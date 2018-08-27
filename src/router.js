@@ -10,14 +10,30 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+      redirect:'/tab_home',
+      children: [
+        {
+          path: '/tab_home',
+          name: 'tab_home',
+          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/home.vue'),
+        },
+        {
+          path: '/tab_discover',
+          name: 'tab_discover',
+          component: () => import(/* webpackChunkName: "about" */ './views/tabs/discover.vue'),
+        },
+        {
+          path: '/tab_my',
+          name: 'tab_my',
+          component: () => import(/* webpackChunkName: "about" */ './views/tabs/my.vue'),
+        },
+      ]
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      path: '/login',
+      name: 'login',
+      component: () => import(/* webpackChunkName: "about" */ './views/login.vue'),
     },
+    
   ],
 });
