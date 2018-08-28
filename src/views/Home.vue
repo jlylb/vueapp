@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div style=' overflow: hidden'>
 
   <mt-header :title="barTitle" fixed>
     <router-link to="/" slot="left">
@@ -10,8 +10,6 @@
   </mt-header>
 
   <div class='home-content'>
-    <cube-button type="submit">Submit Button</cube-button>
-
     <router-view></router-view>
   </div>
 

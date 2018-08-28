@@ -1,23 +1,21 @@
-import Vue from 'vue'
-import './plugins/axios'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-// import mui from 'mui'
-// import '@/assets/mui/css/mui.css'
+import Vue from 'vue';
+import './plugins/axios';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import './icons';
 
-// Vue.prototype.$mui = mui
+import 'mint-ui/lib/style.css';
 
-import './icons'
+import '@/assets/scss/index.scss';
 
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
+import MintUI from 'mint-ui';
+import Cube from 'cube-ui';
+import './mock';
 
-Vue.use(MintUI)
+Vue.use(MintUI);
 
-import Cube from 'cube-ui'
-
-Vue.use(Cube)
+Vue.use(Cube);
 
 Vue.config.productionTip = false;
 
