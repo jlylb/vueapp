@@ -13,9 +13,17 @@ import MintUI from 'mint-ui';
 import Cube from 'cube-ui';
 import './mock';
 
+import VeeValidate from 'vee-validate';
+Vue.use(VeeValidate);
+
 Vue.use(MintUI);
 
 Vue.use(Cube);
+
+import MuseUI from 'muse-ui';
+import 'muse-ui/dist/muse-ui.css';
+
+Vue.use(MuseUI);
 
 Vue.config.productionTip = false;
 
