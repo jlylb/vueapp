@@ -1,10 +1,10 @@
 <template>
 
-<div style=' overflow: hidden'>
+<div class='app-container'>
 
   <mt-header :title="barTitle" fixed>
     <router-link to="/" slot="left">
-      <mt-button icon="back">back</mt-button>
+      <mt-button icon="back">返回</mt-button>
     </router-link>
     <mt-button icon="more" slot="right"></mt-button>
   </mt-header>
@@ -62,11 +62,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.app-container {
+  overflow-y: auto;
+  height: 100%;
+  display: flex;
+  position: relative;
+}
 .home-tab /deep/ .mint-tab-item-icon {
   margin: 0 auto;
 }
 .home-content {
-  margin-top: 60px;
+  margin: 50px auto 60px;
+  display: flex;
+  flex: 1;
 }
 </style>
 
