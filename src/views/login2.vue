@@ -7,22 +7,63 @@
                     <svg-icon icon-class="user" class='logo-icon'></svg-icon>
                 </div>
 
-<mu-container>
-  <mu-text-field v-model="username" type="number" placeholder="电话号码" icon="phone"></mu-text-field>
-<mu-text-field v-model="password" label="Password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'"></mu-text-field>
-</mu-container>
+<!-- <mu-container>
 
-                <mt-field  placeholder="请输入用户名" v-model="username" data-vv-name='username' v-validate="'required|email'">
+    <mu-text-field 
+      v-model="validateForm.username"
+      label='username' 
+      full-width
+      label-float 
+      prop="username">
+      </mu-text-field>
+  
+    
+    <mu-text-field
+    label='password' 
+    type="password"  
+    label-float 
+    full-width
+    v-model="validateForm.password" 
+    prop="password">
+    <svg-icon icon-class="password"  class='login-icon' slot='prepend'></svg-icon>
+    </mu-text-field>
+  
+  
+      <mu-button 
+      color="primary" 
+      full-width
+      @click="handleLogin">提交</mu-button>
+    
+
+</mu-container> -->
+
+
+                <!-- <mt-field  placeholder="请输入用户名" v-model="username" data-vv-name='username' v-validate="'required|email'">
                      <svg-icon icon-class="user" class='login-icon'></svg-icon>
                 </mt-field>
-                <span>{{ errors.first('username') }}</span>
+            
                 <mt-field  placeholder="请输入密码" type="password" v-model="password">
                      <svg-icon icon-class="password"  class='login-icon'></svg-icon>
-                </mt-field>
+                </mt-field> -->
 
-                <mt-button size="large" type="primary" @click='handleLogin'>primary</mt-button>
+               
 
-                <!-- <cube-button :primary="true" @click='handleLogin'>登  录</cube-button> -->
+             <my-input 
+             placeholder="请输入用户名"  
+             v-model="username"
+             >
+              <svg-icon icon-class="user" class='login-input-icon' slot='prepend'></svg-icon>
+             </my-input>
+
+             <my-input 
+             placeholder="请输入密码" 
+             type="password"
+             autocomplete="off" 
+             v-model="password">
+              <svg-icon icon-class="password"  class='login-input-icon' slot='prepend'></svg-icon>
+             </my-input>
+
+              <mt-button size="large" type="primary" @click='handleLogin'>primary</mt-button>
 
                 <a class='forget-password'>
                     忘记密码?
@@ -34,13 +75,20 @@
 </template>
 
 <script>
+import MyInput from '@/components/myinput'
 export default {
+    components: { MyInput },
     data() {
         return {
             username: 'username1',
             password: '123456',
             eye: { open: false, reverse: false },
-            visibility: false
+            visibility: false,
+            validateForm: {
+                username: '',
+                password: '',
+                isAgree: false
+            }
         }
     },
     methods: {
@@ -99,6 +147,7 @@ body, html {
     background-color: bisque;
     border-radius: 50%;
     border: 5px solid #fff;
+    margin-bottom: 120px;
 }
 .logo /deep/ .logo-icon {
     width: 200px;
@@ -110,12 +159,10 @@ body, html {
     background-color: transparent;
     color: #fff;
 }
-.home-content /deep/ .login-icon {
-    width: 2em;
-    height: 2em; 
+.home-content /deep/ .login-input-icon {
+    width: 1.5em;
+    height: 1.5em; 
     color: #fff;
 }
-.home-content /deep/ .cube-input-field {
-    color: #fff;
-}
+
 </style>
