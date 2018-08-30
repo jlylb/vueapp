@@ -46,6 +46,14 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "about" */ './views/monitor/index.vue'),
         },
         {
+          path: '/monitor/shebei',
+          name: 'shebei',
+          meta: {
+            title: '实时监测-设备',
+          },
+          component: () => import(/* webpackChunkName: "about" */ './views/monitor/shebei.vue'),
+        },
+        {
           path: '/alarm/index',
           name: 'alarm',
           meta: {
