@@ -97,6 +97,11 @@ const router = new Router({
       name: 'login2',
       component: () => import(/* webpackChunkName: "about" */ './views/login2.vue'),
     },
+    {
+      path: '/login3',
+      name: 'login3',
+      component: () => import(/* webpackChunkName: "about" */ './views/login3.vue'),
+    },
   ],
 });
 

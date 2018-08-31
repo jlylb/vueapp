@@ -37,7 +37,11 @@ export default {
     wendu(newval) {
       console.log(newval, 'wendu')
       this.echartsData = this.getData()
-    }
+    },
+    // shidu(newval) {
+    //   console.log(newval, 'shidu')
+    //   this.echartsData = this.getData()
+    // }
   },
   methods: {
     getData() {

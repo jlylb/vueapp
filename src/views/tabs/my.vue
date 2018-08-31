@@ -1,14 +1,16 @@
 <template>
     <div>
-        <mt-button type="primary" @click='gologin'>login</mt-button>
+        <mt-button type="primary" @click='gologin("login")'>login</mt-button>
+         <mt-button type="primary" @click='gologin("login2")'>login2</mt-button>
+          <mt-button type="primary" @click='gologin("login3")'>login3</mt-button>
     </div>
 </template>
 
 <script>
 export default {
     methods: {
-       gologin() {
-           this.$router.push({name: 'login'})
+       gologin(name) {
+           this.$router.push({name})
        } 
     },
     created() {
@@ -18,5 +20,4 @@ export default {
 </script>
 
 <style>
-
 </style>

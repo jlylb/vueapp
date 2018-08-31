@@ -1,57 +1,15 @@
 <template>
 
-    <div class='login-container' id='login-container'> 
+    <div class='login-container login-center' id='login-container'> 
         <div class='login-cover'>
             <div class='home-content'>
                 <div class='logo'>
                     <svg-icon icon-class="user" class='logo-icon'></svg-icon>
                 </div>
 
-<!-- <mu-container>
-
-    <mu-text-field 
-      v-model="validateForm.username"
-      label='username' 
-      full-width
-      label-float 
-      prop="username">
-      </mu-text-field>
-  
-    
-    <mu-text-field
-    label='password' 
-    type="password"  
-    label-float 
-    full-width
-    v-model="validateForm.password" 
-    prop="password">
-    <svg-icon icon-class="password"  class='login-icon' slot='prepend'></svg-icon>
-    </mu-text-field>
-  
-  
-      <mu-button 
-      color="primary" 
-      full-width
-      @click="handleLogin">提交</mu-button>
-    
-
-</mu-container> -->
-
-
-                <!-- <mt-field  placeholder="请输入用户名" v-model="username" data-vv-name='username' v-validate="'required|email'">
-                     <svg-icon icon-class="user" class='login-icon'></svg-icon>
-                </mt-field>
-            
-                <mt-field  placeholder="请输入密码" type="password" v-model="password">
-                     <svg-icon icon-class="password"  class='login-icon'></svg-icon>
-                </mt-field> -->
-
-               
-
              <my-input 
              placeholder="请输入用户名"  
-             v-model="username"
-             >
+             v-model="username">
               <svg-icon icon-class="user" class='login-input-icon' slot='prepend'></svg-icon>
              </my-input>
 
@@ -63,7 +21,7 @@
               <svg-icon icon-class="password"  class='login-input-icon' slot='prepend'></svg-icon>
              </my-input>
 
-              <mt-button size="large" type="primary" @click='handleLogin'>primary</mt-button>
+              <mt-button size="large" type="primary" @click='handleLogin'>登  录</mt-button>
 
                 <a class='forget-password'>
                     忘记密码?
@@ -97,8 +55,8 @@ export default {
         }
     },
     mounted() {
-      // var html = document.getElementById('login-container');
-      // html.style.minHeight = html.clientHeight + 'px';
+    //   var html = document.getElementById('login-container');
+    //   html.style.minHeight = html.clientHeight + 'px';
     },
     created() {
       
@@ -107,13 +65,6 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-body,
-html {
-  height: 100%;
-}
-#app {
-  height: 100%;
-}
 .login-container {
   background-image: url('../assets/bg.png');
   background-repeat: no-repeat;
@@ -123,6 +74,13 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.login-center {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate3d(-50%, -50%, 0);
+  width: 100%;
 }
 .login-cover {
   background: rgba(0, 0, 0, 0.5);
