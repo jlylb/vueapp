@@ -1,5 +1,6 @@
 <template>
 <mu-container :style='{overflow: "auto"}' class='layout-container'>
+  <top-component></top-component> 
     <h1 class='chart-title' :style='{margin: 0}'>空气温湿度趋势图</h1>
 
     <div class='chart-sub-action'>

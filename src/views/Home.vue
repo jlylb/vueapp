@@ -2,12 +2,10 @@
 
 <div class='app-container'>
 
-  <mt-header :title="barTitle" fixed>
-    <router-link to="/" slot="left">
-      <mt-button icon="back">返回</mt-button>
-    </router-link>
+  <!-- <mt-header :title="barTitle" fixed>
+    <mt-button icon="back" @click="goBack" slot="left" v-if='isShow'>返回</mt-button>
     <mt-button icon="more" slot="right"></mt-button>
-  </mt-header>
+  </mt-header> -->
 
   <div class='home-content'>
     <router-view></router-view>
@@ -45,12 +43,18 @@ export default {
   computed: {
     ...mapGetters('app',[
       'barTitle'
-    ])
+    ]),
+    isShow() {
+      return this.$route.name !=='tab_home'
+    }
   },
   methods: {
     tabClick(name) {
       console.log({name})
       this.$router.push({name})
+    },
+    goBack() {
+      this.$router.go(-1)
     }
   },
   created() {
@@ -67,6 +71,7 @@ export default {
   height: 100%;
   display: flex;
   position: relative;
+  // background: #e8eaec;
 }
 .home-tab /deep/ .mint-tab-item-icon {
   margin: 0 auto;

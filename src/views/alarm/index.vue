@@ -1,6 +1,6 @@
 <template>
   <div>
-    告警管理
+    <top-component></top-component> 
   </div>
 </template>
 

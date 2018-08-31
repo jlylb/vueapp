@@ -1,6 +1,6 @@
 <template>
   <div>
-    视频控制
+    <top-component></top-component> 
   </div>
 </template>
 

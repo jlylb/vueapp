@@ -1,6 +1,6 @@
 <template>
   <div class='layout-container'>
-
+<top-component></top-component> 
     <mt-cell title="选择大棚" is-link @click.native="changePeng">
       <span style="color: green">{{ peng }}</span>
     </mt-cell>

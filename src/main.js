@@ -118,6 +118,10 @@ Vue.use(Tooltip);
 
 Vue.config.productionTip = false;
 
+import TopComponent from './components/top'
+
+Vue.component('topComponent', TopComponent)
+
 new Vue({
   router,
   store,

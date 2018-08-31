@@ -51,7 +51,7 @@ export default {
     },
     methods: {
         handleLogin() {
-            this.$router.push({ path: '/' })
+            this.$router.push({ path: '/tab_home' })
         }
     },
     mounted() {

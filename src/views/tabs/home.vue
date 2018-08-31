@@ -1,7 +1,9 @@
 <template>
 
     <div class='tab-container'>
-       
+
+    <top-component></top-component> 
+        
     <mt-swipe :show-indicators="true" class='slide-image'>
         <mt-swipe-item v-for='(item, index) in items' :key='index'>
             <img :src='item.image' />

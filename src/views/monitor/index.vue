@@ -11,6 +11,7 @@
   </div> -->
   <!-- <div class='wrap-container' :style='{overflow: "auto"}'> -->
   <mu-container :style='{overflow: "auto"}'>
+    <top-component></top-component> 
   <mu-flex justify-content="center">
  <mu-paper :z-depth="1">
       <mu-grid-list class="gridlist-demo">

@@ -11,7 +11,7 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
-      redirect: '/tab_home',
+      redirect: '/login2',
       children: [
         {
           path: '/tab_home',

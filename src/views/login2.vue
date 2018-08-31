@@ -6,48 +6,6 @@
                 <div class='logo'>
                     <svg-icon icon-class="user" class='logo-icon'></svg-icon>
                 </div>
-
-<!-- <mu-container>
-
-    <mu-text-field 
-      v-model="validateForm.username"
-      label='username' 
-      full-width
-      label-float 
-      prop="username">
-      </mu-text-field>
-  
-    
-    <mu-text-field
-    label='password' 
-    type="password"  
-    label-float 
-    full-width
-    v-model="validateForm.password" 
-    prop="password">
-    <svg-icon icon-class="password"  class='login-icon' slot='prepend'></svg-icon>
-    </mu-text-field>
-  
-  
-      <mu-button 
-      color="primary" 
-      full-width
-      @click="handleLogin">提交</mu-button>
-    
-
-</mu-container> -->
-
-
-                <!-- <mt-field  placeholder="请输入用户名" v-model="username" data-vv-name='username' v-validate="'required|email'">
-                     <svg-icon icon-class="user" class='login-icon'></svg-icon>
-                </mt-field>
-            
-                <mt-field  placeholder="请输入密码" type="password" v-model="password">
-                     <svg-icon icon-class="password"  class='login-icon'></svg-icon>
-                </mt-field> -->
-
-               
-
              <my-input 
              placeholder="请输入用户名"  
              v-model="username"
@@ -63,7 +21,7 @@
               <svg-icon icon-class="password"  class='login-input-icon' slot='prepend'></svg-icon>
              </my-input>
 
-              <mt-button size="large" type="primary" @click='handleLogin'>primary</mt-button>
+              <mt-button size="large" type="primary" @click='handleLogin'>登  录</mt-button>
 
                 <a class='forget-password'>
                     忘记密码?
@@ -75,35 +33,33 @@
 </template>
 
 <script>
-import MyInput from '@/components/myinput'
+import MyInput from "@/components/myinput";
 export default {
-    components: { MyInput },
-    data() {
-        return {
-            username: 'username1',
-            password: '123456',
-            eye: { open: false, reverse: false },
-            visibility: false,
-            validateForm: {
-                username: '',
-                password: '',
-                isAgree: false
-            }
-        }
-    },
-    methods: {
-        handleLogin() {
-            this.$router.push({ path: '/' })
-        }
-    },
-    mounted() {
-      // var html = document.getElementById('login-container');
-      // html.style.minHeight = html.clientHeight + 'px';
-    },
-    created() {
-      
+  components: { MyInput },
+  data() {
+    return {
+      username: "username1",
+      password: "123456",
+      eye: { open: false, reverse: false },
+      visibility: false,
+      validateForm: {
+        username: "",
+        password: "",
+        isAgree: false
+      }
+    };
+  },
+  methods: {
+    handleLogin() {
+      this.$router.push({ path: "/tab_home" });
     }
-}
+  },
+  mounted() {
+    // var html = document.getElementById('login-container');
+    // html.style.minHeight = html.clientHeight + 'px';
+  },
+  created() {}
+};
 </script>
 
 <style lang='scss' scoped>
@@ -115,7 +71,7 @@ html {
   height: 100%;
 }
 .login-container {
-  background-image: url('../assets/bg.png');
+  background-image: url("../assets/bg.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   -moz-background-size: 100% 100%;

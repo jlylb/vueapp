@@ -1,6 +1,6 @@
 <template>
     <div>
-        discover
+       <top-component></top-component> 
     </div>
 </template>
 
