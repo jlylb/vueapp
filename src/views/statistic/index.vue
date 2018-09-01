@@ -1,6 +1,6 @@
 <template>
-  <div>
-    统计分析
+   <div class='layout-container'>
+    <top-component></top-component> 
   </div>
 </template>
 

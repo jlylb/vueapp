@@ -45,13 +45,22 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "about" */ './views/monitor/index.vue'),
         },
+
         {
-          path: '/monitor/shebei',
-          name: 'shebei',
+          path: '/monitor/device',
+          name: 'monitor_device',
           meta: {
-            title: '实时监测-设备',
+            title: '实时监测-选择设备',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/monitor/shebei.vue'),
+          component: () => import(/* webpackChunkName: "about" */ './views/monitor/device.vue'),
+        },
+        {
+          path: '/monitor/chart',
+          name: 'monitor_chart',
+          meta: {
+            title: '实时监测-设备趋势图',
+          },
+          component: () => import(/* webpackChunkName: "about" */ './views/monitor/chart.vue'),
         },
         {
           path: '/alarm/index',
@@ -62,12 +71,36 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "about" */ './views/alarm/index.vue'),
         },
         {
+          path: '/alarm/device',
+          name: 'alarm_device',
+          meta: {
+            title: '告警管理-设备报警',
+          },
+          component: () => import(/* webpackChunkName: "about" */ './views/alarm/device.vue'),
+        },
+        {
+          path: '/alarm/detail',
+          name: 'alarm_detail',
+          meta: {
+            title: '告警管理-报警内容',
+          },
+          component: () => import(/* webpackChunkName: "about" */ './views/alarm/detail.vue'),
+        },
+        {
           path: '/remote/index',
           name: 'remote',
           meta: {
             title: '远程控制',
           },
           component: () => import(/* webpackChunkName: "about" */ './views/remote/index.vue'),
+        },
+        {
+          path: '/remote/device',
+          name: 'remote_device',
+          meta: {
+            title: '远程控制设备',
+          },
+          component: () => import(/* webpackChunkName: "about" */ './views/remote/device.vue'),
         },
         {
           path: '/statistic/index',
@@ -87,11 +120,7 @@ const router = new Router({
         },
       ],
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import(/* webpackChunkName: "about" */ './views/login.vue'),
-    },
+
     {
       path: '/login2',
       name: 'login2',

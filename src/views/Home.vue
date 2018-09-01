@@ -2,18 +2,13 @@
 
 <div class='app-container'>
 
-  <!-- <mt-header :title="barTitle" fixed>
-    <mt-button icon="back" @click="goBack" slot="left" v-if='isShow'>返回</mt-button>
-    <mt-button icon="more" slot="right"></mt-button>
-  </mt-header> -->
-
   <div class='home-content'>
     <router-view></router-view>
   </div>
 
   <mt-tabbar v-model="selected" class='home-tab'>
     <mt-tab-item id="home" @click.native="tabClick('tab_home')">
-      <svg-icon icon-class="user" slot='icon'></svg-icon>
+      <svg-icon icon-class="home1" slot='icon'></svg-icon>
       首页
     </mt-tab-item>
     <mt-tab-item id="discover" @click.native="tabClick('tab_discover')">
@@ -21,7 +16,7 @@
       发现
     </mt-tab-item>
     <mt-tab-item id="my" @click.native="tabClick('tab_my')">
-      <svg-icon icon-class="people" slot='icon'></svg-icon>
+      <svg-icon icon-class="user" slot='icon'></svg-icon>
       我的
     </mt-tab-item>
   </mt-tabbar>
@@ -72,6 +67,17 @@ export default {
   display: flex;
   position: relative;
   // background: #e8eaec;
+  & {
+    .home-tab {
+      background-color: rgba(35, 159, 254, 0.8);
+    }
+    .mint-tab-item {
+      color: #fff;
+      &.is-selected {
+        color: #26a2ff;
+      }
+    }
+  }
 }
 .home-tab /deep/ .mint-tab-item-icon {
   margin: 0 auto;

@@ -85,7 +85,7 @@ export default {
           }
         },
         grid: { 
-            left: '15%',
+            left: '10%',
             top: '10%',
          },
         series: [
@@ -93,46 +93,13 @@ export default {
             name: "温度",
             type: "line",
             data: this.wendu,
-            // markPoint: {
-            //   data: [
-            //     { type: "max", name: "最大值" },
-            //     { type: "min", name: "最小值" }
-            //   ]
-            // },
-            // markLine: {
-            //   data: [{ type: "average", name: "平均值" }]
-            // }
+
           },
           {
             name: "湿度",
             type: "line",
             data: this.shidu,
-            // markPoint: {
-            //   data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }]
-            // },
-            // markLine: {
-            //   data: [
-            //     { type: "average", name: "平均值" },
-            //     [
-            //       {
-            //         symbol: "none",
-            //         x: "90%",
-            //         yAxis: "max"
-            //       },
-            //       {
-            //         symbol: "circle",
-            //         label: {
-            //           normal: {
-            //             position: "start",
-            //             formatter: "最大值"
-            //           }
-            //         },
-            //         type: "max",
-            //         name: "最高点"
-            //       }
-            //     ]
-            //   ]
-            // }
+
           }
         ]
       }
