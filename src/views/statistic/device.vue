@@ -10,31 +10,13 @@
     is-link 
     v-for='(item, index) in device' 
     :key='index'>
-      <!-- <span style="color: green">温度: 35°</span> -->
+    <span style='color: green'>查看趋势图</span>
       <svg-icon :icon-class='item.icon' class='item-icon' slot='icon'></svg-icon>
     </mt-cell>
 
 
 
-  <mt-popup
-    v-model="popupVisible"
-    class='popup-device'
-    position="bottom">
 
-    <mt-cell title="设备名称">
-      <span>{{ item.name }}</span>
-    </mt-cell>
-
-    <mt-cell title="设备类型">
-      <span>{{ item.type }}</span>
-    </mt-cell>
-
-    <mt-cell  v-for='(param, index) in item.params' :key='index'>
-      <span slot='title'>{{ param.desc }}</span>
-      <span style="color: green">{{ param.value }}</span>
-    </mt-cell>
-
-  </mt-popup>
   </div>
 </template>
 
@@ -61,29 +43,10 @@ export default {
   },
   methods: {
     openDevice(item) {
-      this.popupVisible = true
-      this.item = item
+
+      this.$router.push({name: 'statistic_chart', params: {...item} })
     },
-    changeWork(val) {
-      console.log(val)
-      MessageBox.confirm('确定更改工作状态?', '提示', {
-        closeOnClickModal: false
-      }).then(action => {
-        MessageBox.alert('操作成功');
-      }).catch((res) => {
-        this.workStatus = val
-      });
-    },
-    changeDevice(val) {
-      console.log(val)
-      MessageBox.confirm('确定更改设备状态?', '提示', {
-        closeOnClickModal: false
-      }).then(action => {
-        
-      }).catch((res) => {
-        this.deviceStatus = val
-      }); 
-    }
+
   }
 }
 </script>

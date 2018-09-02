@@ -66,6 +66,7 @@ export default {
   height: 100%;
   display: flex;
   position: relative;
+  overflow-x: hidden;
   // background: #e8eaec;
   & {
     .home-tab {

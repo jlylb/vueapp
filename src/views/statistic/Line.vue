@@ -62,7 +62,7 @@ export default {
           data: ["温度", "湿度"]
         },
         toolbox: {
-          show: true,
+          show: false,
           feature: {
             dataZoom: {
                 yAxisIndex: 'none'
@@ -79,13 +79,14 @@ export default {
          // data: times
         },
         yAxis: {
+          name: '单位: °C',
           type: "value",
           axisLabel: {
-            formatter: "{value} °C"
+            formatter: "{value}"
           }
         },
         grid: { 
-            left: '10%',
+            left: '12%',
             top: '10%',
          },
         series: [

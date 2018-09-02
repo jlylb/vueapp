@@ -5,7 +5,7 @@
 
     <mt-cell 
     :title="item.title" 
-    :label="new Date()"
+    :label="new Date()+ ''"
     @click.native='openDevice(item)' 
     is-link 
     v-for='(item, index) in contents' 
@@ -19,27 +19,17 @@
     v-model="popupVisible"
     class='popup-device'
     position="bottom">
-
-    <mt-cell title="设备名称">
-      <span>{{ item.name }}</span>
+<mt-cell title="详情" :label="new Date()+ ''">
+</mt-cell>
+    <mt-cell title="">
+      <span>
+        温度计坏了温度计坏了
+        温度计坏了温度计坏了温度
+        计坏了温度计坏了温度计坏了温度计坏了温度计坏了温度计坏了温度计坏了温度计坏了温度计坏了
+        </span>
     </mt-cell>
-
-    <mt-cell title="一级报警" is-link @click.native='openDetail(item)'>
-      <mt-badge type="error">10</mt-badge>
-    </mt-cell>
-
-    <mt-cell title="二级报警" is-link @click.native='openDetail(item)'>
-      <mt-badge type="warning">10</mt-badge>
-    </mt-cell>
-
-    <mt-cell title="三级报警" is-link @click.native='openDetail(item)'>
-      <mt-badge type="primary">30</mt-badge>
-    </mt-cell>
-
-    <mt-cell title="四级报警" is-link @click.native='openDetail(item)'>
-      <mt-badge type="success">10</mt-badge>
-    </mt-cell>
-
+<mt-cell title="">
+</mt-cell>
   </mt-popup>
   </div>
 </template>

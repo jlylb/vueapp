@@ -1,16 +1,36 @@
 <template>
 
-<div :style='{overflow: "auto"}' class='layout-container'>
+<div  class='layout-container'>
 
   <top-component>
     <span slot='right' @click='filterChart'>筛选</span>
   </top-component> 
 
-    <h1 class='chart-title' :style='{margin: 0}'>空气温湿度趋势图</h1>
+<div class='chart-block'>
 
-    <div class='chart'>
-        <air-line :wendu='items.wendu' :shidu='items.shidu' :title='2' :style='{width:"100%", height: "50%"}'></air-line>
+    <h1 class='chart-title' >空气温湿度趋势图</h1>
+
+      <air-line :wendu='items.wendu' :shidu='items.shidu' :title='2' class='chart'></air-line>
+
     </div>
+  
+
+
+  <mt-popup
+  v-model="filterLeft"
+  class='popup-menu'
+  popup-transition="popup-fade">
+    <mt-cell title="当天" is-link>
+    </mt-cell>
+    <mt-cell title="本周" is-link>
+    </mt-cell>
+    <mt-cell title="本月" is-link>
+    </mt-cell>
+    <mt-cell title="本年" is-link>
+    </mt-cell>
+    <mt-cell title="自定义" is-link @click.native='openChart'>
+    </mt-cell>
+</mt-popup>
 
   <mt-datetime-picker
     ref="pickerTimeStart"
@@ -37,8 +57,8 @@
       <span>{{ pickerEnd|parseTime('{y}-{m}-{d}') }}</span>
     </mt-cell>
 
-    <mt-cell title="条件过滤">
-      <mt-button size="small" type='primary' @click="selectDevice">确定</mt-button>
+    <mt-cell class='filter-button'>
+      <mt-button size="large" type='primary' @click="selectDevice">确定</mt-button>
     </mt-cell>
 
 
@@ -61,6 +81,7 @@ export default {
       items: [],
       popupVisible: false,
       filterOpen: false,
+      filterLeft: false,
       slots: [
         {
           flex: 1,
@@ -94,8 +115,11 @@ export default {
     changeTimeEnd() {
       this.$refs.pickerTimeEnd.open();
     },
-
     filterChart() {
+      this.filterLeft = true
+    },
+    openChart() {
+      this.filterLeft = false
       this.filterOpen = true
     }
   },
@@ -112,12 +136,28 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.chart-title {
+  font-size: 24px;
+  line-height: 24px;
+  // font-weight: bold;
+}
+.chart-block {
+  // overflow: auto;
+  display: inline-block;
+  position: relative;
+  height: 300px;
+}
 .chart {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  width: 400px;
   min-height: 300px;
-  flex: 1;
+  position: absolute;
+  margin-top: 20px;
+  left: 50%;
+  transform: translate3d(-50%,0,0);
+
+  // flex: 1;
 }
 </style>

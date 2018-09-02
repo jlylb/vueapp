@@ -11,6 +11,8 @@ html {
 .layout-container {
   width: 100%;
   padding: 5px;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 
 .layout-container .mint-cell-title {
@@ -18,5 +20,15 @@ html {
 }
 
 .layout-container .popup-device {
+  width: 100%;
+}
+
+.layout-container .popup-menu {
+  transform: translate3d(0, 0, 0);
+  right: 0px;
+  top: 40px;
+}
+
+.layout-container .filter-button .mint-cell-value{
   width: 100%;
 }

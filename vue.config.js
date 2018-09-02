@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const TransformModulesPlugin = require('webpack-transform-modules-plugin');
+// const TransformModulesPlugin = require('webpack-transform-modules-plugin');
 // const  PostCompilePlugin = require('webpack-post-compile-plugin')
 
 module.exports = {
@@ -36,7 +36,7 @@ module.exports = {
         'window.mui': 'mui',
       }),
       // new PostCompilePlugin(),
-      new TransformModulesPlugin(),
+      // new TransformModulesPlugin(),
     ],
     externals: {
       mui: 'mui',

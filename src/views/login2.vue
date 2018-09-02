@@ -74,7 +74,6 @@ html {
   background-image: url("../assets/bg.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  -moz-background-size: 100% 100%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -109,10 +108,14 @@ html {
   border-radius: 50%;
   border: 5px solid #fff;
   margin-bottom: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }
 .logo /deep/ .logo-icon {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   color: #fff;
 }
 .input {

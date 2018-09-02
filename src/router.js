@@ -54,14 +54,7 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "about" */ './views/monitor/device.vue'),
         },
-        {
-          path: '/monitor/chart',
-          name: 'monitor_chart',
-          meta: {
-            title: '实时监测-设备趋势图',
-          },
-          component: () => import(/* webpackChunkName: "about" */ './views/monitor/chart.vue'),
-        },
+
         {
           path: '/alarm/index',
           name: 'alarm',
@@ -109,6 +102,22 @@ const router = new Router({
             title: '统计分析',
           },
           component: () => import(/* webpackChunkName: "about" */ './views/statistic/index.vue'),
+        },
+        {
+          path: '/statistic/device',
+          name: 'statistic_device',
+          meta: {
+            title: '统计分析-设备',
+          },
+          component: () => import(/* webpackChunkName: "about" */ './views/statistic/device.vue'),
+        },
+        {
+          path: '/statistic/chart',
+          name: 'statistic_chart',
+          meta: {
+            title: '统计分析-趋势图',
+          },
+          component: () => import(/* webpackChunkName: "about" */ './views/statistic/chart.vue'),
         },
         {
           path: '/video/index',
