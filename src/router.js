@@ -144,12 +144,12 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: () => import(/* webpackChunkName: "about" */ './views/login.vue'),
+      component: () => import(/* webpackChunkName: "zbout" */ './views/login.vue'),
     },
     {
       path: '/login3',
       name: 'login3',
-      component: () => import(/* webpackChunkName: "about" */ './views/login3.vue'),
+      component: () => import(/* webpackChunkName: "zbout" */ './views/login3.vue'),
     },
   ],
 });

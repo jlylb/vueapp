@@ -60,14 +60,16 @@ export default {
     display: none;
     width: 100%;
     height: 30%;
+    background-color: rgba(0, 0, 0, .2);
+    position: absolute;
+    bottom: 0;
+    left:0;
   }
 
   &:hover {
     .video-desc {
       display: block;
-      background-color: rgba(0, 0, 0, .2);
-      position: absolute;
-      bottom: 0;
+
     }
   }
 }

@@ -28,6 +28,9 @@ module.exports = {
       .end();
   },
   assetsDir: 'static',
+  transpileDependencies: [
+ 
+  ],
   baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
   configureWebpack: {
     plugins: [

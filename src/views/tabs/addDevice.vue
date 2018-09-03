@@ -30,4 +30,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.layout-container {
+  position: relative;
+}
 </style>

@@ -70,7 +70,7 @@
 <style lang="less">
 .scan {
   height: 100%;
-  position: relative;
+  // position: relative;
   #bcid {
     width: 100%;
     position: absolute;

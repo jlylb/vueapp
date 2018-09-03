@@ -7,15 +7,15 @@
   </div>
 
   <mt-tabbar v-model="selected" class='home-tab'>
-    <mt-tab-item id="home" @click.native="tabClick('tab_home')" :class='tabClass("tab_home")'>
+    <mt-tab-item id="tab_home" @click.native="tabClick('tab_home')" >
       <svg-icon icon-class="home1" slot='icon'></svg-icon>
       首页
     </mt-tab-item>
-    <mt-tab-item id="discover" @click.native="tabClick('tab_discover')" :class='tabClass("tab_home")'>
+    <mt-tab-item id="tab_discover" @click.native="tabClick('tab_discover')" >
       <svg-icon icon-class="chart" slot='icon'></svg-icon>
       发现
     </mt-tab-item>
-    <mt-tab-item id="my" @click.native="tabClick('tab_my')" :class='tabClass("tab_home")'>
+    <mt-tab-item id="tab_my" @click.native="tabClick('tab_my')">
       <svg-icon icon-class="user" slot='icon'></svg-icon>
       我的
     </mt-tab-item>
@@ -32,7 +32,7 @@ export default {
   components: {},
   data() {
     return {
-      selected: "home"
+      selected: "tab_home"
     };
   },
   computed: {
@@ -42,12 +42,10 @@ export default {
     isShow() {
       return this.$route.name !=='tab_home'
     },
-    tabClass(tabName) {
-    let cur = this.$route.name
-      return {
-        'is-selected': tabName===cur,
-        'clear-selected': tabName!==cur
-      }
+  },
+  watch: {
+    '$route'(to) {
+      this.selected = to.name
     }
   },
   methods: {
@@ -57,11 +55,17 @@ export default {
     },
     goBack() {
       this.$router.go(-1)
+    },
+    tabClass(tabName) {
+    let cur = this.$route.name
+      return {
+        'is-selected': tabName===cur,
+        'clear-selected': tabName!==cur
+      }
     }
   },
   created() {
     console.log(this.$store)
-
 
     // const name = 'tab_home'
     // this.$router.push({name})
@@ -95,6 +99,8 @@ export default {
 }
 .home-tab /deep/ .mint-tab-item-icon {
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 .home-content {
   margin: 50px auto 60px;
