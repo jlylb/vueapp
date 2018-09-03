@@ -1,16 +1,16 @@
 const app = {
-    namespaced: true,
-    state: {
-      barTitle: '首页'
+  namespaced: true,
+  state: {
+    barTitle: '首页',
+  },
+  mutations: {
+    BAR_TITLE: (state, title) => {
+      state.barTitle = title;
     },
-    mutations: {
-        BAR_TITLE: (state, title) => {
-            state.barTitle = title
-        }
-    },
-    getters: {
-        barTitle: state => state.barTitle
-    }
-}
+  },
+  getters: {
+    barTitle: state => state.barTitle,
+  },
+};
 
-export default app
+export default app;

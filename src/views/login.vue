@@ -6,21 +6,25 @@
                 <div class='logo'>
                     <svg-icon icon-class="user" class='logo-icon'></svg-icon>
                 </div>
+            
              <my-input 
-             placeholder="请输入用户名"  
-             v-model="username"
-             >
+             placeholder="请输入用户名"
+             data-vv-name='username'
+             v-validate="{ required: true, alpha_dash: true }"  
+             v-model="validateForm.username">
               <svg-icon icon-class="user" class='login-input-icon' slot='prepend'></svg-icon>
              </my-input>
-
+             <div class='error' v-if='errors.has("username")'>{{ errors.first("username") }}</div>
              <my-input 
-             placeholder="请输入密码" 
+             placeholder="请输入密码"
+             data-vv-name='password'
+             v-validate="{ required: true, min: 6 }" 
              type="password"
              autocomplete="off" 
-             v-model="password">
+             v-model="validateForm.password">
               <svg-icon icon-class="password"  class='login-input-icon' slot='prepend'></svg-icon>
              </my-input>
-
+              <div class='error' v-if='errors.has("password")'>{{ errors.first("password") }}</div>
               <mt-button size="large" type="primary" @click='handleLogin'>登  录</mt-button>
 
                 <a class='forget-password'>
@@ -38,21 +42,33 @@ export default {
   components: { MyInput },
   data() {
     return {
-      username: "username1",
-      password: "123456",
-      eye: { open: false, reverse: false },
-      visibility: false,
+      // username: "username1",
+      // password: "123456",
       validateForm: {
-        username: "",
-        password: "",
-        isAgree: false
+        username: "username1",
+        password: "123456"
       }
     };
   },
   methods: {
     handleLogin() {
-      this.$router.push({ path: "/tab_home" });
+      this.$validator.validate().then((valid) => {
+        console.log(valid,this.errors.all(), this.errors.collect(), this.fields)
+        if(valid) {
+          console.log(this.validateForm)
+          this.$store.dispatch('user/LoginByUsername', this.validateForm)
+          .then((res) => {
+              console.log(res, 333333333)
+              this.$router.push({ path: "/tab_home" });
+          })
+          
+        }
+      })
+
     }
+  },
+  computed: {
+
   },
   mounted() {
     // var html = document.getElementById('login-container');
@@ -63,15 +79,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-body,
-html {
-  height: 100%;
-}
-#app {
-  height: 100%;
-}
 .login-container {
-  background-image: url("../assets/bg.png");
+  background-image: url('../assets/bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   height: 100%;
@@ -107,11 +116,10 @@ html {
   background-color: bisque;
   border-radius: 50%;
   border: 5px solid #fff;
-  margin-bottom: 120px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 .logo /deep/ .logo-icon {
   width: 150px;
@@ -127,5 +135,9 @@ html {
   width: 1.5em;
   height: 1.5em;
   color: #fff;
+}
+.error {
+  color: #ef4f4f;
+  text-align: left;
 }
 </style>

@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import VeeValidate from 'vee-validate';
-
+import VeeValidate, { Validator } from 'vee-validate';
+import messages from '@/lang/zh_CN';
+import '@/permission';
 import MintUI from 'mint-ui';
 import 'reset.css';
 import 'mint-ui/lib/style.css';
@@ -16,7 +17,12 @@ import './assets/scss/index.scss';
 
 import TopComponent from './components/top.vue';
 
-Vue.use(VeeValidate);
+Validator.localize('zh_CN', messages);
+const config = {
+  locale: 'zh_CN',
+};
+
+Vue.use(VeeValidate, config);
 
 Vue.use(MintUI);
 

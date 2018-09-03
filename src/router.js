@@ -11,7 +11,7 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
-      redirect: '/login2',
+      redirect: '/tab_home',
       children: [
         {
           path: '/tab_home',
@@ -27,14 +27,22 @@ const router = new Router({
           meta: {
             title: '发现',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/tabs/discover.vue'),
+          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/discover.vue'),
         },
         {
           path: '/tab_my',
           name: 'tab_my',
-          component: () => import(/* webpackChunkName: "about" */ './views/tabs/my.vue'),
+          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/my.vue'),
           meta: {
             title: '我的',
+          },
+        },
+        {
+          path: '/tab_my/addDevice',
+          name: 'add_device',
+          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/addDevice.vue'),
+          meta: {
+            title: '我的-添加设备',
           },
         },
         {
@@ -43,7 +51,7 @@ const router = new Router({
           meta: {
             title: '实时监测',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/monitor/index.vue'),
+          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/index.vue'),
         },
 
         {
@@ -52,7 +60,7 @@ const router = new Router({
           meta: {
             title: '实时监测-选择设备',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/monitor/device.vue'),
+          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device.vue'),
         },
 
         {
@@ -61,7 +69,7 @@ const router = new Router({
           meta: {
             title: '告警管理',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/alarm/index.vue'),
+          component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/index.vue'),
         },
         {
           path: '/alarm/device',
@@ -69,7 +77,7 @@ const router = new Router({
           meta: {
             title: '告警管理-设备报警',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/alarm/device.vue'),
+          component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/device.vue'),
         },
         {
           path: '/alarm/detail',
@@ -77,7 +85,7 @@ const router = new Router({
           meta: {
             title: '告警管理-报警内容',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/alarm/detail.vue'),
+          component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/detail.vue'),
         },
         {
           path: '/remote/index',
@@ -85,7 +93,7 @@ const router = new Router({
           meta: {
             title: '远程控制',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/remote/index.vue'),
+          component: () => import(/* webpackChunkName: "remote" */ './views/remote/index.vue'),
         },
         {
           path: '/remote/device',
@@ -93,7 +101,7 @@ const router = new Router({
           meta: {
             title: '远程控制设备',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/remote/device.vue'),
+          component: () => import(/* webpackChunkName: "remote" */ './views/remote/device.vue'),
         },
         {
           path: '/statistic/index',
@@ -101,7 +109,8 @@ const router = new Router({
           meta: {
             title: '统计分析',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/statistic/index.vue'),
+          component: () =>
+            import(/* webpackChunkName: "statistic" */ './views/statistic/index.vue'),
         },
         {
           path: '/statistic/device',
@@ -109,7 +118,8 @@ const router = new Router({
           meta: {
             title: '统计分析-设备',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/statistic/device.vue'),
+          component: () =>
+            import(/* webpackChunkName: "statistic" */ './views/statistic/device.vue'),
         },
         {
           path: '/statistic/chart',
@@ -117,7 +127,8 @@ const router = new Router({
           meta: {
             title: '统计分析-趋势图',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/statistic/chart.vue'),
+          component: () =>
+            import(/* webpackChunkName: "statistic" */ './views/statistic/chart.vue'),
         },
         {
           path: '/video/index',
@@ -125,15 +136,15 @@ const router = new Router({
           meta: {
             title: '视频控制',
           },
-          component: () => import(/* webpackChunkName: "about" */ './views/video/index.vue'),
+          component: () => import(/* webpackChunkName: "video" */ './views/video/index.vue'),
         },
       ],
     },
 
     {
-      path: '/login2',
-      name: 'login2',
-      component: () => import(/* webpackChunkName: "about" */ './views/login2.vue'),
+      path: '/login',
+      name: 'login',
+      component: () => import(/* webpackChunkName: "about" */ './views/login.vue'),
     },
     {
       path: '/login3',

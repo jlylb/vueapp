@@ -19,7 +19,7 @@ export function parseTime(time, cFormat) {
     s: date.getSeconds(),
     a: date.getDay(),
   };
-  const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
+  const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key];
     if (key === 'a') return ['一', '二', '三', '四', '五', '六', '日'][value - 1];
     if (result.length > 0 && value < 10) {
@@ -27,5 +27,34 @@ export function parseTime(time, cFormat) {
     }
     return value || 0;
   });
-  return time_str;
+  return timeStr;
+}
+
+export function cleanArray(actual) {
+  const newArray = [];
+  for (let i = 0; i < actual.length; i++) {
+    if (actual[i]) {
+      newArray.push(actual[i]);
+    }
+  }
+  return newArray;
+}
+
+export function param(json) {
+  if (!json) return '';
+  return cleanArray(Object.keys(json).map((key) => {
+    if (json[key] === undefined) return '';
+    return `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`;
+  })).join('&');
+}
+
+export function param2Obj(url) {
+  const search = url.split('?')[1];
+  if (!search) {
+    return {};
+  }
+  return JSON.parse(`{"${decodeURIComponent(search)
+    .replace(/"/g, '\\"')
+    .replace(/&/g, '","')
+    .replace(/=/g, '":"')}"}`);
 }

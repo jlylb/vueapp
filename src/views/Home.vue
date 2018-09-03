@@ -41,6 +41,13 @@ export default {
     ]),
     isShow() {
       return this.$route.name !=='tab_home'
+    },
+    tabClass(tabName) {
+    let cur = this.$route.name
+      return {
+        'is-selected': tabName===cur,
+        'clear-selected': tabName!==cur
+      }
     }
   },
   methods: {
@@ -54,6 +61,8 @@ export default {
   },
   created() {
     console.log(this.$store)
+
+
     // const name = 'tab_home'
     // this.$router.push({name})
   }
@@ -76,6 +85,10 @@ export default {
       color: #fff;
       &.is-selected {
         color: #26a2ff;
+      }
+      &.clear-selected {
+        color: #fff;
+        background-color: rgba(35, 159, 254, 0.8);
       }
     }
   }

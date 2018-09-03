@@ -4,7 +4,8 @@
         <div class='user'>
             <div class='user-info'>
                 <div class='user-avatr'>
-                    <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
+                    <!-- <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon> -->
+                    <img :src='avatar' class='item-icon'/>
                 </div>
             </div>
             <div class='user-device'>
@@ -29,7 +30,10 @@
 
         <mt-cell title="个人信息" is-link>
             <svg-icon icon-class='user-circle' class='item-icon' slot='icon'></svg-icon>
-            您好, username1
+            您好, {{ name }}
+        </mt-cell>
+        <mt-cell title="添加设备" is-link  to='tab_my/addDevice'>
+            <svg-icon icon-class='add' class='item-icon' slot='icon'></svg-icon> 
         </mt-cell>
 
         <mt-cell title="帮助中心" is-link>
@@ -42,22 +46,33 @@
             <svg-icon icon-class='us-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
         <mt-cell></mt-cell>
-        <div class='sign-out' @click='logout("login2")'>退出登录</div>
+        <div class='sign-out' @click='logout("login")'>退出登录</div>
     </div>
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
+
 export default {
+    computed: {
+        ...mapState('user', [
+            'name',
+            'avatar'
+        ])
+    },
     methods: {
        gologin(name) {
            this.$router.push({name})
        },
        logout(name) {
-           this.$router.replace({name})
+           this.$store.dispatch('user/LogOut').then(()=>{
+                this.$router.replace({name})
+           })
+           
        } 
     },
     created() {
-        this.$store.commit('app/BAR_TITLE', '我的')
+
     }
 }
 </script>
@@ -95,9 +110,14 @@ export default {
   background-color: rebeccapurple;
   color: #fff;
 
-  & /deep/ .item-icon {
+  //   & /deep/ .item-icon {
+  //     width: 150px;
+  //     height: 150px;
+  //   }
+  .item-icon {
     width: 150px;
     height: 150px;
+    border-radius: 60%;
   }
 }
 .device-item {
