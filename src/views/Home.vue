@@ -7,15 +7,15 @@
   </div>
 
   <mt-tabbar v-model="selected" class='home-tab'>
-    <mt-tab-item id="home" @click.native="tabClick('tab_home')">
+    <mt-tab-item id="home" @click.native="tabClick('tab_home')" :class='tabClass("tab_home")'>
       <svg-icon icon-class="home1" slot='icon'></svg-icon>
       首页
     </mt-tab-item>
-    <mt-tab-item id="discover" @click.native="tabClick('tab_discover')">
+    <mt-tab-item id="discover" @click.native="tabClick('tab_discover')" :class='tabClass("tab_home")'>
       <svg-icon icon-class="chart" slot='icon'></svg-icon>
       发现
     </mt-tab-item>
-    <mt-tab-item id="my" @click.native="tabClick('tab_my')">
+    <mt-tab-item id="my" @click.native="tabClick('tab_my')" :class='tabClass("tab_home")'>
       <svg-icon icon-class="user" slot='icon'></svg-icon>
       我的
     </mt-tab-item>
