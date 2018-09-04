@@ -29,7 +29,9 @@
         barcodeStyle: {
           position: 'absolute',
           height: '100%',
-          top: '0'
+          top: '0',
+          frameColor:'green',
+          scanbarColor:'green'
         }
       }
     },
@@ -128,14 +130,14 @@
 <style lang="scss">
 .scan {
   height: 100%;
-  // position: relative;
+  position: relative;
   #bcid {
     width: 100%;
     // height: 100%;
     position: absolute;
     left: 0;
-    right: 0;
-    top: 0;
+    // right: 0;
+    // top: 0;
     bottom: 0;
     text-align: center;
     color: #fff;
@@ -151,7 +153,7 @@
     // line-height: 2rem;
     z-index: 3002;
     width: 100%;
-    height: 60px;
+    // height: 60px;
     color: #fff;
   }
   .tools-bar {

@@ -206,6 +206,14 @@ const router = new Router({
         title: '我的-添加设备2',
       },
     },
+    {
+      path: '/addtest',
+      name: 'addtest',
+      component: () => import(/* webpackChunkName: "device" */ './views/tabs/addtest.vue'),
+      meta: {
+        title: '我的-添加设备测试',
+      },
+    },
   ],
 });
 

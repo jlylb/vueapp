@@ -38,7 +38,9 @@
         <mt-cell title="添加设备2" is-link  to='addDevice2'>
             <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
         </mt-cell>
-
+        <mt-cell title="添加设备3" is-link  to='addtest'>
+            <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
+        </mt-cell>
         <mt-cell title="帮助中心" is-link to='/auth/help'>
             <svg-icon icon-class='help-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
