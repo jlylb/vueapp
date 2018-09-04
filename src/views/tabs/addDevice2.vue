@@ -1,24 +1,21 @@
 <template>
-    <div class='layout-container'>
+    <div class='single-container'>
         <top-component></top-component> 
-        <barcode-component></barcode-component>
+        <barcode-component2></barcode-component2>
     </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import BarcodeComponent from '@/components/barcode';
+import BarcodeComponent2 from '@/components/barcode2';
 
 
 export default {
   components: {
-    BarcodeComponent
+    BarcodeComponent2
   },
   computed: {
-    ...mapState('user', [
-        'name',
-        'avatar'
-    ])
+
   },
   methods: {
 
@@ -30,10 +27,11 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.layout-container {
+.single-container {
   position: relative;
-}
-.home-content {
-  margin-bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

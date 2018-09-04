@@ -6,7 +6,7 @@
     <router-view></router-view>
   </div>
 
-  <mt-tabbar v-model="selected" class='home-tab'>
+  <mt-tabbar v-model="selected" class='home-tab' v-show='isShow'>
     <mt-tab-item id="tab_home" @click.native="tabClick('tab_home')" >
       <svg-icon icon-class="home1" slot='icon'></svg-icon>
       首页
@@ -32,21 +32,29 @@ export default {
   components: {},
   data() {
     return {
-      selected: "tab_home"
+      selected: "",
+      hiddenTabs: ['add_device'],
+      isShow: true
     };
   },
   computed: {
     ...mapGetters('app',[
       'barTitle'
-    ]),
-    isShow() {
-      return this.$route.name !=='tab_home'
-    },
+    ])
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.selected = to.name
+      vm.isShow = !(vm.hiddenTabs.indexOf(to.name) > -1)
+    })
   },
   watch: {
     '$route'(to) {
+      console.log(to.name)
       this.selected = to.name
-    }
+      this.isShow = !(this.hiddenTabs.indexOf(to.name) > -1)
+      console.log(this.isShow)
+    },
   },
   methods: {
     tabClick(name) {

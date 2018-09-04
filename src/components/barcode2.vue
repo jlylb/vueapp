@@ -4,6 +4,17 @@
       <div style="height:40%"></div>
       <p class="tip">...载入中...</p>
     </div>
+
+    <footer>
+    <div class='tools-bar'>
+      <div class='tools-item'>
+        <p>
+          <svg-icon icon-class='user-circle' class='item-icon' slot='icon'></svg-icon>
+        </p>
+        <p>闪光灯</p>
+      </div>
+    </div>
+    </footer>
   </div>
 </template>
 
@@ -46,7 +57,8 @@
           }
           result = result.replace(/\n/g, '');
           that.codeUrl = result;
-          alert(result);
+          ///alert(result);
+          that.$router.push({name: 'addDevice_page'});
           that.closeScan();
         }
       },
@@ -85,7 +97,7 @@
           wo=ws.opener();
           // 开始扫描
           ws.addEventListener('show',function(){
-            scan=new plus.barcode.Barcode('bcid',[plus.barcode.QR,plus.barcode.EAN8,plus.barcode.EAN13],{frameColor:'#00FF00',scanbarColor:'#00FF00'});
+            scan=new plus.barcode.Barcode('bcid',[plus.barcode.QR,plus.barcode.EAN8,plus.barcode.EAN13],{frameColor:'green',scanbarColor:'green'});
               scan.onmarked=onmarked;
               scan.start({conserve:true});
           });
@@ -113,13 +125,13 @@
     }
   }
 </script>
-<style lang="less">
+<style lang="scss">
 .scan {
   height: 100%;
   // position: relative;
   #bcid {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     position: absolute;
     left: 0;
     right: 0;
@@ -127,9 +139,31 @@
     bottom: 0;
     text-align: center;
     color: #fff;
-    background: #ccc;
+    background: rgba(0, 0, 0, 0.7);
     padding: 0;
     margin: 0;
+  }
+  footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    // height: 2rem;
+    // line-height: 2rem;
+    z-index: 3002;
+    width: 100%;
+    height: 60px;
+    color: #fff;
+  }
+  .tools-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .tools-item {
+    width: 50%;
+    // display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

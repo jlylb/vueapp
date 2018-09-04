@@ -140,7 +140,46 @@ const router = new Router({
         },
       ],
     },
-
+    {
+      path: '/',
+      name: 'auth',
+      component: Home,
+      redirect: '/auth_userinfo',
+      children: [
+        {
+          path: '/auth/userinfo',
+          name: 'auth_userinfo',
+          meta: {
+            title: '个人信息',
+          },
+          component: () => import(/* webpackChunkName: "auth" */ './views/auth/userinfo.vue'),
+        },
+        {
+          path: '/auth/about',
+          name: 'auth_about',
+          meta: {
+            title: '关于我们',
+          },
+          component: () => import(/* webpackChunkName: "auth" */ './views/auth/about.vue'),
+        },
+        {
+          path: '/auth/help',
+          name: 'auth_help',
+          meta: {
+            title: '帮助中心',
+          },
+          component: () => import(/* webpackChunkName: "auth" */ './views/auth/help.vue'),
+        },
+        {
+          path: '/auth/feedback',
+          name: 'auth_feedback',
+          meta: {
+            title: '意见反馈',
+          },
+          component: () => import(/* webpackChunkName: "auth" */ './views/auth/feedback.vue'),
+        },
+      ],
+    },
     {
       path: '/login',
       name: 'login',
@@ -150,6 +189,22 @@ const router = new Router({
       path: '/login3',
       name: 'login3',
       component: () => import(/* webpackChunkName: "zbout" */ './views/login3.vue'),
+    },
+    {
+      path: '/addDevice2',
+      name: 'add_device2',
+      component: () => import(/* webpackChunkName: "device" */ './views/tabs/addDevice2.vue'),
+      meta: {
+        title: '我的-添加设备2',
+      },
+    },
+    {
+      path: '/addDevice_page',
+      name: 'addDevice_page',
+      component: () => import(/* webpackChunkName: "device" */ './views/tabs/addDevice2.vue'),
+      meta: {
+        title: '我的-添加设备2',
+      },
     },
   ],
 });

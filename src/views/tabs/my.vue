@@ -28,21 +28,24 @@
             </div>
         </div>
 
-        <mt-cell title="个人信息" is-link>
+        <mt-cell title="个人信息" is-link to='/auth/userinfo'>
             <svg-icon icon-class='user-circle' class='item-icon' slot='icon'></svg-icon>
             您好, {{ name }}
         </mt-cell>
         <mt-cell title="添加设备" is-link  to='tab_my/addDevice'>
-            <svg-icon icon-class='add' class='item-icon' slot='icon'></svg-icon> 
+            <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
+        </mt-cell>
+        <mt-cell title="添加设备2" is-link  to='addDevice2'>
+            <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
         </mt-cell>
 
-        <mt-cell title="帮助中心" is-link>
+        <mt-cell title="帮助中心" is-link to='/auth/help'>
             <svg-icon icon-class='help-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
-        <mt-cell title="意见反馈" is-link>
+        <mt-cell title="意见反馈" is-link to='/auth/feedback'>
             <svg-icon icon-class='adviser-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
-        <mt-cell title="关于我们" is-link>
+        <mt-cell title="关于我们" is-link to='/auth/about'>
             <svg-icon icon-class='us-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
         <mt-cell></mt-cell>
