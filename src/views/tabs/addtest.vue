@@ -1,29 +1,33 @@
 <template>
     <div class='single-container'>
         <top-component></top-component>
-        <barcode-component3></barcode-component3>
+        <barcode-component-test></barcode-component-test>
 
     </div>
 </template>
 
 <script>
-import BarcodeComponent3 from '@/components/barcode3';
+import BarcodeComponentTest from '@/components/barcode3';
 
 export default {
   components: {
-    BarcodeComponent3
+    BarcodeComponentTest
   },
   data() {
     return {
       pdi_index: '',
-      pdi_area: ''
+      pdi_area: '',
+      popupVisible: false,
+      item: {}
     }
   },
   computed: {
 
   },
   methods: {
-
+    popup() {
+      this.popupVisible = true
+    }
   },
   created() {
 
@@ -39,15 +43,4 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
 }
- footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2rem;
-    line-height: 2rem;
-    z-index: 3002;
-    width: 100%;
-    height: 60px;
-    color: #fff;
-  }
 </style>

@@ -5,6 +5,7 @@ import '@/permission';
 import MintUI from 'mint-ui';
 import 'reset.css';
 import 'mint-ui/lib/style.css';
+import '@/tools/backbutton';
 
 import App from './App.vue';
 import router from './router';

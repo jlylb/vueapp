@@ -38,6 +38,14 @@ const router = new Router({
           },
         },
         {
+          path: '/mydevice',
+          name: 'mydevice',
+          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/mydevice.vue'),
+          meta: {
+            title: '我的-添加设备',
+          },
+        },
+        {
           path: '/tab_my/addDevice',
           name: 'add_device',
           component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/addDevice.vue'),

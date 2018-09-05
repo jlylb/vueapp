@@ -1,140 +1,172 @@
 <template>
   <div class="scan">
-    <div id="bcid">
-      <div style="height:40%"></div>
-      <p class="tip">...载入中...</p>
-    </div>
-
-    <footer>
-      <mt-button type='primary' @click='createBarcode'>扫码</mt-button>
-      <mt-button type='primary' @click='createView'>添加文字</mt-button>
-      <mt-button type='primary' @click='createImg'>添加图片</mt-button>
-    </footer>
-    
+		<div id="bcid">
+			<div style="height:40%"></div>
+			<p class="tip">...载入中...</p>
+		</div>
+		<footer>
+			<div class="fbt" @click="back">取　消</div>
+			<div id="btCancel" class="fbt" @click="scanSwitch">{{ btnText }}</div>
+		</footer>
   </div>
 </template>
 
 <script type='text/ecmascript-6'>
-let barcode = null
+
   export default {
     data() {
       return {
-
+        ws: null,
+        domready: null,
+        wo: null,
+        scan: null,
+        bCancel: true,
+        code: ''
       }
     },
     methods: {
-      addText() {
+      scanSwitch() {
+        if(this.bCancel){
+          this.scan.cancel();
+        }else{
+          this.scan.start();
+        }
+        this.bCancel=!this.bCancel;
+        console.log(this.bCancel)
+      },
+      plusReady(){
+        if(this.ws||!window.plus){
+          return;
+        }
+        const vm = this
+        try{
+            this.ws=plus.webview.currentWebview();
+            vm.scan=new plus.barcode.Barcode('bcid',[plus.barcode.QR,plus.barcode.EAN8,plus.barcode.EAN13],{frameColor:'#00FF00',scanbarColor:'#00FF00'});
+            vm.scan.onmarked=vm.onmarked;
+            vm.scan.start();
+            vm.ws.show('pop-in');
+        }catch(e) {
+          console.log(this.ws,'catch ws')
+        }
 
       },
-      addImg() {
-
-      },
-      createBarcode() {
-      if(!window.plus) return;
-      console.log(plus.barcode, plus.barcode.create)
-      if(!barcode){
-        barcode = plus.barcode.create('barcode', [plus.barcode.QR], {
-          top:'100px',
-          left:'0px',
-          width: '100%',
-          height: '200px',
-          position: 'static',
-          frameColor:'#00ff00',
-          scanbarColor:'#00ff00'
-        });
-        console.log(barcode,77777777)
-        function onmarked(type, result) {
-        let text = '未知: ';
+      onmarked(type, result, file){
         switch(type){
           case plus.barcode.QR:
-          text = 'QR: ';
+          type = 'QR';
           break;
           case plus.barcode.EAN13:
-          text = 'EAN13: ';
+          type = 'EAN13';
           break;
           case plus.barcode.EAN8:
-          text = 'EAN8: ';
+          type = 'EAN8';
+          break;
+          default:
+          type = '其它'+type;
           break;
         }
-        alert( text+result );
-      }
-        barcode.onmarked = onmarked;
-        console.log(barcode,2222222)
-        plus.webview.currentWebview().append(barcode);
-      }
-      console.log(barcode,333333333333)
-      barcode.start();
-    },
+        result = result.replace(/\n/g, '');
+
+        this.code = result
+        history.back();
+        this.$router.replace({name: 'mydevice', params: {code: this.code, success: 1}})
+        //this.back();
+        // this.$parent.popup()
+        // this.$router.go(-1);
+      },
+      back(){
+        if(window.plus){
+          console.log(this, 'back')
+          // this.scan.close()
+          // this.ws.close()
+          // this.$router.go(-1);
+          history.back();
+          this.$router.replace({name: 'mydevice'})
+        }
+      },
       createView(){
-        let view = new plus.nativeObj.View('test',
-        {top:'0px',left:'0px',height:'44px',width:'100%'});
-        view.draw([
-          {tag:'font',id:'font',text:'原生控件',textStyles:{size:'18px'}},
-          ]);
-        view.show();
+          let view = new plus.nativeObj.View('test',
+          {top:'auto',left:'40px',height:'44px',width:'100%'});
+          view.draw([
+            {tag:'font',id:'font',text:'原生控件',textStyles:{size:'18px'}},
+            ]);
+          view.show();
       },
       createImg(){
-        let view = new plus.nativeObj.View('test1',
-        {top:'0px',left:'0px',height:'44px',width:'100%'});
-        view.draw([
-          {tag:'img',id:'img',src:'_www/static/img/icon.png',position:{top:'100px',left:'0px',width:'100%',height:'200px'}},
-          ]);
-        view.show();
+          let view = new plus.nativeObj.View('test1',
+          {top:'0px',left:'0px',height:'44px',width:'100%'});
+          view.draw([
+            {tag:'img',id:'img',src:'static/img/icon.png',position:{top:'100px',left:'0px',width:'100%',height:'200px'}},
+            ]);
+          view.show();
+        }
+    },
+    computed: {
+      btnText() {
+        return this.bCancel?'暂停':'开始'
       }
     },
     mounted() {
-
+      // console.log(window.plus)
+      if(window.plus){
+        this.plusReady();
+      }else{
+        document.addEventListener('plusready', this.plusReady, false);
+      }
     },
     beforeDestroy() {
- 
+      
     },
     destroyed() {
-      // this.barcode = null
+      this.ws = null;
+      this.domready = null;
+      this.wo = null;
+      this.scan.close()
+      this.scan = null;
+      this.bCancel = false;
     },
     created() {
+
+    },
+    beforeCreate() {
 
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .scan {
   height: 100%;
   position: relative;
-  #bcid {
-    width: 100%;
-    // height: 100%;
-    position: absolute;
-    left: 0;
-    // right: 0;
-    // top: 0;
-    bottom: 0;
-    text-align: center;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 0;
-    margin: 0;
-  }
-  footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    // height: 2rem;
-    // line-height: 2rem;
-    z-index: 3002;
-    width: 100%;
-    // height: 60px;
-    color: #fff;
-  }
-  .tools-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .tools-item {
-    width: 50%;
-    // display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+}
+#bcid {
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  bottom: 44px;
+  text-align: center;
+}
+.tip {
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 0px -1px #103e5c;
+}
+footer {
+  width: 100%;
+  height: 44px;
+  position: absolute;
+  bottom: 0px;
+  line-height: 44px;
+  text-align: center;
+  color: #fff;
+}
+.fbt {
+  width: 50%;
+  height: 100%;
+  background-color: #ffcc33;
+  float: left;
+}
+.fbt:active {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
 }
 </style>
