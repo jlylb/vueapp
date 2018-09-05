@@ -5,7 +5,7 @@
 			<p class="tip">...载入中...</p>
 		</div>
 		<footer>
-			<div class="fbt" @click="back">取　消</div>
+			<div class="fbt" @click="createImg">取　消</div>
 			<div id="btCancel" class="fbt" @click="scanSwitch">{{ btnText }}</div>
 		</footer>
   </div>
@@ -41,7 +41,14 @@
         const vm = this
         try{
             this.ws=plus.webview.currentWebview();
-            vm.scan=new plus.barcode.Barcode('bcid',[plus.barcode.QR,plus.barcode.EAN8,plus.barcode.EAN13],{frameColor:'#00FF00',scanbarColor:'#00FF00'});
+            vm.scan=new plus.barcode.Barcode(
+              'bcid',
+            [plus.barcode.QR,plus.barcode.EAN8,plus.barcode.EAN13],
+            {
+              frameColor:'#00FF00',
+              scanbarColor:'#00FF00',
+              top: '40px',
+            });
             vm.scan.onmarked=vm.onmarked;
             vm.scan.start();
             vm.ws.show('pop-in');
@@ -94,9 +101,9 @@
       },
       createImg(){
           let view = new plus.nativeObj.View('test1',
-          {top:'0px',left:'0px',height:'44px',width:'100%'});
+          {top:'100px',left:'auto',height:'200px',width:'100%'});
           view.draw([
-            {tag:'img',id:'img',src:'static/img/icon.png',position:{top:'100px',left:'0px',width:'100%',height:'200px'}},
+            {tag:'img',id:'img',src:'_www/static/img/icon.png',position:{top:'0',left:'0px',width:'100%',height:'200px'}},
             ]);
           view.show();
         }
@@ -137,6 +144,7 @@
 .scan {
   height: 100%;
   position: relative;
+  overflow: hidden;
 }
 #bcid {
   width: 100%;

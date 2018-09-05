@@ -5,8 +5,10 @@
 </template>
 <script>
 export default {
-  mounted() {
+  methods: {
 
+  },
+  mounted() {
   }
 }
 </script>

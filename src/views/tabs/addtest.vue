@@ -27,7 +27,11 @@ export default {
   methods: {
     popup() {
       this.popupVisible = true
-    }
+    },
+
+  },
+  mounted() {
+
   },
   created() {
 
