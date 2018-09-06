@@ -4,15 +4,22 @@
 			<div style="height:40%"></div>
 			<p class="tip">...载入中...</p>
 		</div>
-		<footer>
-			<div class="fbt" @click="createImg">取　消</div>
-			<div id="btCancel" class="fbt" @click="scanSwitch">{{ btnText }}</div>
-		</footer>
+
+    <footer>
+      <div class='tools-bar'>
+        <div class='tools-item'>
+          <p>
+            <svg-icon :icon-class='flashIcon' class='item-icon' slot='icon' @click.native='openFlash'></svg-icon>
+          </p>
+        </div>
+      </div>
+      </footer>
+      
   </div>
 </template>
 
 <script type='text/ecmascript-6'>
-
+  import LightPng from '@/assets/light_open.png'
   export default {
     data() {
       return {
@@ -21,11 +28,15 @@
         wo: null,
         scan: null,
         bCancel: true,
-        code: ''
+        code: '',
+        lightView: null,
+        isOpenFlash: false,
+        flashIcon: 'light-off4'
       }
     },
     methods: {
       scanSwitch() {
+        if(!window.plus) return;
         if(this.bCancel){
           this.scan.cancel();
         }else{
@@ -41,13 +52,15 @@
         const vm = this
         try{
             this.ws=plus.webview.currentWebview();
+            // this.createImg();
             vm.scan=new plus.barcode.Barcode(
               'bcid',
             [plus.barcode.QR,plus.barcode.EAN8,plus.barcode.EAN13],
             {
               frameColor:'#00FF00',
               scanbarColor:'#00FF00',
-              top: '40px',
+              top: '0',
+              position: 'absolute'
             });
             vm.scan.onmarked=vm.onmarked;
             vm.scan.start();
@@ -76,7 +89,7 @@
 
         this.code = result
         history.back();
-        this.$router.replace({name: 'mydevice', params: {code: this.code, success: 1}})
+        this.$router.replace({name: 'tab_discover', params: {code: this.code, success: 1}})
         //this.back();
         // this.$parent.popup()
         // this.$router.go(-1);
@@ -92,6 +105,7 @@
         }
       },
       createView(){
+          if(!window.plus) return;
           let view = new plus.nativeObj.View('test',
           {top:'auto',left:'40px',height:'44px',width:'100%'});
           view.draw([
@@ -100,13 +114,23 @@
           view.show();
       },
       createImg(){
-          let view = new plus.nativeObj.View('test1',
-          {top:'100px',left:'auto',height:'200px',width:'100%'});
-          view.draw([
-            {tag:'img',id:'img',src:'_www/static/img/icon.png',position:{top:'0',left:'0px',width:'100%',height:'200px'}},
+          if(!window.plus) return;
+          this.lightView = new plus.nativeObj.View('test1',
+          {bottom:'0',left:'50%',height:'40px',width:'60px', dock:'bottom', backgroundColor: 'rgba(0,0,0,0.7)'});
+          this.lightView.addEventListener('click',()=>{
+              this.openFlash();
+          });
+          this.lightView.draw([
+            {tag:'img',id:'img',src: LightPng, position:{top:'0',left:'0',width:'100px',height:'auto'}},
             ]);
-          view.show();
-        }
+          this.lightView.show();
+      },
+      openFlash() {
+        if (!window.plus) return;
+        this.isOpenFlash = !this.isOpenFlash
+        this.flashIcon = this.isOpenFlash?'light-open4':'light-off4';
+        this.scan.setFlash(this.isOpenFlash);
+      },
     },
     computed: {
       btnText() {
@@ -128,7 +152,12 @@
       this.ws = null;
       this.domready = null;
       this.wo = null;
-      this.scan.close()
+      if(this.lightView) {
+        this.lightView.close()
+      }
+      if(this.scan) {
+        this.scan.close()
+      }
       this.scan = null;
       this.bCancel = false;
     },
@@ -141,40 +170,51 @@
   }
 </script>
 <style lang="scss" scoped>
+$height: 40px;
 .scan {
   height: 100%;
   position: relative;
   overflow: hidden;
 }
+
 #bcid {
   width: 100%;
   position: absolute;
   top: 0px;
-  bottom: 44px;
+  bottom: 0;
   text-align: center;
+  // transform: translateY(40px);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 .tip {
   color: #ffffff;
   font-weight: bold;
-  text-shadow: 0px -1px #103e5c;
 }
 footer {
-  width: 100%;
-  height: 44px;
   position: absolute;
-  bottom: 0px;
-  line-height: 44px;
-  text-align: center;
+  left: 0;
+  bottom: 0;
+  // height: 2rem;
+  // line-height: 2rem;
+  z-index: 3002;
+  width: 100%;
+  // height: 60px;
   color: #fff;
 }
-.fbt {
-  width: 50%;
-  height: 100%;
-  background-color: #ffcc33;
-  float: left;
+.tools-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.fbt:active {
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
+.tools-item {
+  width: 50%;
+  // display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  & .item-icon {
+    height: 2em;
+    width: 2em;
+  }
 }
 </style>

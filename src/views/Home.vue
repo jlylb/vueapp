@@ -13,7 +13,7 @@
     </mt-tab-item>
     <mt-tab-item id="tab_discover" @click.native="tabClick('tab_discover')" >
       <svg-icon icon-class="chart" slot='icon'></svg-icon>
-      发现
+      设备
     </mt-tab-item>
     <mt-tab-item id="tab_my" @click.native="tabClick('tab_my')">
       <svg-icon icon-class="user" slot='icon'></svg-icon>

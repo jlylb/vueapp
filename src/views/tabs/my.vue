@@ -32,7 +32,7 @@
             <svg-icon icon-class='user-circle' class='item-icon' slot='icon'></svg-icon>
             您好, {{ name }}
         </mt-cell>
-        <mt-cell title="添加设备" is-link  to='tab_my/addDevice'>
+        <!-- <mt-cell title="添加设备" is-link  to='tab_my/addDevice'>
             <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
         </mt-cell>
         <mt-cell title="添加设备2" is-link  to='addDevice2'>
@@ -40,6 +40,9 @@
         </mt-cell>
         <mt-cell title="我的设备" is-link  to='mydevice'>
             <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
+        </mt-cell> -->
+        <mt-cell title="定位" is-link to='/geo'>
+            <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
         <mt-cell title="帮助中心" is-link to='/auth/help'>
             <svg-icon icon-class='help-circle' class='item-icon' slot='icon'></svg-icon>

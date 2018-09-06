@@ -25,9 +25,9 @@ const router = new Router({
           path: '/tab_discover',
           name: 'tab_discover',
           meta: {
-            title: '发现',
+            title: '我的设备',
           },
-          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/discover.vue'),
+          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/mydevice.vue'),
         },
         {
           path: '/tab_my',
@@ -42,13 +42,21 @@ const router = new Router({
           name: 'mydevice',
           component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/mydevice.vue'),
           meta: {
-            title: '我的-添加设备',
+            title: '我的设备',
           },
         },
         {
           path: '/tab_my/addDevice',
           name: 'add_device',
           component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/addDevice.vue'),
+          meta: {
+            title: '我的-添加设备',
+          },
+        },
+        {
+          path: '/geo',
+          name: 'geo',
+          component: () => import(/* webpackChunkName: "geo" */ './views/geo/index.vue'),
           meta: {
             title: '我的-添加设备',
           },
@@ -219,7 +227,7 @@ const router = new Router({
       name: 'addtest',
       component: () => import(/* webpackChunkName: "device" */ './views/tabs/addtest.vue'),
       meta: {
-        title: '我的-添加设备测试',
+        title: '扫码添加设备',
       },
     },
   ],
