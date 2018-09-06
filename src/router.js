@@ -154,6 +154,14 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "video" */ './views/video/index.vue'),
         },
+        {
+          path: '/video/player',
+          name: 'video_player',
+          meta: {
+            title: '视频控制',
+          },
+          component: () => import(/* webpackChunkName: "video" */ './views/video/videoPlayer.vue'),
+        },
       ],
     },
     {

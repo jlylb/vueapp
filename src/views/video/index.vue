@@ -6,7 +6,7 @@
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="60">
       <li v-for="(item, index) in list" :key='index'>
-        <a class='video-card' @touchstart="touchstart">
+        <a class='video-card' @click='openVideo'>
           <p>视频 {{ item }}</p>
           <p class='video-desc'>视频描述</p>
         </a>
@@ -38,8 +38,11 @@ export default {
         this.loading = false;
       }, 2500);
     },
-    touchstart() {
+    openVideo() {
 
+      const url = 'https://v.youku.com/v_show/id_XODAzOTYxNjA0.html?spm=a2h0k.11417342.soresults.dposter';
+      console.log(url, this.$router)
+      this.$router.push({name: 'video_player', params: {url: url} });
     }
   }
 };
@@ -57,7 +60,7 @@ export default {
   position: relative;
 
   .video-desc {
-    display: none;
+    display: block;
     width: 100%;
     height: 30%;
     background-color: rgba(0, 0, 0, .2);
@@ -66,12 +69,12 @@ export default {
     left:0;
   }
 
-  &:hover {
-    .video-desc {
-      display: block;
+  // &:hover {
+  //   .video-desc {
+  //     display: block;
 
-    }
-  }
+  //   }
+  // }
 }
 .page-infinite-loading {
   text-align: center;
