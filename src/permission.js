@@ -1,5 +1,6 @@
 import { MessageBox } from 'mint-ui';
 import { getToken } from '@/tools/auth';
+import { getGuide } from '@/tools/guide';
 import router from './router';
 import store from './store';
 

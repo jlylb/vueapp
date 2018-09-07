@@ -3,16 +3,7 @@
     <mt-tab-container class="page-tab" v-model="active" swipeable>
 
       <mt-tab-container-item id="tab1" class='tab-item tab-item-first'>
-            <!-- <img :src='guide2'>
-            <div class='item-title animated bounceInDown'>
-              武汉盛世奈特有限公司
-            </div>
-            <div class='item-left animated bounceInRight'>
-              智能物联网
-            </div>
-            <div class='item-right animated bounceInLeft'>
-              大数据
-            </div> -->
+
 					<div class="item-logo" style="background-color: #D74B28">
 						<a href="#">
 						盛世奈特
@@ -26,7 +17,7 @@
          
       </mt-tab-container-item>
 
-      <mt-tab-container-item  class='tab-item tab-item-second'>
+      <mt-tab-container-item id="tab2" class='tab-item tab-item-second'>
          <!-- <img :src='guide3'> -->
          		<div class="item-logo" style="background-color: #02C1ED;">
 						<a href="#">
@@ -41,7 +32,7 @@
 					</div>
       </mt-tab-container-item>
 
-      <mt-tab-container-item  class='tab-item tab-item-third'>
+      <mt-tab-container-item id="tab3" class='tab-item tab-item-third'>
          <!-- <img :src='guide4'> -->
          	<div class="item-logo" style="background-color: #67C962;">
 						<a href="#">
@@ -55,7 +46,7 @@
 					</div>
       </mt-tab-container-item>
 
-     <mt-tab-container-item  class='tab-item tab-item-third'>
+     <mt-tab-container-item id="tab4" class='tab-item tab-item-third'>
          <!-- <img :src='guide4'> -->
          	<div class="item-logo" style="background-color: #FCD208;">
 						<a href="#">
@@ -86,6 +77,9 @@ export default {
       guide3,
       guide4
     };
+  },
+  created() {
+    this.$store.dispatch('app/giveGuide', true);
   }
 }
 </script>
@@ -99,22 +93,7 @@ export default {
   color: #fff;
   position: relative;
 }
-.tab-item {
-  // display: flex;
-  // justify-content: center;
-}
-.item-title {
-  position: absolute;
-  font-size: 3em;
-  font-weight: bold;
-  bottom: 30%;
-  left: 50%;
-}
-.tab-item img {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
+
 .guide /deep/ .mint-tab-container-wrap {
   height: 100%;
 }
