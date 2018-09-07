@@ -5,6 +5,8 @@ import '@/permission';
 import MintUI from 'mint-ui';
 import 'reset.css';
 import 'mint-ui/lib/style.css';
+import 'animate.css';
+// import VueTouch from 'vue-touch';
 // import '@/tools/backbutton';
 
 import App from './App.vue';

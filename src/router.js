@@ -238,6 +238,22 @@ const router = new Router({
         title: '扫码添加设备',
       },
     },
+    {
+      path: '/guide',
+      name: 'guide',
+      component: () => import(/* webpackChunkName: "guide" */ './views/guide/index.vue'),
+      meta: {
+        title: '引导页',
+      },
+    },
+    {
+      path: '/guide1',
+      name: 'guide1',
+      component: () => import(/* webpackChunkName: "guide" */ './views/guide/guide1.vue'),
+      meta: {
+        title: '引导页',
+      },
+    },
   ],
 });
 
