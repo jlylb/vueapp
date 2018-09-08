@@ -1,4 +1,4 @@
-import { setGuide } from '@/tools/guide';
+import { removeGuide, setGuide } from '@/tools/guide';
 
 const app = {
   namespaced: true,
@@ -21,8 +21,12 @@ const app = {
     giveGuide({ commit }, bVal) {
       commit('GUIDE', bVal);
       setGuide(bVal);
-    }
-  }
+    },
+    forgetGuide({ commit }) {
+      commit('GUIDE', false);
+      removeGuide();
+    },
+  },
 };
 
 export default app;

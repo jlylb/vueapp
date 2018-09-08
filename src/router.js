@@ -207,12 +207,17 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: () => import(/* webpackChunkName: "zbout" */ './views/login.vue'),
+      component: () => import(/* webpackChunkName: "login" */ './views/login.vue'),
     },
     {
       path: '/login3',
       name: 'login3',
-      component: () => import(/* webpackChunkName: "zbout" */ './views/login3.vue'),
+      component: () => import(/* webpackChunkName: "login" */ './views/login3.vue'),
+    },
+    {
+      path: '/login4',
+      name: 'login4',
+      component: () => import(/* webpackChunkName: "login" */ './views/login4.vue'),
     },
     {
       path: '/addDevice2',
@@ -241,7 +246,7 @@ const router = new Router({
     {
       path: '/guide',
       name: 'guide',
-      component: () => import(/* webpackChunkName: "guide" */ './views/guide/index.vue'),
+      component: () => import(/* webpackChunkName: "guide index" */ './views/guide/index.vue'),
       meta: {
         title: '引导页',
       },
@@ -249,7 +254,7 @@ const router = new Router({
     {
       path: '/guide1',
       name: 'guide1',
-      component: () => import(/* webpackChunkName: "guide" */ './views/guide/guide1.vue'),
+      component: () => import(/* webpackChunkName: "guide index" */ './views/guide/guide1.vue'),
       meta: {
         title: '引导页',
       },

@@ -26,6 +26,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getGuide } from '@/tools/guide'
 
 export default {
   name: "home",
@@ -82,7 +83,7 @@ export default {
           // const hash = location.hash;
           const path =vm.$route.path;
           console.log(path,'url params')
-          if (path === '/tab_home') {
+          if (path === '/tab_home' || path === '/login') {
             // 入口页了，执行退出。
             plus.runtime.quit();
           } else {
@@ -93,10 +94,24 @@ export default {
         });
       //}
       // document.addEventListener('plusready', plusReady, false);
-    }}
+    }},
+    addGuide() {
+      if(!window.plus) return;
+      if(!getGuide()){
+        const cself = plus.webview.getLaunchWebview();
+        const csecond = plus.webview.create('guide.html','guide');
+        csecond.show();
+        cself.append(csecond);
+      }
+
+    },
+    closeGuide() {
+
+    },
   },
   mounted() {
-    this.addEventTest()
+    this.addEventTest();
+    // this.addGuide();
   },
   created() {
     console.log(this.$store)

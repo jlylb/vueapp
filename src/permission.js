@@ -4,7 +4,7 @@ import { getGuide } from '@/tools/guide';
 import router from './router';
 import store from './store';
 
-const whiteList = ['/login'];
+const whiteList = ['/login', '/guide', '/login3', '/login4'];
 
 console.log(store.getters);
 
@@ -31,9 +31,15 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (whiteList.indexOf(to.path) !== -1) {
+    console.log(window.plus, 'window plus', to, from);
     next();
   } else {
-    next({ path: '/login', replace: true });
+    console.log('last login', getGuide());
+    if (!getGuide()) {
+      next({ path: '/guide', replace: true });
+    } else {
+      next({ path: '/login', replace: true });
+    }
   }
 });
 

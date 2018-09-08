@@ -90,6 +90,7 @@ const user = {
             resolve();
           })
           .catch((error) => {
+            console.log(error, 'login error');
             reject(error);
           });
       });
@@ -140,12 +141,13 @@ const user = {
     },
 
     // 登出
-    LogOut({ commit, state }) {
+    LogOut({ commit, state, dispatch }) {
       return new Promise((resolve, reject) => {
         logout(state.token)
           .then(() => {
             commit('SET_TOKEN', '');
             commit('SET_ROLES', []);
+            dispatch('app/forgetGuide', null, { root: true });
             removeToken();
             resolve();
           })

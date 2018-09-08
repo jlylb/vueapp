@@ -53,7 +53,7 @@
 						盛世奈特
 						</a>
 						<div class="animate">
-							<mt-button id='close' type='danger'>立即体验</mt-button>
+							<mt-button id='close' type='danger' @click="closeWebview">立即体验</mt-button>
 						</div>	
 					</div>
 
@@ -66,17 +66,20 @@
 </template>
 
 <script>
-import guide2 from '@/assets/guide2.jpg';
-import guide3 from '@/assets/guide3.jpg';
-import guide4 from '@/assets/guide4.jpg';
+
 export default {
   data() {
     return {
       active: 'tab1',
-      guide2,
-      guide3,
-      guide4
     };
+  },
+  methods: {
+    closeWebview() {
+      // if(!window.plus) return;
+      // const csecond = plus.webview.getWebviewById('guide');
+      // csecond.close();
+      this.$router.push({path: '/', replace: true});
+    }
   },
   created() {
     this.$store.dispatch('app/giveGuide', true);

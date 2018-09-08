@@ -53,6 +53,9 @@
         <mt-cell title="关于我们" is-link to='/auth/about'>
             <svg-icon icon-class='us-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
+        <mt-cell title="login" is-link to='/login4'>
+            <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
+        </mt-cell>
         <mt-cell></mt-cell>
         <div class='sign-out' @click='logout("login")'>退出登录</div>
     </div>
