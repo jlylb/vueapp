@@ -1,7 +1,7 @@
 <template>
 
     <div class='login-container' id='login-container'> 
-        <div class='login-cover'>
+        <div class='login-cover' id='login-cover'>
             <div class='home-content'>
                 <div class='logo'>
                     <svg-icon icon-class="user" class='logo-icon'></svg-icon>
@@ -71,8 +71,12 @@ export default {
 
   },
   mounted() {
-    // var html = document.getElementById('login-container');
-    // html.style.minHeight = html.clientHeight + 'px';
+    // const body = document.getElementsByTagName('body')[0];
+    // body.style.height=body.clientHeight+"px";
+    // const html = document.getElementById('login-container');
+    // html.style.height = '100%';
+    // const cover = document.getElementById('login-cover');
+    // cover.style.height = '100%';
   },
   created() {}
 };

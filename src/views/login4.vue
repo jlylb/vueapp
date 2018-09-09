@@ -1,8 +1,8 @@
 <template>
 
     <div class='login-container' id='login-container'> 
-        <div class='login-cover'>
-            <div class='home-content'>
+      
+            <div class='login-cover'>
                 <div class='logo'>
                     <svg-icon icon-class="user" class='logo-icon'></svg-icon>
                 </div>
@@ -27,7 +27,7 @@
                     忘记密码?
                 </a>
             </div>
-        </div>
+       
     </div>
 
 </template>
@@ -68,7 +68,7 @@ export default {
 
 <style lang='scss' scoped>
 .login-container {
-  //   background-image: url('../assets/bg.png');
+  // background-image: url('../assets/bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   height: 100%;
@@ -85,6 +85,11 @@ export default {
 }
 .login-cover {
   background: rgba(0, 0, 0, 0.5);
+  background-image: url('../assets/guide4.jpg');
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
   height: 100%;
   width: 98%;
   padding: 0 1%;
@@ -139,6 +144,11 @@ export default {
   color: #fff;
 }
 .home-content /deep/ .login-input-icon {
+  width: 1.5em;
+  height: 1.5em;
+  color: #fff;
+}
+.login-cover /deep/ .login-input-icon {
   width: 1.5em;
   height: 1.5em;
   color: #fff;
