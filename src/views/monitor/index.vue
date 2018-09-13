@@ -3,7 +3,7 @@
 
   <top-component></top-component>
 
-  <mt-cell :title="`${index + 1}号大棚`" is-link :to='{name: "monitor_device"}' v-for='(item, index) in dapeng' :key='index'>
+  <mt-cell :title="`${index + 1}号大棚`" is-link :to='{name: "monitor_device2"}' v-for='(item, index) in dapeng' :key='index'>
     <span style="color: green"> {{ index + 5 }}个设备</span>
     <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
   </mt-cell>

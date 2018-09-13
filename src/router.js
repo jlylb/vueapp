@@ -78,7 +78,14 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device.vue'),
         },
-
+        {
+          path: '/monitor/device2',
+          name: 'monitor_device2',
+          meta: {
+            title: '实时监测-选择设备',
+          },
+          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device2.vue'),
+        },
         {
           path: '/alarm/index',
           name: 'alarm',
