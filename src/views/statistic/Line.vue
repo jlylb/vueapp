@@ -102,7 +102,7 @@ export default {
         },
         grid: { 
             left: '12%',
-            top: '12%',
+            top: '15%',
          },
         series: [
           {

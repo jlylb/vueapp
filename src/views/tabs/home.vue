@@ -8,6 +8,9 @@
         <mt-swipe-item v-for='(item, index) in items' :key='index'>
             <img :src='item.image' />
         </mt-swipe-item>
+        <!-- <mt-swipe-item >
+            <img :src='testJpg' />
+        </mt-swipe-item> -->
     </mt-swipe>
       
 
@@ -52,10 +55,12 @@
 </template>
 
 <script>
+// import testJpg from '@/assets/test.jpg'
 export default {
     data() {
         return {
-            items : []
+            items : [],
+            // testJpg
         }
     },
     methods: {

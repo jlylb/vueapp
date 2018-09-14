@@ -143,7 +143,7 @@ export default {
 
 .chart {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   position: absolute;
   left: 50%;
   transform: translate3d(-50%, 0, 0);
@@ -155,8 +155,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
-  height: 20%;
+  // padding: 10px 0;
+  height: 25%;
   background-color: #e6effb;
 }
 .chart-desc-icon {
@@ -235,5 +235,9 @@ export default {
 .layout-container /deep/ .popup-device {
   height: 40%;
   overflow-y: auto;
+}
+.layout-container {
+  height: 100%;
+  overflow: hidden;
 }
 </style>

@@ -118,7 +118,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rebeccapurple;
+  background-color: rgba(0, 0, 0, 0.3);
   color: #fff;
 
   //   & /deep/ .item-icon {

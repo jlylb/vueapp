@@ -155,6 +155,7 @@ export default {
   margin: 50px auto 60px;
   display: flex;
   flex: 1;
+  height: calc(100% - 110px);
 }
 </style>
 
