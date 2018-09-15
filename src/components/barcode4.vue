@@ -1,11 +1,11 @@
 <template>
-  <div class="scan">
+  <!-- <div class="scan"> -->
 		<div id="bcid">
 			<div style="height:40%"></div>
 			<p class="tip">...载入中...</p>
 		</div>
 
-    <footer>
+    <!-- <footer>
       <div class='tools-bar'>
         <div class='tools-item'>
           <p>
@@ -15,7 +15,7 @@
       </div>
       </footer>
       
-  </div>
+  </div> -->
 </template>
 
 <script type='text/ecmascript-6'>
@@ -172,53 +172,24 @@
 <style lang="scss" scoped>
 $height: 40px;
 .scan {
-  height: calc(100% - 40px);
+  height: 100%;
   position: relative;
   overflow: hidden;
-  margin-top: 40px;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 #bcid {
   width: 100%;
   position: absolute;
-  top: 40px;
+  top: 20px;
   bottom: 0;
   text-align: center;
-  height: 90%;
-  // height: calc(100% - 95px);
+  height: 88%;
   // transform: translateY(40px);
   // background-color: rgba(0, 0, 0, 0.7);
 }
 .tip {
   color: #ffffff;
   font-weight: bold;
-}
-footer {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  // height: 2rem;
-  // line-height: 2rem;
-  z-index: 3002;
-  width: 100%;
-  // height: 60px;
-  color: #fff;
-}
-.tools-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.tools-item {
-  width: 50%;
-  // display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 0;
-  & .item-icon {
-    height: 2em;
-    width: 2em;
-  }
 }
 </style>

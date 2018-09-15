@@ -1,6 +1,6 @@
 <template>
     <div class='single-container'>
-        <!-- <top-component></top-component> -->
+        <top-component></top-component>
         <barcode-component-test></barcode-component-test>
 
     </div>
@@ -41,6 +41,7 @@ export default {
 
 <style lang='scss' scoped>
 .single-container {
+  background-color: rgba(0, 0, 0, 0.7);
   position: relative;
   width: 100%;
   height: 100%;
@@ -48,6 +49,7 @@ export default {
   overflow-y: auto;
   & .mint-header {
     background-color: transparent;
+    // position: static;
   }
 }
 </style>

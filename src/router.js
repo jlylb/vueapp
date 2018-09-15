@@ -266,6 +266,14 @@ const router = new Router({
         title: '引导页',
       },
     },
+    {
+      path: '/handtest',
+      name: 'handtest',
+      component: () => import(/* webpackChunkName: "test" */ './views/tabs/handtest.vue'),
+      meta: {
+        title: '测试页',
+      },
+    },
   ],
 });
 

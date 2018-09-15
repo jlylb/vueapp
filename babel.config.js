@@ -10,5 +10,6 @@ module.exports = {
         camel2DashComponentName: false,
       },
     ],
+    'equire',
   ],
 };

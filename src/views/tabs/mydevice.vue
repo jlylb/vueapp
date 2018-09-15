@@ -73,6 +73,10 @@
     </mt-cell>
     <mt-cell title="手动添加"  @click.native='handAdd'>
     </mt-cell>
+    <!-- <mt-cell title="测试"  @click.native='handTest'>
+    </mt-cell> -->
+    <!-- <mt-cell title="窗口测试"  @click.native='handWindow'>
+    </mt-cell> -->
 </mt-popup>
   </div>
 </template>
@@ -184,7 +188,38 @@ export default {
     },
     save() {
       this.popupVisible = false;
+    },
+    handTest() {
+      this.isAdd = false
+      this.$router.push({name: 'handtest'})
+    },
+    handWindow() {
+      this.isAdd = false
+      if(!window.plus) {
+        return
+      }
+      const cself = plus.webview.currentWebview();
+      let csecond = plus.webview.getWebviewById("barcode");
+      if(!csecond) {
+        csecond = plus.webview.create('barcode.html','barcode', {
+                                top:"0",   bottom:"0px",left: "0px", width:"100%",   height:"100%", 
+                        });
+        csecond.show();
+        cself.append(csecond);
+      }else{
+        csecond.show();
+      }
+
+    },
+    hide() {
+      // if(!window.plus) {
+      //   return
+      // }
+      // plus.webview.getWebviewById("barcode").hide();
     }
+  },
+  destroyed() {
+    this.hide()
   },
   created() {
     const params = this.$route.params;

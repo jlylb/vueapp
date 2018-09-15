@@ -72,7 +72,7 @@ getGeocode(){
 	console.log( "获取定位位置信息:" );
 	plus.geolocation.getCurrentPosition( this.geoInf,  (e) => {
 		MessageBox.alert( "获取定位位置信息失败："+e.message );
-	},{geocode:true,provider:'amap'});
+	},{geocode:true});
 }
   }
 }
