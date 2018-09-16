@@ -63,12 +63,10 @@
 </template>
 
 <script>
-import XCell from 'mint-ui/packages/cell/index.js';
-// import Clickoutside from 'mint-ui/src/utils/clickoutside';
+import { Cell as XCell } from 'mint-ui';
+
 import Clickoutside from '@/tools/clickoutside';
-if (process.env.NODE_ENV === 'component') {
-  require('mint-ui/packages/cell/style.css');
-}
+
 /**
  * mt-field
  * @desc 编辑器，依赖 cell

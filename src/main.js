@@ -6,6 +6,7 @@ import MintUI from 'mint-ui';
 import 'reset.css';
 import 'mint-ui/lib/style.css';
 import 'animate.css';
+require('viewport-units-buggyfill').init();
 // import VueTouch from 'vue-touch';
 // import '@/tools/backbutton';
 
