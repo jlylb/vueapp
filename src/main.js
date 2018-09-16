@@ -6,6 +6,8 @@ import MintUI from 'mint-ui';
 import 'reset.css';
 import 'mint-ui/lib/style.css';
 import 'animate.css';
+import 'lib-flexible/flexible.js';
+// import 'amfe-flexible';
 // import VueTouch from 'vue-touch';
 // import '@/tools/backbutton';
 

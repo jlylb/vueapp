@@ -26,9 +26,13 @@ module.exports = {
         symbolId: 'icon-[name]',
       })
       .end();
+
+
   },
+
   assetsDir: 'static',
   transpileDependencies: [],
+
   pages: {
     index: {
       // page 的入口
@@ -51,7 +55,9 @@ module.exports = {
     guide: 'src/guide.js',
     barcode: 'src/barcode.js',
   },
-  baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
+
+  baseUrl: undefined,
+
   configureWebpack: {
     plugins: [
       new webpack.ProvidePlugin({
@@ -65,4 +71,11 @@ module.exports = {
       mui: 'mui',
     },
   },
+
+  outputDir: undefined,
+  runtimeCompiler: undefined,
+  productionSourceMap: undefined,
+  parallel: undefined,
+
+  css: undefined
 };

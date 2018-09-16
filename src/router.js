@@ -253,7 +253,7 @@ const router = new Router({
     {
       path: '/guide',
       name: 'guide',
-      component: () => import(/* webpackChunkName: "guide index" */ './views/guide/index.vue'),
+      component: () => import(/* webpackChunkName: "guideindex" */ './views/guide/index.vue'),
       meta: {
         title: '引导页',
       },
@@ -261,7 +261,7 @@ const router = new Router({
     {
       path: '/guide1',
       name: 'guide1',
-      component: () => import(/* webpackChunkName: "guide index" */ './views/guide/guide1.vue'),
+      component: () => import(/* webpackChunkName: "guideindex" */ './views/guide/guide1.vue'),
       meta: {
         title: '引导页',
       },
