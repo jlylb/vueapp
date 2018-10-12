@@ -125,7 +125,7 @@ export default {
 <style lang="scss" scoped>
 .app-container {
   overflow-y: auto;
-  height: 100%;
+  height: 100vh;
   display: flex;
   position: relative;
   overflow-x: hidden;
@@ -155,7 +155,7 @@ export default {
   margin: 50px auto 60px;
   display: flex;
   flex: 1;
-  height: calc(100% - 110px);
+  height: calc(100vh - 110px);
 }
 </style>
 

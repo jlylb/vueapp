@@ -7,8 +7,9 @@ module.exports = {
       viewportWidth: 750, 
       viewportHeight: 1334, 
       unitPrecision: 3, 
-      viewportUnit: 'vw', 
-      selectorBlackList: ['.ignore', '.hairlines'], 
+      viewportUnit: 'vw',
+      fontViewportUnit: 'vm', 
+      selectorBlackList: ['.ignore', '.hairlines','.mint-header','.mint-tab-item','.home-content'], 
       minPixelValue: 1, 
       mediaQuery: false 
     },
