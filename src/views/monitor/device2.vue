@@ -2,13 +2,12 @@
    <div class='layout-container'>
 
     <top-component @top-btn='selectType'>
-     
     </top-component> 
 
 
     <div class='chart-block'>
-
-      <air-line :wendu='items.wendu' :shidu='items.shidu' :title='2' class='chart'></air-line>
+<ve-histogram :data="chartData" :settings="chartSettings" height='100%' ></ve-histogram>
+      <!-- <air-line :wendu='items.wendu' :shidu='items.shidu' :title='2' class='chart'></air-line> -->
 
     </div>
     <div class='chart-desc'>
@@ -75,7 +74,7 @@
     </mt-cell>
 
   </mt-popup>
-  <drop-menu :open.sync='openMenu' :data='deviceType' @menuItem='clickMenu'></drop-menu>
+  <drop-menu :open.sync='openMenu' :data='deviceData' @menuItem='clickMenu'></drop-menu>
   
   </div>
 </template>
@@ -85,6 +84,7 @@ import { MessageBox } from 'mint-ui';
 import { fetchDevice } from '@/api/monitor'
 import AirLine from '@/views/statistic/Line'
 import DropMenu from '@/components/dropdown'
+import { getDataValue } from '@/tools'
 
 export default {
   components: { AirLine, DropMenu },
@@ -98,7 +98,15 @@ export default {
       item: {},
       items: [],
       openMenu: false,
-      deviceType: null,
+      pdiIndex: null,
+      deviceData: null,
+      chartData: {
+          columns: ['日期', '访问用户', '下单用户'],
+          rows: [
+            { '日期': '1/1', '访问用户': 1393, '下单用户': 1093, },
+            { '日期': '1/2', '访问用户': 3530, '下单用户': 3230, },
+          ]
+        }
     }
   },
   methods: {
@@ -111,19 +119,43 @@ export default {
     },
     clickMenu(item) {
       this.selectDevice = true
-      this.firstProvince = item.value
+      this.pdiIndex = item
     },
     selectType() {
       this.openMenu = true
+    },
+    formatDevice(data) {
+      const result = []
+      for(let dtype in data) {
+        data[dtype].map((item)=> {
+          result.push({...item, type: dtype})
+        })
+      }
+      return result
+    },
+    getData(data) {
+      fetchDevice(data).then((res) => {
+        console.log(res)
+        this.device = res.data.devices
+      }) 
+    }
+  },
+  watch: {
+    pdiIndex(newVal) {
+      this.getData(newVal)
     }
   },
   created() {
     console.log(this.$route.params)
-    this.deviceType = this.$route.params.type
-    fetchDevice().then((res) => {
-      console.log(res)
-      this.device = res.data.devices
-    })    
+    const { selectDevice } = this.$route.params
+    this.deviceData = this.formatDevice(selectDevice)
+    this.pdiIndex = getDataValue(this.deviceData, [0], null)
+    this.chartSettings = {
+        axisSite: { right: ['下单用户'] },
+        yAxisType: ['normal', 'normal'],
+        yAxisName: ['数值', '数值']
+      }
+   
   }
 }
 </script>

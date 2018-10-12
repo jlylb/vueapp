@@ -3,7 +3,7 @@
 
   <top-component @top-btn='selectProvince'></top-component>
 
-  <mt-cell :title="`${index + 1}号大棚`" is-link :to='{name: "monitor_device2"}' v-for='(item, index) in selectCity' :key='index' @click.native='openDetail'>
+  <mt-cell :title="`${index + 1}号大棚`" is-link  v-for='(item, index) in selectCity' :key='index' @click.native='openDetail(item)'>
     <span style="color: green"> {{ countDevice(item.value, device) }}个设备</span>
     <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
   </mt-cell>
@@ -22,10 +22,6 @@ export default {
   components: { DropMenu },
   data() {
     return {
-      items: [],
-      dapeng: [
-        '201501', '201502', '201503', '201504', '201505', '201506'
-      ],
       openMenu: false,
       menu: [],
       province: [],
@@ -36,6 +32,7 @@ export default {
       device: null,
       deviceType: null,
       selectDeviceType: null,
+      selectDevice: null,
     }
   },
   methods: {
@@ -57,17 +54,20 @@ export default {
       }
       return Object.keys(getDataValue(data, [cityId], [])).length
     },
-    openDetail() {
-      this.$router.push({name: 'monitor_device2', params: {...this.selectDeviceType } })
+    openDetail(item) {
+      this.firstCity = item.value
+      this.selectDevice = getDataValue(this.device, [this.firstCity], [])
+      this.$router.push({name: 'monitor_device2', params: { selectDevice: this.selectDevice }, dapeng: item.value })
     }
   },
   watch: {
     firstProvince(newVal) {
       this.selectCity = getDataValue(this.city, [newVal], [])
+      this.firstCity = getDataValue(this.selectCity, [0, 'value'], null)
     },
     firstCity(newVal) {
       console.log(newVal, '.....first city')
-      this.selectDeviceType = getDataValue(this.deviceType, [newVal], [])
+      this.selectDevice = getDataValue(this.device, [newVal], [])
 
     }
   },
@@ -77,9 +77,8 @@ export default {
       this.province = res.data.province
       this.city = res.data.city
       this.device = res.data.device
-      this.deviceType = res.data.deviceType
       this.firstProvince = getDataValue(this.province, [0, 'value'], null)
-      this.firstCity = getDataValue(this.province, [this.firstProvince, 'value'], null)
+      // this.firstCity = getDataValue(this.selectCity, [0, 'value'], null)
 
     })
   }
