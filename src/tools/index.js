@@ -58,3 +58,16 @@ export function param2Obj(url) {
     .replace(/&/g, '","')
     .replace(/=/g, '":"')}"}`);
 }
+
+export function getDataValue(data, keys, other = '') {
+  keys = keys || [];
+  const len = keys.length;
+  if (len === 0) return other;
+  let index = 0;
+  let dataVal = data;
+  while (dataVal != null && index < len) {
+    dataVal = dataVal[keys[index++]];
+  }
+  dataVal = dataVal || other;
+  return index && index == len ? dataVal : other;
+}

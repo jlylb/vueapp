@@ -1,14 +1,8 @@
-const webpack = require('webpack');
 const path = require('path');
-// const TransformModulesPlugin = require('webpack-transform-modules-plugin');
-// const  PostCompilePlugin = require('webpack-post-compile-plugin')
 
 module.exports = {
   chainWebpack: (config) => {
-    config.resolve.alias
-      .set('@', path.resolve(__dirname, './src'))
-      .set('mui', path.resolve(__dirname, './src/assets/mui/js/mui.js'))
-      .set('cube-ui', 'cube-ui/lib');
+    config.resolve.alias.set('@', path.resolve(__dirname, './src'));
 
     config.module
       .rule('svg')
@@ -52,16 +46,30 @@ module.exports = {
   },
   baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
   configureWebpack: {
-    plugins: [
-      new webpack.ProvidePlugin({
-        mui: 'mui',
-        'window.mui': 'mui',
-      }),
-      // new PostCompilePlugin(),
-      // new TransformModulesPlugin(),
-    ],
-    externals: {
-      mui: 'mui',
+    plugins: [],
+    externals: {},
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: '@import "@/assets/scss/var.scss";',
+      },
+    },
+  },
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://phpsite.cc',
+        changeOrigin: true,
+      },
+      '/image': {
+        target: 'http://phpsite.cc',
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/image': '/upload',
+        },
+      },
     },
   },
 };

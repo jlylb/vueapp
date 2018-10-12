@@ -2,6 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import { getToken } from '@/tools/auth';
 import store from '@/store';
+import { MessageBox, Toast } from 'mint-ui';
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -9,7 +10,7 @@ import store from '@/store';
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const config = {
-  // baseURL: process.env.baseURL || process.env.apiUrl || ""
+  baseURL: '/api',
   timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
@@ -25,19 +26,28 @@ _axios.interceptors.request.use(
     }
     return sconfig;
   },
-  error =>
-    // Do something with request error
-    Promise.reject(error),
+  (error) => {
+    console.log(error);
+    Promise.reject(error);
+  },
 );
 
 // Add a response interceptor
 _axios.interceptors.response.use(
-  response =>
-    // Do something with response data
-    response,
-  error =>
-    // Do something with response error
-    Promise.reject(error),
+  (response) => {
+    console.log(response, 'ok....');
+    const { data } = response;
+
+    if (data.status !== 1) {
+      MessageBox.alert(data.msg || response.statusText, '提示');
+    }
+    return response;
+  },
+  (error) => {
+    console.log(error, error.response, 'response');
+    MessageBox.alert(`${error.response.statusText}`, '提示');
+    Promise.reject(error);
+  },
 );
 
 Plugin.install = function (Vue, options) {

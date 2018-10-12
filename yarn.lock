@@ -1048,6 +1048,10 @@ ansi-regex@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/ansi-regex/download/ansi-regex-3.0.0.tgz#ed0317c322064f79466c02966bddb605ab37d998"
 
+ansi-regex@^4.0.0:
+  version "4.0.0"
+  resolved "http://registry.npm.taobao.org/ansi-regex/download/ansi-regex-4.0.0.tgz#70de791edf021404c3fd615aa89118ae0432e5a9"
+
 ansi-styles@^2.2.1:
   version "2.2.1"
   resolved "http://registry.npm.taobao.org/ansi-styles/download/ansi-styles-2.2.1.tgz#b432dd3358b634cf75e1e4664368240533c1ddbe"
@@ -2524,6 +2528,10 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
+
+echarts-amap@1.0.0-rc.6:
+  version "1.0.0-rc.6"
+  resolved "http://registry.npm.taobao.org/echarts-amap/download/echarts-amap-1.0.0-rc.6.tgz#5782a74daee52ed44ce3f8f62577561783f09e16"
 
 echarts@^4.1.0:
   version "4.1.0"
@@ -5034,6 +5042,10 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/number-is-nan/download/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
+numerify@1.2.9:
+  version "1.2.9"
+  resolved "http://registry.npm.taobao.org/numerify/download/numerify-1.2.9.tgz#af4696bb1d57f8d3970a615d8b0cd53d932bd559"
+
 oauth-sign@~0.8.2:
   version "0.8.2"
   resolved "http://registry.npm.taobao.org/oauth-sign/download/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
@@ -6799,6 +6811,12 @@ strip-ansi@^4.0.0:
   dependencies:
     ansi-regex "^3.0.0"
 
+strip-ansi@^5.0.0:
+  version "5.0.0"
+  resolved "http://registry.npm.taobao.org/strip-ansi/download/strip-ansi-5.0.0.tgz#f78f68b5d0866c20b2c9b8c61b5298508dc8756f"
+  dependencies:
+    ansi-regex "^4.0.0"
+
 strip-bom@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/strip-bom/download/strip-bom-2.0.0.tgz#6219a85616520491f35788bdbf1447a99c7e6b0e"
@@ -7307,6 +7325,10 @@ utila@~0.4:
   version "0.4.0"
   resolved "http://registry.npm.taobao.org/utila/download/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
 
+utils-lite@0.1.10:
+  version "0.1.10"
+  resolved "http://registry.npm.taobao.org/utils-lite/download/utils-lite-0.1.10.tgz#d2908c0482e23c31e6b082558540e7134ffad7d7"
+
 utils-merge@1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/utils-merge/download/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
@@ -7314,6 +7336,14 @@ utils-merge@1.0.1:
 uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   version "3.3.2"
   resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+
+v-charts@^1.17.10:
+  version "1.17.10"
+  resolved "http://registry.npm.taobao.org/v-charts/download/v-charts-1.17.10.tgz#4b4762ae11f7092c7fe8429d4229eb62405512da"
+  dependencies:
+    echarts-amap "1.0.0-rc.6"
+    numerify "1.2.9"
+    utils-lite "0.1.10"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

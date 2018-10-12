@@ -8,8 +8,8 @@ export function fetchList(query) {
 
 export function fetchDevice(query) {
   return axios({
-    url: '/monitor/air',
-    method: 'get',
-    params: query,
+    url: '/monitor/realdata',
+    method: 'post',
+    query,
   });
 }

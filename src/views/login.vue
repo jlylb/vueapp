@@ -10,7 +10,7 @@
              <my-input 
              placeholder="请输入用户名"
              data-vv-name='username'
-             v-validate="{ required: true, alpha_dash: true }"  
+             v-validate="{ required: true}"  
              v-model="validateForm.username">
               <svg-icon icon-class="user" class='login-input-icon' slot='prepend'></svg-icon>
              </my-input>
@@ -45,7 +45,7 @@ export default {
       // username: "username1",
       // password: "123456",
       validateForm: {
-        username: "username1",
+        username: "Cynthia Lindgren",
         password: "123456"
       }
     };

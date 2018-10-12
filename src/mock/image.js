@@ -16,6 +16,6 @@ export default {
         image: Mock.Random.image('600x150', Mock.Random.color()),
       },
     ];
-    return { items };
+    return { items, status: 1 };
   },
 };

@@ -7,10 +7,9 @@
      </template>
     <template slot='right'>
         <slot name='right'>
-            <mt-button icon="more" slot="right"></mt-button>
+            <mt-button icon="more" slot="right" @click='goClick'></mt-button>
         </slot>
      </template>
-    
   </mt-header>
 </template>
 
@@ -30,11 +29,14 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1)
+    },
+    goClick() {
+      console.log('trigger menu...')
+      this.$emit('top-btn')
     }
   },
 }
 </script>
 
 <style>
-
 </style>

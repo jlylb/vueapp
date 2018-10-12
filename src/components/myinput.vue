@@ -63,31 +63,9 @@
 </template>
 
 <script>
-import XCell from 'mint-ui/packages/cell/index.js';
-// import Clickoutside from 'mint-ui/src/utils/clickoutside';
+import { Cell as XCell } from 'mint-ui';
 import Clickoutside from '@/tools/clickoutside';
-if (process.env.NODE_ENV === 'component') {
-  require('mint-ui/packages/cell/style.css');
-}
-/**
- * mt-field
- * @desc 编辑器，依赖 cell
- * @module components/field
- *
- * @param {string} [type=text] - field 类型，接受 text, textarea 等
- * @param {string} [label] - 标签
- * @param {string} [rows] - textarea 的 rows
- * @param {string} [placeholder] - placeholder
- * @param {string} [disabled] - disabled
- * @param {string} [readonly] - readonly
- * @param {string} [state] - 表单校验状态样式，接受 error, warning, success
- *
- * @example
- * <mt-field v-model="value" label="用户名"></mt-field>
- * <mt-field v-model="value" label="密码" placeholder="请输入密码"></mt-field>
- * <mt-field v-model="value" label="自我介绍" placeholder="自我介绍" type="textarea" rows="4"></mt-field>
- * <mt-field v-model="value" label="邮箱" placeholder="成功状态" state="success"></mt-field>
- */
+
 export default {
   name: 'mt-field-input',
   data() {

@@ -12,6 +12,8 @@ import 'animate.css';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import VeLine from 'v-charts/lib/line.common';
+import VeHistogram from 'v-charts/lib/histogram.common';
 import './mock';
 import './icons';
 import './plugins/axios';
@@ -32,6 +34,9 @@ Vue.use(MintUI);
 Vue.config.productionTip = false;
 
 Vue.component('topComponent', TopComponent);
+
+Vue.component(VeLine.name, VeLine);
+Vue.component(VeHistogram.name, VeHistogram);
 
 new Vue({
   router,
