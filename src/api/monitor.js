@@ -6,10 +6,10 @@ export function fetchList(query) {
   });
 }
 
-export function fetchDevice(query) {
+export function fetchDevice(data) {
   return axios({
     url: '/monitor/realdata',
     method: 'post',
-    query,
+    data,
   });
 }

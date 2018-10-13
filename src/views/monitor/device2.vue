@@ -6,9 +6,8 @@
 
 
     <div class='chart-block'>
-<ve-histogram :data="chartData" :settings="chartSettings" height='100%' ></ve-histogram>
+<ve-histogram :data="chartData" :settings="chartSettings" :extend="extend" height='100%' ></ve-histogram>
       <!-- <air-line :wendu='items.wendu' :shidu='items.shidu' :title='2' class='chart'></air-line> -->
-
     </div>
     <div class='chart-desc'>
       <div class='chart-desc-title'>
@@ -25,35 +24,16 @@
       </div>
       <div class='chart-desc-block'>
         
-        <div class='chart-desc-block-item red'>
-          <p>温度</p>
-          <p>22°C</p>
-          <p>预警</p>
-          <p>
-            <span>-22°C</span>
-            <span>+22°C</span>
-          </p>
+        <div class='chart-desc-block-item red' v-for='(itemValue, index) in item' :key='index' v-if='index!=="consta"'>
+          <p>{{ itemValue[index+'_name'] }}</p>
+          <p>{{ itemValue[index+'_value'] }}  {{ unit[index] }}</p>
+          <p>上限告警</p>
+          <p>{{ itemValue['hwarn_value'] }}</p>
+          <p>下限告警</p>
+          <p>{{ itemValue['lwarn_value'] }}</p>
+
         </div>
 
-        <div class='chart-desc-block-item primary'>
-          <p>湿度</p>
-          <p>59%RH</p>
-          <p>预警</p>
-          <p>
-            <span>-10%RH</span>
-            <span>+10%RH</span>
-          </p>
-        </div>
-
-        <div class='chart-desc-block-item yellow'>
-          <p>湿度</p>
-          <p>59%RH</p>
-          <p>预警</p>
-          <p>
-            <span>-10%RH</span>
-            <span>+10%RH</span>
-          </p>
-        </div>
 
       </div>
     </div>
@@ -64,18 +44,18 @@
     position="bottom">
 
     <mt-cell 
-    :title="item.name" 
-    :label="item.type"
+    :title="deviceName + item" 
     @click.native='openDevice(item)' 
     is-link 
-    v-for='(item, index) in device' 
-    :key='index'>
-      <svg-icon :icon-class='item.icon' class='item-icon' slot='icon'></svg-icon>
+    v-for='item in num' 
+    :key='item'>
+      <!-- <svg-icon :icon-class='item.icon' class='item-icon' slot='icon'></svg-icon> -->
     </mt-cell>
 
   </mt-popup>
+
   <drop-menu :open.sync='openMenu' :data='deviceData' @menuItem='clickMenu'></drop-menu>
-  
+
   </div>
 </template>
 
@@ -100,19 +80,21 @@ export default {
       openMenu: false,
       pdiIndex: null,
       deviceData: null,
-      chartData: {
-          columns: ['日期', '访问用户', '下单用户'],
-          rows: [
-            { '日期': '1/1', '访问用户': 1393, '下单用户': 1093, },
-            { '日期': '1/2', '访问用户': 3530, '下单用户': 3230, },
-          ]
-        }
+      chartData: {},
+      chartSettings: {},
+      num: 0,
+      deviceName: '',
+      itemFields: null,
+      unit: null,
+      icons: null,
+      itemIndex: null,
     }
   },
   methods: {
     openDevice(item) {
-      this.items = {...this.items}
-      this.selectDevice = false
+      // this.items = {...this.items}
+      this.itemIndex = item
+      // this.selectDevice = false
     },
     deviceFileter() {
       this.selectDevice = true
@@ -128,21 +110,70 @@ export default {
       const result = []
       for(let dtype in data) {
         data[dtype].map((item)=> {
-          result.push({...item, type: dtype})
+          let { value: device } = item
+          result.push({ device, device_type: dtype, ...item })
         })
       }
       return result
+    },
+    formatChartData() {
+      const item = this.items[this.itemIndex - 1]
+      this.item = item
+      let yAxisName = [], yAxisType = ['value'], axisSite = {}, rows = [], columns = []
+      let chartRow = {}, min = [0], max = [100], labelMap = {}
+      chartRow['name'] = this.deviceName + this.itemIndex
+      console.log(this.itemFields, 'format chartdata')
+      this.itemFields.map((temp) => {
+        let cur = item[temp]
+        let itemKey = temp+'_name', itemValue = temp+'_value'
+        let curKeyVal = cur[itemKey], curValueVal = cur[itemValue]
+        yAxisName.push(curKeyVal + ' ' + this.unit[temp])
+        columns.push(temp)
+        chartRow[temp] = curValueVal
+        labelMap[temp] = curKeyVal
+      })
+      console.log(yAxisName, 'yAxisName...')
+      let len = yAxisName.length
+      if(len > 1) {
+        axisSite = { right: [columns[len-1]] }
+        yAxisType.push('value')
+        min.push(0),
+        max.push(100)
+      }
+      rows.push(chartRow)
+      this.chartSettings = {
+        axisSite, yAxisType, yAxisName, min, max, labelMap
+      }
+      columns = ['name'].concat(columns)
+      this.chartData = {
+        columns, rows
+      }
+      console.log()
     },
     getData(data) {
       fetchDevice(data).then((res) => {
         console.log(res)
         this.device = res.data.devices
+        this.items = getDataValue(this.device, ['items'], [])
+        this.num = getDataValue(this.device, ['num'], [])
+        this.itemFields = getDataValue(this.device, ['fields'], [])
+        this.deviceName = getDataValue(this.device, ['name'], '')
+        this.unit = getDataValue(this.device, ['unit'], '')
+        this.icons = getDataValue(this.device, ['icons'], '')
+        this.itemIndex = 1
       }) 
     }
   },
   watch: {
     pdiIndex(newVal) {
       this.getData(newVal)
+    },
+    itemIndex(newVal) {
+      // this.getData(newVal)
+      this.formatChartData()
+    },
+    selectDevice(newVal) {
+      if(newVal===false) this.openMenu = false
     }
   },
   created() {
@@ -150,11 +181,13 @@ export default {
     const { selectDevice } = this.$route.params
     this.deviceData = this.formatDevice(selectDevice)
     this.pdiIndex = getDataValue(this.deviceData, [0], null)
-    this.chartSettings = {
-        axisSite: { right: ['下单用户'] },
-        yAxisType: ['normal', 'normal'],
-        yAxisName: ['数值', '数值']
-      }
+    this.extend = {
+          grid: { 
+            left: '5%',
+            right: '5%',
+            bottom: '1%',
+         },
+    }
    
   }
 }
