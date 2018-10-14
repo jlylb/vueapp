@@ -65,7 +65,7 @@ export function getDataValue(data, keys, other = '') {
   if (len === 0) return other;
   let index = 0;
   let dataVal = data;
-  if (Object.keys(data).length === 0) return other;
+  if (!data || Object.keys(data).length === 0) return other;
   while (dataVal != null && index < len) {
     dataVal = dataVal[keys[index++]];
   }

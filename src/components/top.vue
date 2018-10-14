@@ -1,5 +1,5 @@
 <template>
- <mt-header :title="barTitle" fixed>
+ <mt-header :title="title||barTitle" fixed>
      <template slot='left'>
         <slot name='left'>
             <mt-button icon="back" @click="goBack"  v-if='isShow'>返回</mt-button>
@@ -18,6 +18,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  props: ['title'],
   computed: {
     ...mapGetters('app',[
       'barTitle'

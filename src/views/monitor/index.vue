@@ -3,7 +3,7 @@
 
   <top-component @top-btn='selectProvince'></top-component>
 
-  <mt-cell :title="`${index + 1}号大棚`" is-link  v-for='(item, index) in selectCity' :key='index' @click.native='openDetail(item)'>
+  <mt-cell :title="`${index + 1}号大棚`" is-link  v-for='(item, index) in selectCity' :key='index' @click.native='openDetail(item, index)'>
     <span style="color: green"> {{ countDevice(item.value, device) }}个设备</span>
     <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
   </mt-cell>
@@ -54,10 +54,10 @@ export default {
       }
       return Object.keys(getDataValue(data, [cityId], [])).length
     },
-    openDetail(item) {
+    openDetail(item, index) {
       this.firstCity = item.value
       this.selectDevice = getDataValue(this.device, [this.firstCity], [])
-      this.$router.push({name: 'monitor_device2', params: { selectDevice: this.selectDevice }, dapeng: item.value })
+      this.$router.push({name: 'monitor_device2', params: { dapeng: index + 1, areaId: item.value } })
     }
   },
   watch: {
@@ -78,8 +78,6 @@ export default {
       this.city = res.data.city
       this.device = res.data.device
       this.firstProvince = getDataValue(this.province, [0, 'value'], null)
-      // this.firstCity = getDataValue(this.selectCity, [0, 'value'], null)
-
     })
   }
 

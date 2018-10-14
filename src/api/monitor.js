@@ -13,3 +13,11 @@ export function fetchDevice(data) {
     data,
   });
 }
+
+export function fetchAreaDevice(data) {
+  return axios({
+    url: '/monitor/areadevice',
+    method: 'post',
+    data,
+  });
+}

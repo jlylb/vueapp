@@ -6,9 +6,12 @@
       <mt-cell 
         :title="item.label" 
         v-for='(item, index) in data' 
-        :key='item.label' 
+        :key='item.value' 
         :class='{ "active-menu": menuIndex==index }'
         @click.native='openPop(item, $event, index)'>
+
+        <svg-icon :icon-class='item.icon' class='item-icon' slot='icon' v-if='item.icon'></svg-icon>
+
       </mt-cell>
   </mt-popup>
 </template>
@@ -53,8 +56,19 @@ export default {
 <style lang='scss' scoped>
 .active-menu {
   background-color: $blue;
-  /deep/ .mint-cell-text {
-    color: #fff;
+  /deep/ {
+    .mint-cell-text {
+      color: #fff;
+      vertical-align: inherit;
+    }
+    .item-icon {
+      color: #fff;
+    }
   }
+}
+.popup-menu /deep/ {
+    .mint-cell-text {
+      vertical-align: inherit;
+    }
 }
 </style>

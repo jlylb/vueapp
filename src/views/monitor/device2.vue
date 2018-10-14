@@ -6,10 +6,16 @@
 
 
     <div class='chart-block'>
-<ve-histogram :data="chartData" :settings="chartSettings" :extend="extend" height='100%' ></ve-histogram>
-      <!-- <air-line :wendu='items.wendu' :shidu='items.shidu' :title='2' class='chart'></air-line> -->
+      <ve-histogram 
+        :data="chartData" 
+        :settings="chartSettings" 
+        :extend="extend" 
+        :data-empty="dataEmpty"
+        :loading="loading"
+        :after-set-option='afterSet'
+        height='100%' ></ve-histogram>
     </div>
-    <div class='chart-desc'>
+    <div class='chart-desc' v-if='item'>
       <div class='chart-desc-title'>
         <div class='chart-desc-item chart-desc-item-left'>
           <div class='chart-desc-icon'>
@@ -17,20 +23,24 @@
           </div>
         </div>
         <div class='chart-desc-item chart-desc-item-right'>
-          <p>一号大棚</p>
-          <p>状态:<span>温度正常</span><span>湿度正常</span><span>湿度正常</span>
+          <p>{{ dapeng }}号大棚 
+            <span class='item-title' @click='deviceFileter'>{{ pdiIndex && pdiIndex.label }}</span>
+          </p>
+          <p>
+            {{ item['consta']['consta_name'] }}: 
+            <span>{{ item['consta']['consta_value']===0?'正常':'断线' }}</span>
            </p>
         </div>
       </div>
       <div class='chart-desc-block'>
         
-        <div class='chart-desc-block-item red' v-for='(itemValue, index) in item' :key='index' v-if='index!=="consta"'>
+        <div :class='["chart-desc-block-item", itemClass[itemFields.indexOf(index)]]' v-for='(itemValue, index) in item' :key='index' v-if='index!=="consta"'>
           <p>{{ itemValue[index+'_name'] }}</p>
-          <p>{{ itemValue[index+'_value'] }}  {{ unit[index] }}</p>
+          <p> <span>{{ itemValue[index+'_value'] }}  {{ unit[index] }}</span> </p>
           <p>上限告警</p>
-          <p>{{ itemValue['hwarn_value'] }}</p>
+          <p> <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span> </p>
           <p>下限告警</p>
-          <p>{{ itemValue['lwarn_value'] }}</p>
+          <p> <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span> </p>
 
         </div>
 
@@ -41,15 +51,17 @@
   <mt-popup
     v-model="selectDevice"
     class='popup-device'
+    :style='{height: "240px"}'
     position="bottom">
 
     <mt-cell 
     :title="deviceName + item" 
-    @click.native='openDevice(item)' 
+    @click.native='openDevice(item)'
+    :class='{ itemSelect: itemIndex===item }' 
     is-link 
     v-for='item in num' 
     :key='item'>
-      <!-- <svg-icon :icon-class='item.icon' class='item-icon' slot='icon'></svg-icon> -->
+      <svg-icon :icon-class='pdiIndex.icon' class='item-icon' slot='icon' v-if='pdiIndex'></svg-icon>
     </mt-cell>
 
   </mt-popup>
@@ -61,21 +73,17 @@
 
 <script>
 import { MessageBox } from 'mint-ui';
-import { fetchDevice } from '@/api/monitor'
-import AirLine from '@/views/statistic/Line'
+import { fetchDevice, fetchAreaDevice } from '@/api/monitor'
 import DropMenu from '@/components/dropdown'
 import { getDataValue } from '@/tools'
 
 export default {
-  components: { AirLine, DropMenu },
+  components: { DropMenu },
   data() {
     return {
-      popupVisible: false,
-      deviceStatus: true,
-      workStatus: true,
       selectDevice: false,
       device: null,
-      item: {},
+      item: null,
       items: [],
       openMenu: false,
       pdiIndex: null,
@@ -88,40 +96,39 @@ export default {
       unit: null,
       icons: null,
       itemIndex: null,
+      itemClass: ['red', 'yellow', 'primary'],
+      dapeng: null,
+      itemSelect: 'itemSelect',
+      dataEmpty: false,
+      chart: null,
+      loading: false
     }
   },
   methods: {
+    getDataValue,
+    afterSet(chart) {
+      this.chart = chart
+    },
     openDevice(item) {
-      // this.items = {...this.items}
       this.itemIndex = item
-      // this.selectDevice = false
     },
     deviceFileter() {
       this.selectDevice = true
     },
     clickMenu(item) {
-      this.selectDevice = true
+      // this.selectDevice = true
+      this.openMenu = false
       this.pdiIndex = item
     },
     selectType() {
       this.openMenu = true
-    },
-    formatDevice(data) {
-      const result = []
-      for(let dtype in data) {
-        data[dtype].map((item)=> {
-          let { value: device } = item
-          result.push({ device, device_type: dtype, ...item })
-        })
-      }
-      return result
     },
     formatChartData() {
       const item = this.items[this.itemIndex - 1]
       this.item = item
       let yAxisName = [], yAxisType = ['value'], axisSite = {}, rows = [], columns = []
       let chartRow = {}, min = [0], max = [100], labelMap = {}
-      chartRow['name'] = this.deviceName + this.itemIndex
+      chartRow['name'] = this.deviceName ? (this.deviceName + this.itemIndex) : ''
       console.log(this.itemFields, 'format chartdata')
       this.itemFields.map((temp) => {
         let cur = item[temp]
@@ -151,22 +158,47 @@ export default {
       console.log()
     },
     getData(data) {
+      this.loading = true
       fetchDevice(data).then((res) => {
+        this.loading = false
         console.log(res)
         this.device = res.data.devices
+        if(this.device.length === 0) {
+          MessageBox.alert(`该设备没有数据！`, '提示');
+          this.items = []
+          this.num = 0
+          this.itemFields = []
+          this.deviceName = null
+          this.item = null
+          this.dataEmpty = true
+          this.chartData = {
+            columns: [], rows: []
+          }
+          this.chartSettings = {
+            axisSite: {}, yAxisType: [], yAxisName: [], min: [], max: [], labelMap: {}
+          }
+          console.log(this.chart, 'chart instance....')
+          if(this.chart) {
+            this.chart.clear()
+          }
+          this.itemIndex = null
+          return
+        }
+        this.dataEmpty = false
         this.items = getDataValue(this.device, ['items'], [])
-        this.num = getDataValue(this.device, ['num'], [])
+        this.num = getDataValue(this.device, ['num'], 0)
         this.itemFields = getDataValue(this.device, ['fields'], [])
         this.deviceName = getDataValue(this.device, ['name'], '')
-        this.unit = getDataValue(this.device, ['unit'], '')
-        this.icons = getDataValue(this.device, ['icons'], '')
+        this.unit = getDataValue(this.device, ['unit'], null)
+        this.icons = getDataValue(this.device, ['typeicons'], null)
         this.itemIndex = 1
       }) 
     }
   },
   watch: {
     pdiIndex(newVal) {
-      this.getData(newVal)
+      let { value: device } = newVal
+      this.getData({ ...newVal, device })
     },
     itemIndex(newVal) {
       // this.getData(newVal)
@@ -174,13 +206,15 @@ export default {
     },
     selectDevice(newVal) {
       if(newVal===false) this.openMenu = false
+    },
+    '$route': function(to) {
+      console.log(to, 'device to .....')
     }
   },
   created() {
     console.log(this.$route.params)
-    const { selectDevice } = this.$route.params
-    this.deviceData = this.formatDevice(selectDevice)
-    this.pdiIndex = getDataValue(this.deviceData, [0], null)
+    const { areaId, dapeng } = this.$route.params
+    this.dapeng = dapeng
     this.extend = {
           grid: { 
             left: '5%',
@@ -188,7 +222,15 @@ export default {
             bottom: '1%',
          },
     }
-   
+   fetchAreaDevice({ areaId })
+   .then((res) => {
+     this.deviceData = res.data.devices
+     this.pdiIndex = getDataValue(this.deviceData, [0], null)
+     if(!this.deviceData) {
+        MessageBox.alert(`该大棚没有设备！`, '提示');
+        return
+     }
+   })
   }
 }
 </script>
@@ -201,7 +243,34 @@ export default {
   width: 100%;
   // overflow: hidden;
 }
-
+.itemSelect {
+  background-color: $blue;
+    /deep/ {
+    .mint-cell-text {
+      color: #fff;
+      vertical-align: inherit;
+    }
+    .item-icon {
+      color: #fff;
+    }
+  }
+}
+.item-title {
+  letter-spacing: normal;
+  cursor: pointer;
+  &::after {
+    border: solid 2px #67c23a;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    content: " ";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    transform: rotate(135deg);
+    display: inline-block;
+    margin-left: 5px;
+  }
+}
 .chart {
   width: 100%;
   height: 100%;
@@ -271,6 +340,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  flex: 1;
   p {
     span {
       &:first-child {
