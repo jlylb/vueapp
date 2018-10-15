@@ -10,7 +10,10 @@
 
     <h1 class='chart-title' >空气温湿度趋势图</h1>
 
-      <air-line :wendu='items.wendu' :shidu='items.shidu' :title='2' class='chart'></air-line>
+        <ve-line
+          :data="chartData"
+          :data-zoom="dataZoom">
+        </ve-line>
 
     </div>
   
@@ -70,14 +73,32 @@
 
 <script>
 import { fetchDevice } from '@/api/monitor'
-import AirLine from './Line'
 import { parseTime } from '@/tools/'
 import { Toast } from 'mint-ui'
+import 'echarts/lib/component/dataZoom'
 
 export default {
-  components: { AirLine },
+  components: {  },
   data() {
+    this.dataZoom = [
+        {
+          type: 'slider',
+          start: 0,
+          end: 20
+        }
+    ]
     return {
+    chartData: {
+        columns: ['日期', '成本', '利润'],
+        rows: [
+          { '日期': '1月1日', '成本': 15, '利润': 12 },
+          { '日期': '1月2日', '成本': 12, '利润': 25 },
+          { '日期': '1月3日', '成本': 21, '利润': 10 },
+          { '日期': '1月4日', '成本': 41, '利润': 32 },
+          { '日期': '1月5日', '成本': 31, '利润': 30 },
+          { '日期': '1月6日', '成本': 71, '利润': 55 }
+        ]
+      },
       items: [],
       popupVisible: false,
       filterOpen: false,
@@ -146,6 +167,7 @@ export default {
   display: inline-block;
   position: relative;
   height: 300px;
+  width: 100%;
 }
 .chart {
   // display: flex;

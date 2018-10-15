@@ -39,13 +39,14 @@ _axios.interceptors.response.use(
     console.log(response, 'ok....');
     const { data } = response;
 
-    if (data.status !== 1) {
-      MessageBox.alert(data.msg || response.statusText, '提示');
-    }
     if (response.status === 401) {
       store.dispatch('user/FedLogOut').then(() => {
         router.push({ name: 'login' });
       });
+    }else{
+      if (data.status !== 1) {
+        MessageBox.alert(data.msg || response.statusText, '提示');
+      }
     }
     return response;
   },
