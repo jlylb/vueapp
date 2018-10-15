@@ -24,23 +24,28 @@
         </div>
         <div class='chart-desc-item chart-desc-item-right'>
           <p>{{ dapeng }}号大棚 
-            <span class='item-title' @click='deviceFileter'>{{ pdiIndex && pdiIndex.label }}</span>
+            <span class='item-title item-title-select' @click='deviceFileter'>{{ pdiIndex && pdiIndex.label }}</span>
           </p>
           <p>
             {{ item['consta']['consta_name'] }}: 
-            <span>{{ item['consta']['consta_value']===0?'正常':'断线' }}</span>
+            <mt-badge :type="item['consta']['consta_value']===0?'success':'error'">{{ item['consta']['consta_value']===0?'正常':'断线' }}</mt-badge>
            </p>
         </div>
       </div>
       <div class='chart-desc-block'>
         
         <div :class='["chart-desc-block-item", itemClass[itemFields.indexOf(index)]]' v-for='(itemValue, index) in item' :key='index' v-if='index!=="consta"'>
-          <p>{{ itemValue[index+'_name'] }}</p>
-          <p> <span>{{ itemValue[index+'_value'] }}  {{ unit[index] }}</span> </p>
-          <p>上限告警</p>
-          <p> <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span> </p>
-          <p>下限告警</p>
-          <p> <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span> </p>
+          <p :class='{column: isColumn}'>
+            <span>{{ itemValue[index+'_name'] }}</span>
+            <span>{{ itemValue[index+'_value'] }}  {{ unit[index] }}</span> </p>
+          <p :class='{column: isColumn}'>
+            <span>上限告警</span>
+            <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span> 
+          </p>
+          <p :class='{column: isColumn}'>
+            <span>下限告警</span>
+            <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span> 
+          </p>
 
         </div>
 
@@ -101,7 +106,8 @@ export default {
       itemSelect: 'itemSelect',
       dataEmpty: false,
       chart: null,
-      loading: false
+      loading: false,
+      isColumn: false
     }
   },
   methods: {
@@ -122,8 +128,11 @@ export default {
     },
     selectType() {
       this.openMenu = true
+      this.itemIndex = null
     },
     formatChartData() {
+      this.isColumn = false
+      if(!this.itemIndex) return
       const item = this.items[this.itemIndex - 1]
       this.item = item
       let yAxisName = [], yAxisType = ['value'], axisSite = {}, rows = [], columns = []
@@ -150,6 +159,9 @@ export default {
       rows.push(chartRow)
       this.chartSettings = {
         axisSite, yAxisType, yAxisName, min, max, labelMap
+      }
+      if(columns.length > 1) {
+        this.isColumn = true
       }
       columns = ['name'].concat(columns)
       this.chartData = {
@@ -245,7 +257,7 @@ export default {
 }
 .itemSelect {
   background-color: $blue;
-    /deep/ {
+  /deep/ {
     .mint-cell-text {
       color: #fff;
       vertical-align: inherit;
@@ -262,14 +274,16 @@ export default {
     border: solid 2px #67c23a;
     border-bottom-width: 0;
     border-left-width: 0;
-    content: " ";
+    content: ' ';
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     transform: rotate(135deg);
     display: inline-block;
-    margin-left: 5px;
+    margin-left: 3px;
   }
+}
+.item-title-select {
 }
 .chart {
   width: 100%;
@@ -321,7 +335,7 @@ export default {
     color: rgba(0, 0, 0, 0.5);
     span {
       display: inline-block;
-      padding-left: 3px;
+      // padding-left: 3px;
     }
   }
 }
@@ -342,10 +356,21 @@ export default {
   justify-content: space-around;
   flex: 1;
   p {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    &.column {
+      flex-direction: column;
+      width: auto;
+      span {
+        &:first-child {
+          margin-bottom: 3px;
+        }
+      }
+    }
     span {
       &:first-child {
         margin-right: 5px;
-        margin-bottom: 5px;
       }
       border-radius: 25%;
       border: 1px solid rgba(255, 255, 255, 0.8);

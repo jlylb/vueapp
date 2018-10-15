@@ -100,7 +100,7 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         console.log(state.token, 666666);
-        getUserInfo(state.token)
+        getUserInfo()
           .then((response) => {
             console.log(response);
             if (!response.data) {

@@ -79,7 +79,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device.vue'),
         },
         {
-          path: '/monitor/device2/:dapeng/:areaId',
+          path: '/monitor/device2/:dapeng/:areaId/',
           name: 'monitor_device2',
           meta: {
             title: '实时监测-选择设备',

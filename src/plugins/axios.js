@@ -2,7 +2,8 @@ import Vue from 'vue';
 import axios from 'axios';
 import { getToken } from '@/tools/auth';
 import store from '@/store';
-import { MessageBox, Toast } from 'mint-ui';
+import { MessageBox } from 'mint-ui';
+import router from '../router';
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -40,6 +41,11 @@ _axios.interceptors.response.use(
 
     if (data.status !== 1) {
       MessageBox.alert(data.msg || response.statusText, '提示');
+    }
+    if (response.status === 401) {
+      store.dispatch('user/FedLogOut').then(() => {
+        router.push({ name: 'login' });
+      });
     }
     return response;
   },

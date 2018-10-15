@@ -5,6 +5,7 @@ const app = {
   state: {
     barTitle: '首页',
     isGuide: false,
+    province: null,
   },
   mutations: {
     BAR_TITLE: (state, title) => {
@@ -13,9 +14,13 @@ const app = {
     GUIDE: (state, bVal) => {
       state.isGuide = bVal;
     },
+    PROVINCE: (state, nVal) => {
+      state.province = nVal;
+    },
   },
   getters: {
     barTitle: state => state.barTitle,
+    currentProvince: state => state.province,
   },
   actions: {
     giveGuide({ commit }, bVal) {
@@ -25,6 +30,9 @@ const app = {
     forgetGuide({ commit }) {
       commit('GUIDE', false);
       removeGuide();
+    },
+    setProvince({ commit }, nVal) {
+      commit('PROVINCE', nVal);
     },
   },
 };

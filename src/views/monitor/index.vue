@@ -8,7 +8,7 @@
     <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
   </mt-cell>
 
-  <drop-menu :open.sync='openMenu' :data='province' @menuItem='clickMenu'></drop-menu>
+  <drop-menu :open.sync='openMenu' :data='province' @menuItem='clickMenu' :active='currentProvince'></drop-menu>
 
  </div> 
 
@@ -18,6 +18,8 @@
 import { fetchList } from '@/api/monitor'
 import DropMenu from '@/components/dropdown'
 import { getDataValue } from '@/tools'
+import { mapGetters } from 'vuex'
+
 export default {
   components: { DropMenu },
   data() {
@@ -35,6 +37,11 @@ export default {
       selectDevice: null,
     }
   },
+  computed: {
+    ...mapGetters('app',[
+      'currentProvince'
+    ]),
+  },
   methods: {
     closeBottomSheet(val, val1) {
       console.log(val, val1)
@@ -46,6 +53,7 @@ export default {
     clickMenu(item) {
       this.openMenu = false
       this.firstProvince = item.value
+      this.setProvince()
     },
     countDevice(cityId, data) {
       console.log(getDataValue(data, [cityId], []),'count ....')
@@ -55,21 +63,16 @@ export default {
       return Object.keys(getDataValue(data, [cityId], [])).length
     },
     openDetail(item, index) {
-      this.firstCity = item.value
-      this.selectDevice = getDataValue(this.device, [this.firstCity], [])
       this.$router.push({name: 'monitor_device2', params: { dapeng: index + 1, areaId: item.value } })
+    },
+    setProvince() {
+      this.$store.commit('app/PROVINCE', this.firstProvince);
     }
   },
   watch: {
     firstProvince(newVal) {
       this.selectCity = getDataValue(this.city, [newVal], [])
-      this.firstCity = getDataValue(this.selectCity, [0, 'value'], null)
     },
-    firstCity(newVal) {
-      console.log(newVal, '.....first city')
-      this.selectDevice = getDataValue(this.device, [newVal], [])
-
-    }
   },
   created() {
     fetchList().then((res) => {
@@ -77,7 +80,12 @@ export default {
       this.province = res.data.province
       this.city = res.data.city
       this.device = res.data.device
+      if(this.currentProvince) {
+        this.firstProvince = this.currentProvince
+        return 
+      }
       this.firstProvince = getDataValue(this.province, [0, 'value'], null)
+      this.setProvince()
     })
   }
 

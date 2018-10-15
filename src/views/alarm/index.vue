@@ -2,40 +2,91 @@
   <div class='layout-container'>
     <top-component></top-component>
 
-    <mt-cell 
-    :title="item.name"
-    @click.native.prevent='openRoute(item)' 
-    is-link 
-    v-for='(item, index) in device' 
-    :key='index'>
-      <mt-badge type="error">{{ item.num }}</mt-badge>
-      <svg-icon :icon-class='item.icon' class='item-icon' slot='icon'></svg-icon>
+    <div class='realwarn' 
+      v-infinite-scroll="getData"
+      infinite-scroll-disabled="moreLoading"
+      infinite-scroll-distance="60">
+      <mt-cell 
+      :title="item.pdi_name"
+      :label="item.pdi_warnname"
+      @click.native.prevent='openRoute(item)' 
+      is-link 
+      v-for='(item, index) in device' 
+      :key='index'>
+        <mt-badge :type="wlevel[item.pdi_warnlevel]['class']" v-if="wlevel[item.pdi_warnlevel]">{{ wlevel[item.pdi_warnlevel]['name'] }}</mt-badge>
+        <svg-icon :icon-class='icons[item.pdi_type]' class='item-icon' slot='icon' v-if='icons[item.pdi_type]'></svg-icon>
+      </mt-cell>
+    </div>
+    <p v-show="loading" class="page-infinite-loading">
+      <mt-spinner type="fading-circle"></mt-spinner>
+      加载中...
+    </p>
+
+  <mt-popup
+    v-model="popupVisible"
+    class='popup-device'
+    position="bottom">
+    <mt-cell title="告警信息" :label="selectItem.pdi_updatetime">
     </mt-cell>
+    <mt-cell title="">
+      <span>
+        {{ selectItem.pdi_warnname }}
+      </span>
+    </mt-cell>
+    <mt-cell title="">
+    </mt-cell>
+  </mt-popup>
 
   </div>
 </template>
 
 <script>
+import { fetchList } from '@/api/alarm'
 export default {
   data() {
     return {
-      device: [
-        {name: '空气温室度传感器', icon: 'temp', type: 'temp', num: 10 },
-        {name: '光照度传感器', icon: 'light', type: 'light' , num: 100 },
-        {name: '二氧化碳传感器', icon: 'co2', type: 'co2' , num: 105 },
-        {name: '土壤墒情传感器', icon: 'soil', type: 'soil', num: 20},
-        {name: '液位传感器', icon: 'liquid', type: 'liquid', num: 30 },
-
-      ],
+      device: [],
+      icons: null,
+      wlevel: null,
+      loading: false,
+      moreLoading: false,
+      selectItem: {},
+      popupVisible: false
     }
   },
   methods: {
     openRoute(item) {
-      this.$router.push({name: "alarm_device", params: {...item} })
+      this.selectItem = item
+      // this.popupVisible = true
+    },
+    getData() {
+      this.loading = true
+      fetchList().then((res) => {
+        this.device = res.data.data.data
+        this.icons = res.data.icons
+        this.wlevel = res.data.wlevel
+        this.loading = false
+        this.moreLoading = false
+      }).catch((res) => {
+        this.loading = false
+      })
     }
+  },
+  created() {
+
   }
 }
 </script>
 
-<style>
+<style lang='scss' scoped>
+.page-infinite-loading {
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  /deep/ div {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+}
 </style>

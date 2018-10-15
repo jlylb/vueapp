@@ -7,7 +7,7 @@
         :title="item.label" 
         v-for='(item, index) in data' 
         :key='item.value' 
-        :class='{ "active-menu": menuIndex==index }'
+        :class='{ "active-menu": (active?active===item.value:menuIndex==index) }'
         @click.native='openPop(item, $event, index)'>
 
         <svg-icon :icon-class='item.icon' class='item-icon' slot='icon' v-if='item.icon'></svg-icon>
@@ -34,6 +34,10 @@ export default {
     open: {
       type: Boolean,
       default: false
+    },
+    active: {
+      type: [String, Number],
+      default: null
     }
   },
   watch: {
@@ -67,8 +71,8 @@ export default {
   }
 }
 .popup-menu /deep/ {
-    .mint-cell-text {
-      vertical-align: inherit;
-    }
+  .mint-cell-text {
+    vertical-align: inherit;
+  }
 }
 </style>
