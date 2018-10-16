@@ -16,36 +16,54 @@
 
     <div class='fluid-content'>
         <div class="fluid-content-item">
-            <div class='item-monitor item item-right' @click="openRouter('monitor')">
+            <div class='item-monitor item item-right' @click="openRouter('air')">
                 <div class='wrap-item'>
-                    <svg-icon icon-class='monitor' class='item-icon'></svg-icon>
-                    <div class='icon-desc'>实时监测</div>
+                    <div class='icon'>
+                    <svg-icon icon-class='jmkt' class='item-icon'></svg-icon>
+                    </div>
+                    <div class='icon-desc'>精密空调</div>
                 </div>
             </div>
-            <div class='item-alarm item item-right'  @click="openRouter('alarm')">
+            <div class='item-alarm item item-right'  @click="openRouter('ups')">
                 <div class='wrap-item'>
-                    <svg-icon icon-class='message'  class='item-icon'></svg-icon>
-                    <div class='icon-desc'>告警管理</div>
+                    <div class='icon'>
+                        <svg-icon icon-class='ups'  class='item-icon'></svg-icon>
+                    </div>
+                    <div class='icon-desc'>UPS电源</div>
                 </div>
             </div>
-            <div class='item-statistic item item-right'   @click="openRouter('statistic')">
+            <div class='item-statistic item item-right'   @click="openRouter('electric')">
                 <div class='wrap-item'>
-                    <svg-icon icon-class='statistic'  class='item-icon'></svg-icon>
-                    <div class='icon-desc'>统计分析</div>
+                    <div class='icon'>
+                        <svg-icon icon-class='dlyi'  class='item-icon'></svg-icon>
+                    </div>
+                    <div class='icon-desc'>电量仪</div>
                 </div>
             </div>
         </div>
         <div class="fluid-content-item">
-            <div class='item-remote item'   @click="openRouter('remote')">
+            <div class='item-remote item'   @click="openRouter('alarm')">
                 <div class='wrap-item'>
-                    <svg-icon icon-class='control'  class='item-icon'></svg-icon>
-                    <div class='icon-desc'>远程控制</div>
+                    <div class='icon'>
+                        <svg-icon icon-class='afbj'  class='item-icon'></svg-icon>
+                    </div>
+                    <div class='icon-desc'>安防报警</div>
                 </div>
             </div>
-            <div class='item-video item'   @click="openRouter('video')">
+            <div class='item-video item'   @click="openRouter('guard')">
                 <div class='wrap-item'>
-                    <svg-icon icon-class='video'  class='item-icon'></svg-icon>
-                    <div class='icon-desc'>视频控制</div>
+                    <div class='icon'>
+                        <svg-icon icon-class='menjin'  class='item-icon'></svg-icon>
+                    </div>
+                    <div class='icon-desc'>门禁控制</div>
+                </div>
+            </div>
+            <div class='item-temp item'   @click="openRouter('temphu')">
+                <div class='wrap-item'>
+                    <div class='icon'>
+                        <svg-icon icon-class='wsdu'  class='item-icon'></svg-icon>
+                    </div>    
+                    <div class='icon-desc'>温湿度</div>
                 </div>
             </div>
         </div>
@@ -129,8 +147,8 @@ export default {
     padding: 5px;
   }
   .item-icon {
-    width: 3em;
-    height: 3em;
+    width: 2.6em;
+    height: 2.6em;
     color: #fff;
   }
   .item-right {
@@ -142,10 +160,10 @@ export default {
   }
   .item-alarm {
     background-color: rgb(245, 108, 108);
-    flex: 2;
+    flex: 1.8;
   }
   .item-statistic {
-    background-color: #409eff;
+    background-color: #a448bb;
     flex: 1.4;
   }
   .item-remote {
@@ -155,6 +173,24 @@ export default {
   .item-video {
     flex: 1.7;
     background-color: #e6a23c;
+  }
+  .item-temp {
+    flex: 1.7;
+    background-color: #19d4ae;
+  }
+}
+.icon {
+  width: 65px;
+  height: 65px;
+  line-height: 65px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  position: relative;
+  .item-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
   }
 }
 </style>

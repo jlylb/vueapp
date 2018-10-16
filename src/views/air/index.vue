@@ -1,12 +1,77 @@
 <template>
- <div class='layout-container'>
+ <div class='layout-container air'>
 
   <top-component @top-btn='selectProvince'></top-component>
+  <mt-button size="small" @click.native.prevent="active = 'tab-container1'">参数</mt-button>
+  <mt-button size="small" @click.native.prevent="active = 'tab-container2'">状态</mt-button>
+  <mt-button size="small" @click.native.prevent="active = 'tab-container3'">温湿度</mt-button>
+  <mt-tab-container v-model="active">
+    <mt-tab-container-item id="tab-container1" name='参数'>
 
-  <mt-cell :title="`${index + 1}号大棚`" is-link  v-for='(item, index) in selectCity' :key='index' @click.native='openDetail(item, index)'>
-    <span style="color: green"> {{ countDevice(item.value, device) }}个设备</span>
-    <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
-  </mt-cell>
+     <mt-cell  label="空调运行参数"></mt-cell>
+
+     <mt-cell  title="回风温度" :label='rangeValue'>
+      <mt-range
+        class='air-range'
+        v-model="rangeValue"
+        :min="1"
+        :max="100"
+        :step="1"
+        disabled
+        :bar-height="5">
+      </mt-range>
+     </mt-cell>
+
+    <mt-cell  title="送风温度" :label='rangeValue1'>
+      <mt-range
+        class='air-range'
+        v-model="rangeValue1"
+        :min="1"
+        :max="100"
+        :step="1"
+        disabled
+        :bar-height="5">
+      </mt-range>
+     </mt-cell>
+
+    <mt-cell  label="参数设定"></mt-cell>
+
+     <mt-cell  title="温度设定" :label='rangeValue'>
+      <mt-range
+        class='air-range'
+        v-model="rangeValue"
+        :min="1"
+        :max="100"
+        :step="1"
+        :bar-height="5">
+      </mt-range>
+     </mt-cell>
+
+    <mt-cell  title="湿度设定" :label='rangeValue1'>
+      <mt-range
+        class='air-range'
+        v-model="rangeValue1"
+        :min="1"
+        :max="100"
+        :step="1"
+        :bar-height="5">
+      </mt-range>
+     </mt-cell>
+      <mt-cell  title="空调开关" :label='switch1?"开":"关"'>
+        <mt-switch v-model="switch1"></mt-switch>
+      </mt-cell>
+
+      
+
+    </mt-tab-container-item>
+    <mt-tab-container-item id="tab-container2" name='状态'>
+      2222222222222222
+    </mt-tab-container-item>
+    <mt-tab-container-item id="tab-container3" name="温湿度">
+    33333333333333
+    </mt-tab-container-item>
+</mt-tab-container>
+
 
   <drop-menu :open.sync='openMenu' :data='province' @menuItem='clickMenu' :active='currentProvince'></drop-menu>
 
@@ -35,6 +100,10 @@ export default {
       deviceType: null,
       selectDeviceType: null,
       selectDevice: null,
+      rangeValue: 10,
+      rangeValue1: 5,
+      active: "tab-container1",
+      switch1: true,
     }
   },
   computed: {
@@ -96,5 +165,12 @@ export default {
 .sheet .mu-item-action {
   justify-content: center;
   color: inherit;
+}
+.air /deep/ .mint-cell-value {
+  position: relative;
+  flex: 2.5;
+}
+.air-range {
+  width: 100%;
 }
 </style>

@@ -62,35 +62,27 @@ const router = new Router({
           },
         },
         {
-          path: '/monitor/index',
-          name: 'monitor',
+          path: '/air/index',
+          name: 'air',
           meta: {
-            title: '实时监测',
+            title: '精密空调',
           },
-          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/index.vue'),
+          component: () => import(/* webpackChunkName: "air" */ './views/air/index.vue'),
         },
 
         {
-          path: '/monitor/device',
-          name: 'monitor_device',
+          path: '/air/device2/:dapeng/:areaId/',
+          name: 'air_device2',
           meta: {
-            title: '实时监测-选择设备',
+            title: '精密空调',
           },
-          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device.vue'),
-        },
-        {
-          path: '/monitor/device2/:dapeng/:areaId/',
-          name: 'monitor_device2',
-          meta: {
-            title: '实时监测-选择设备',
-          },
-          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device2.vue'),
+          component: () => import(/* webpackChunkName: "air" */ './views/air/device2.vue'),
         },
         {
           path: '/alarm/index',
           name: 'alarm',
           meta: {
-            title: '告警管理',
+            title: '安防报警',
           },
           component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/index.vue'),
         },
@@ -98,7 +90,7 @@ const router = new Router({
           path: '/alarm/device',
           name: 'alarm_device',
           meta: {
-            title: '告警管理-设备报警',
+            title: '安防报警-设备报警',
           },
           component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/device.vue'),
         },
@@ -106,68 +98,49 @@ const router = new Router({
           path: '/alarm/detail',
           name: 'alarm_detail',
           meta: {
-            title: '告警管理-报警内容',
+            title: '安防报警-报警内容',
           },
           component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/detail.vue'),
         },
         {
-          path: '/remote/index',
-          name: 'remote',
+          path: '/ups/index',
+          name: 'ups',
           meta: {
-            title: '远程控制',
+            title: 'UPS电源',
           },
-          component: () => import(/* webpackChunkName: "remote" */ './views/remote/index.vue'),
+          component: () => import(/* webpackChunkName: "ups" */ './views/ups/index.vue'),
         },
         {
-          path: '/remote/device',
-          name: 'remote_device',
+          path: '/ups/device',
+          name: 'ups_device',
           meta: {
-            title: '远程控制设备',
+            title: 'UPS电源',
           },
-          component: () => import(/* webpackChunkName: "remote" */ './views/remote/device.vue'),
+          component: () => import(/* webpackChunkName: "ups" */ './views/ups/device.vue'),
         },
         {
-          path: '/statistic/index',
-          name: 'statistic',
+          path: '/temphu/index',
+          name: 'temphu',
           meta: {
-            title: '统计分析',
+            title: '温湿度',
           },
-          component: () =>
-            import(/* webpackChunkName: "statistic" */ './views/statistic/index.vue'),
+          component: () => import(/* webpackChunkName: "temphu" */ './views/temphu/index.vue'),
         },
         {
-          path: '/statistic/device',
-          name: 'statistic_device',
+          path: '/guard/index',
+          name: 'guard',
           meta: {
-            title: '统计分析-设备',
+            title: '门禁控制',
           },
-          component: () =>
-            import(/* webpackChunkName: "statistic" */ './views/statistic/device.vue'),
+          component: () => import(/* webpackChunkName: "guard" */ './views/guard/index.vue'),
         },
         {
-          path: '/statistic/chart',
-          name: 'statistic_chart',
+          path: '/electric/index',
+          name: 'electric',
           meta: {
-            title: '统计分析-趋势图',
+            title: '电量仪',
           },
-          component: () =>
-            import(/* webpackChunkName: "statistic" */ './views/statistic/chart.vue'),
-        },
-        {
-          path: '/video/index',
-          name: 'video',
-          meta: {
-            title: '视频控制',
-          },
-          component: () => import(/* webpackChunkName: "video" */ './views/video/index.vue'),
-        },
-        {
-          path: '/video/player',
-          name: 'video_player',
-          meta: {
-            title: '视频控制',
-          },
-          component: () => import(/* webpackChunkName: "video" */ './views/video/videoPlayer.vue'),
+          component: () => import(/* webpackChunkName: "electric" */ './views/electric/index.vue'),
         },
       ],
     },

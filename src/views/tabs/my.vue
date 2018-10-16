@@ -8,24 +8,7 @@
                     <img :src='avatar' class='item-icon'/>
                 </div>
             </div>
-            <div class='user-device'>
-                <div class='device-item'>
-                    <div class='device-title'>
-                        设备数量
-                    </div>
-                    <div class='device-num'>
-                        10
-                    </div>
-                </div>
-                <div class='device-item'>
-                    <div class='device-title'>
-                        大棚数量
-                    </div>
-                    <div class='device-num'>
-                        5
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <mt-cell title="个人信息" is-link to='/auth/userinfo'>
@@ -41,9 +24,9 @@
         <mt-cell title="我的设备" is-link  to='mydevice'>
             <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
         </mt-cell> -->
-        <mt-cell title="定位" is-link to='/geo'>
+        <!-- <mt-cell title="定位" is-link to='/geo'>
             <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
-        </mt-cell>
+        </mt-cell> -->
         <mt-cell title="帮助中心" is-link to='/auth/help'>
             <svg-icon icon-class='help-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
@@ -53,9 +36,9 @@
         <mt-cell title="关于我们" is-link to='/auth/about'>
             <svg-icon icon-class='us-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
-        <mt-cell title="login" is-link to='/login4'>
+        <!-- <mt-cell title="login" is-link to='/login4'>
             <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
-        </mt-cell>
+        </mt-cell> -->
         <mt-cell></mt-cell>
         <div class='sign-out' @click='logout("login")'>退出登录</div>
     </div>
@@ -98,10 +81,8 @@ export default {
 .user {
   background-color: #fff;
   margin-bottom: 20px;
-  border-bottom: 1px solid #dfdfdf;
 }
 .user-info {
-  border-bottom: 1px solid #dfdfdf;
   padding: 10px 0;
 }
 .user-info,
