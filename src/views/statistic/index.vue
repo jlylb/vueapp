@@ -1,78 +1,183 @@
 <template>
- <div class='layout-container'>
 
-  <top-component @top-btn='selectProvince'></top-component>
+<div  class='layout-container'>
 
-  <mt-cell :title="`${index + 1}号大棚`" is-link  v-for='(item, index) in selectCity' :key='index' @click.native='openDetail(item, index)'>
-    <span style="color: green"> {{ countDevice(item.value, device) }}个设备</span>
-    <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
-  </mt-cell>
+  <top-component>
+    <span slot='right' @click='filterChart'>筛选</span>
+  </top-component> 
 
-  <drop-menu :open.sync='openMenu' :data='province' @menuItem='clickMenu' :active='currentProvince'></drop-menu>
+<div class='chart-block'>
 
- </div> 
+    <h1 class='chart-title' >空气温湿度趋势图</h1>
+
+        <ve-line
+          :data="chartData"
+          :data-zoom="dataZoom">
+        </ve-line>
+
+    </div>
+  
+
+
+  <mt-popup
+  v-model="filterLeft"
+  position="bottom"
+  class='popup-menu popup-menu-right'
+  popup-transition="popup-fade">
+    <mt-field label="公司" placeholder="选择省份" v-model="province"></mt-field>
+    <mt-field label="大棚" placeholder="选择大棚" v-model="area"></mt-field>
+    <mt-field label="设备" placeholder="选择设备" v-model="device"></mt-field>
+
+    <mt-radio
+      title="查询时间"
+      class='radio-time'
+      v-model="selectDate"
+      :options="radioOptions">
+    </mt-radio>
+
+    <div class='radio-time'>
+      <label class="mint-radiolist-title">自定义</label>
+      <mt-field label="开始时间" placeholder="开始时间" v-model="searchDate.start" @click.native="changeTimeStart"></mt-field>
+      <mt-field label="结束时间" placeholder="结束时间" v-model="searchDate.end" @click.native="changeTimeEnd"></mt-field>
+    </div>
+    <mt-button size="large" type='primary'>筛选</mt-button>
+</mt-popup>
+
+  <mt-datetime-picker
+    ref="pickerTimeStart"
+    type="date"
+    v-model="pickerStart">
+  </mt-datetime-picker>
+
+  <mt-datetime-picker
+    ref="pickerTimeEnd"
+    type="date"
+    v-model="pickerEnd">
+  </mt-datetime-picker>
+
+    <mt-popup
+    v-model="filterOpen"
+    class='popup-device'
+    position="bottom">
+
+    <mt-cell title="开始日期" is-link @click.native="changeTimeStart">
+      <span>{{ pickerStart|parseTime('{y}-{m}-{d}') }} </span>
+    </mt-cell>
+
+    <mt-cell title="结束日期" is-link  @click.native="changeTimeEnd">
+      <span>{{ pickerEnd|parseTime('{y}-{m}-{d}') }}</span>
+    </mt-cell>
+
+    <mt-cell class='filter-button'>
+      <mt-button size="large" type='primary' @click="selectDevice">确定</mt-button>
+    </mt-cell>
+
+    
+
+  </mt-popup>
+
+</div>
 
 </template>
 
 <script>
-import { fetchList } from '@/api/monitor'
-import DropMenu from '@/components/dropdown'
-import { getDataValue } from '@/tools'
-import { mapGetters } from 'vuex'
+import { fetchList, fetchDevice } from '@/api/monitor'
+import { parseTime } from '@/tools/'
+import { Toast } from 'mint-ui'
+import 'echarts/lib/component/dataZoom'
 
 export default {
-  components: { DropMenu },
+  components: {  },
   data() {
+    this.dataZoom = [
+        {
+          type: 'slider',
+          start: 0,
+          end: 20
+        }
+    ]
     return {
-      openMenu: false,
-      menu: [],
-      province: [],
-      city: [],
-      firstProvince: null,
-      firstCity: null,
-      selectCity: [],
+    chartData: {
+        columns: ['日期', '成本', '利润'],
+        rows: [
+          { '日期': '1月1日', '成本': 15, '利润': 12 },
+          { '日期': '1月2日', '成本': 12, '利润': 25 },
+          { '日期': '1月3日', '成本': 21, '利润': 10 },
+          { '日期': '1月4日', '成本': 41, '利润': 32 },
+          { '日期': '1月5日', '成本': 31, '利润': 30 },
+          { '日期': '1月6日', '成本': 71, '利润': 55 }
+        ]
+      },
+      items: [],
+      popupVisible: false,
+      filterOpen: false,
+      filterLeft: false,
+      slots: [
+        {
+          flex: 1,
+          values: ['201501', '201502', '201503', '201504', '201505', '201506'],
+          className: 'slot1',
+          textAlign: 'right'
+        }
+      ],
       device: null,
-      deviceType: null,
-      selectDeviceType: null,
-      selectDevice: null,
+      isChangeDevice: false,
+      pickerStart: new Date(),
+      pickerEnd: new Date(),
+      province: null,
+      area: null,
+      device: null,
+      selectDate: 'day',
+      searchDate: { start: null, end: null },
+      radioOptions: [
+        {
+          label: '当天',
+          value: 'day',
+        },
+        {
+          label: '本周',
+          value: 'week'
+        },
+        {
+          label: '本月',
+          value: 'month'
+        },
+        {
+          label: '本年',
+          value: 'year'
+        },
+      ]
     }
   },
-  computed: {
-    ...mapGetters('app',[
-      'currentProvince'
-    ]),
+  filters: {
+    parseTime
   },
   methods: {
-    closeBottomSheet(val, val1) {
-      console.log(val, val1)
+
+    selectDevice() {
+
+      fetchDevice().then((res) => {
+        console.log(res)
+        this.items = res.data
+        this.isChangeDevice = false
+      })  
     },
-    selectProvince() {
-      console.log(this.openMenu, 'select ....')
-      this.openMenu = true
+    changeTimeStart() {
+      this.$refs.pickerTimeStart.open();
     },
-    clickMenu(item) {
-      this.openMenu = false
-      this.firstProvince = item.value
-      this.setProvince()
+    changeTimeEnd() {
+      this.$refs.pickerTimeEnd.open();
     },
-    countDevice(cityId, data) {
-      console.log(getDataValue(data, [cityId], []),'count ....')
-      if(!data) {
-        return 0
-      }
-      return Object.keys(getDataValue(data, [cityId], [])).length
+    filterChart() {
+      this.filterLeft = true
     },
-    openDetail(item, index) {
-      this.$router.push({name: 'statistic_device', params: { dapeng: index + 1, areaId: item.value } })
-    },
-    setProvince() {
-      this.$store.commit('app/PROVINCE', this.firstProvince);
+    openChart() {
+      this.filterLeft = false
+      this.filterOpen = true
     }
   },
-  watch: {
-    firstProvince(newVal) {
-      this.selectCity = getDataValue(this.city, [newVal], [])
-    },
+  mounted() {
+
   },
   created() {
     fetchList().then((res) => {
@@ -80,21 +185,46 @@ export default {
       this.province = res.data.province
       this.city = res.data.city
       this.device = res.data.device
-      if(this.currentProvince) {
-        this.firstProvince = this.currentProvince
-        return 
-      }
+
       this.firstProvince = getDataValue(this.province, [0, 'value'], null)
       this.setProvince()
     })
   }
-
 }
 </script>
 
 <style lang='scss' scoped>
-.sheet .mu-item-action {
-  justify-content: center;
-  color: inherit;
+.chart-title {
+  font-size: 24px;
+  line-height: 24px;
+  // font-weight: bold;
+}
+.chart-block {
+  // overflow: auto;
+  display: inline-block;
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+.chart {
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  width: 400px;
+  min-height: 300px;
+  position: absolute;
+  margin-top: 20px;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+
+  // flex: 1;
+}
+.popup-menu-right {
+  width: 80%;
+  height: 100%;
+  left: auto;
+}
+.radio-time /deep/ .mint-radiolist-title {
+  text-align: left;
 }
 </style>
