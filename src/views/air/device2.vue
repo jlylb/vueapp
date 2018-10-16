@@ -19,11 +19,11 @@
       <div class='chart-desc-title'>
         <div class='chart-desc-item chart-desc-item-left'>
           <div class='chart-desc-icon'>
-            <svg-icon icon-class='dapeng' class='item-icon'></svg-icon>
+            <svg-icon icon-class='jmkt' class='item-icon'></svg-icon>
           </div>
         </div>
         <div class='chart-desc-item chart-desc-item-right'>
-          <p>{{ dapeng }}号大棚 
+          <p>{{ dapeng }} 
             <span class='item-title item-title-select' @click='deviceFileter'>{{ pdiIndex && pdiIndex.label }}</span>
           </p>
           <p>
