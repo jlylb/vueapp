@@ -24,7 +24,7 @@
   position="bottom"
   class='popup-menu popup-menu-right'
   popup-transition="popup-fade">
-    <mt-field label="公司" placeholder="选择省份" v-model="province"></mt-field>
+    <mt-field label="公司" placeholder="选择省份" :value="provinceLabel" @click.native="clickProvince"></mt-field>
     <mt-field label="大棚" placeholder="选择大棚" v-model="area"></mt-field>
     <mt-field label="设备" placeholder="选择设备" v-model="device"></mt-field>
 
@@ -72,9 +72,10 @@
       <mt-button size="large" type='primary' @click="selectDevice">确定</mt-button>
     </mt-cell>
 
-    
-
   </mt-popup>
+
+
+  <my-popup v-model="province" :open.sync='provinceOpen' :slots="provinces"></my-popup>
 
 </div>
 
@@ -85,9 +86,11 @@ import { fetchList, fetchDevice } from '@/api/monitor'
 import { parseTime } from '@/tools/'
 import { Toast } from 'mint-ui'
 import 'echarts/lib/component/dataZoom'
+import MyPopup from '@/components/popup'
+
 
 export default {
-  components: {  },
+  components: { MyPopup },
   data() {
     this.dataZoom = [
         {
@@ -112,12 +115,13 @@ export default {
       popupVisible: false,
       filterOpen: false,
       filterLeft: false,
+      provinceOpen: false,
       slots: [
         {
           flex: 1,
           values: ['201501', '201502', '201503', '201504', '201505', '201506'],
           className: 'slot1',
-          textAlign: 'right'
+          textAlign: 'center'
         }
       ],
       device: null,
@@ -125,6 +129,8 @@ export default {
       pickerStart: new Date(),
       pickerEnd: new Date(),
       province: null,
+      provinces: null,
+      provincesSlots: [],
       area: null,
       device: null,
       selectDate: 'day',
@@ -146,7 +152,13 @@ export default {
           label: '本年',
           value: 'year'
         },
-      ]
+      ],
+      // provinceLabel: ''
+    }
+  },
+  computed: {
+    provinceLabel() {
+      return this.province ? this.province.label : ''
     }
   },
   filters: {
@@ -174,6 +186,14 @@ export default {
     openChart() {
       this.filterLeft = false
       this.filterOpen = true
+    },
+    onProvinceChange(picker, values) {
+      if (values[0] > values[1]) {
+        picker.setSlotValue(1, values[0]);
+      }
+    },
+    clickProvince() {
+      this.provinceOpen = true
     }
   },
   mounted() {
@@ -182,12 +202,20 @@ export default {
   created() {
     fetchList().then((res) => {
       this.items = res.data.items
-      this.province = res.data.province
+this.province = {value: 251, label: "广东省1"}
+      this.provinces = [
+        {
+          flex: 1,
+          // defaultIndex: 0,
+          values: [{value: 250, label: "广东省"},{value: 251, label: "广东省1"}],
+          className: 'slot2',
+        }
+      ]
+      
+console.log('main .............')
       this.city = res.data.city
-      this.device = res.data.device
+      // this.device = res.data.device
 
-      this.firstProvince = getDataValue(this.province, [0, 'value'], null)
-      this.setProvince()
     })
   }
 }
