@@ -11,7 +11,9 @@
 
         <ve-line
           :data="chartData"
-          :data-zoom="dataZoom">
+          :data-zoom="dataZoom"
+          :settings="chartSettings"
+          :after-set-option-once='afterRoom'>
         </ve-line>
 
     </div>
@@ -91,14 +93,14 @@ export default {
     ]
     return {
     chartData: {
-        columns: ['日期', '成本', '利润'],
+        columns: ['日期', '温度', '湿度'],
         rows: [
-          { '日期': '1月1日', '成本': 15, '利润': 12 },
-          { '日期': '1月2日', '成本': 12, '利润': 25 },
-          { '日期': '1月3日', '成本': 21, '利润': 10 },
-          { '日期': '1月4日', '成本': 41, '利润': 32 },
-          { '日期': '1月5日', '成本': 31, '利润': 30 },
-          { '日期': '1月6日', '成本': 71, '利润': 55 }
+          { '日期': '2018-10-16 17:50', '温度': 15, '湿度': 12 },
+          { '日期': '2018-10-16 18:50', '温度': 12, '湿度': 25 },
+          { '日期': '2018-10-16 19:50', '温度': 21, '湿度': 10 },
+          { '日期': '2018-10-16 20:50', '温度': 41, '湿度': 32 },
+          { '日期': '2018-10-16 21:50', '温度': 31, '湿度': 30 },
+          { '日期': '2018-10-16 22:50', '温度': 71, '湿度': 55 }
         ]
       },
       items: [],
@@ -204,6 +206,29 @@ export default {
     parseTime
   },
   methods: {
+          afterRoom($chart) {
+            let i=0
+    setInterval(function () {
+      let s = i
+      let e = i+1
+        $chart.dispatchAction({
+            type: 'dataZoom',
+            dataZoomIndex: 0,
+            // 开始位置的百分比，0 - 100
+            startValue: s,
+            // 结束位置的百分比，0 - 100
+            endValue: e,
+
+        })
+        if(i==4) {
+          i = 0
+        }else{
+          i++
+        }
+        
+    }, 1000)
+
+      },
     formatChartData() {
         const { fields, items, name, num, unit, surfix } = this.items
         const chartData = {}
@@ -299,6 +324,11 @@ export default {
     }).then((res) => {
         this.selectDevice(res)
     })
+      this.chartSettings = {
+        axisSite: { right: ['湿度'] },
+        yAxisType: ['value', 'value'],
+        yAxisName: ['温度', '湿度']
+      }
   }
 }
 </script>
