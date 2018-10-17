@@ -21,3 +21,11 @@ export function fetchAreaDevice(data) {
     data,
   });
 }
+
+export function fetchHistoryDevice(data) {
+  return axios({
+    url: '/monitor/data',
+    method: 'post',
+    data,
+  });
+}

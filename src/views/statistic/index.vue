@@ -2,8 +2,7 @@
 
 <div  class='layout-container'>
 
-  <top-component>
-    <span slot='right' @click='filterChart'>筛选</span>
+  <top-component @top-btn='filterChart'>
   </top-component> 
 
 <div class='chart-block'>
@@ -24,9 +23,9 @@
   position="bottom"
   class='popup-menu popup-menu-right'
   popup-transition="popup-fade">
-    <mt-field label="公司" placeholder="选择省份" :value="provinceLabel" @click.native="clickProvince"></mt-field>
-    <mt-field label="大棚" placeholder="选择大棚" v-model="area"></mt-field>
-    <mt-field label="设备" placeholder="选择设备" v-model="device"></mt-field>
+    <mt-cell title='选择省份' @click.native="clickProvince"> {{ provinceLabel }} </mt-cell>
+    <mt-cell title='选择大棚' @click.native="clickCity"> {{ areaLabel }} </mt-cell>
+    <mt-cell title='选择设备' @click.native="clickDevice"> {{ deviceLabel }} </mt-cell>
 
     <mt-radio
       title="查询时间"
@@ -37,56 +36,47 @@
 
     <div class='radio-time'>
       <label class="mint-radiolist-title">自定义</label>
-      <mt-field label="开始时间" placeholder="开始时间" v-model="searchDate.start" @click.native="changeTimeStart"></mt-field>
-      <mt-field label="结束时间" placeholder="结束时间" v-model="searchDate.end" @click.native="changeTimeEnd"></mt-field>
+      <mt-cell title='开始时间' @click.native="changeTimeStart"> {{ formatTime(searchDate.start) }} </mt-cell>
+      <mt-cell title='结束时间' @click.native="changeTimeEnd"> {{ formatTime(searchDate.end) }} </mt-cell>
+
     </div>
-    <mt-button size="large" type='primary'>筛选</mt-button>
+    <mt-button size="large" type='primary' @click="fetchHistoryData">筛选</mt-button>
 </mt-popup>
 
   <mt-datetime-picker
     ref="pickerTimeStart"
     type="date"
+    @confirm="handleConfirm($event, 'start')"
+    @cancel="handleCancel('start')"
     v-model="pickerStart">
   </mt-datetime-picker>
 
   <mt-datetime-picker
     ref="pickerTimeEnd"
     type="date"
+    @confirm="handleConfirm($event, 'end')"
+    @cancel="handleCancel('end')"
     v-model="pickerEnd">
   </mt-datetime-picker>
 
-    <mt-popup
-    v-model="filterOpen"
-    class='popup-device'
-    position="bottom">
-
-    <mt-cell title="开始日期" is-link @click.native="changeTimeStart">
-      <span>{{ pickerStart|parseTime('{y}-{m}-{d}') }} </span>
-    </mt-cell>
-
-    <mt-cell title="结束日期" is-link  @click.native="changeTimeEnd">
-      <span>{{ pickerEnd|parseTime('{y}-{m}-{d}') }}</span>
-    </mt-cell>
-
-    <mt-cell class='filter-button'>
-      <mt-button size="large" type='primary' @click="selectDevice">确定</mt-button>
-    </mt-cell>
-
-  </mt-popup>
-
 
   <my-popup v-model="province" :open.sync='provinceOpen' :slots="provinces"></my-popup>
+
+  <my-popup v-model="area" :open.sync='cityOpen' :slots="citySlots"></my-popup>
+
+  <my-popup v-model="device" :open.sync='deviceOpen' :slots="deviceSlots"></my-popup>
 
 </div>
 
 </template>
 
 <script>
-import { fetchList, fetchDevice } from '@/api/monitor'
+import { fetchList, fetchHistoryDevice } from '@/api/monitor'
 import { parseTime } from '@/tools/'
 import { Toast } from 'mint-ui'
 import 'echarts/lib/component/dataZoom'
 import MyPopup from '@/components/popup'
+import { getDataValue } from '@/tools'
 
 
 export default {
@@ -116,14 +106,9 @@ export default {
       filterOpen: false,
       filterLeft: false,
       provinceOpen: false,
-      slots: [
-        {
-          flex: 1,
-          values: ['201501', '201502', '201503', '201504', '201505', '201506'],
-          className: 'slot1',
-          textAlign: 'center'
-        }
-      ],
+      cityOpen: false,
+      deviceOpen: false,
+
       device: null,
       isChangeDevice: false,
       pickerStart: new Date(),
@@ -131,8 +116,17 @@ export default {
       province: null,
       provinces: null,
       provincesSlots: [],
+
       area: null,
+      city: null,
+      citys: null,
+      citySlots: [],
+
       device: null,
+      devices: null,
+      areaDevice: null,
+      deviceSlots: [],
+
       selectDate: 'day',
       searchDate: { start: null, end: null },
       radioOptions: [
@@ -159,20 +153,86 @@ export default {
   computed: {
     provinceLabel() {
       return this.province ? this.province.label : ''
+    },
+    areaLabel() {
+      return this.area ? this.area.label : ''
+    },
+    deviceLabel() {
+      return this.device ? this.device.label : ''
+    }
+  },
+  watch: {
+    province(newval) {
+      this.citys = newval ? this.city[newval.value] : []
+      this.citySlots = [
+        {
+          flex: 1,
+          values: this.citys,
+          className: 'slot3',
+        }
+      ]
+    },
+    area(newval) {
+      this.devices = newval ? this.areaDevice[newval.value] : []
+      this.deviceSlots = [
+        {
+          flex: 1,
+          values: this.devices,
+          className: 'slot4',
+        }
+      ]
+    },
+    searchDate: {
+      handler(newval) {
+        console.log(newval, 'watch search date ......')
+        if(newval.start && newval.end) {
+          this.selectDate = null
+        }
+        if(!newval.start && !newval.end) {
+          this.selectDate = 'day'
+        }
+      },
+      deep: true
+    },
+    selectDate(newval) {
+      if(newval) {
+        this.searchDate = { start: null, end: null }
+      }
     }
   },
   filters: {
     parseTime
   },
   methods: {
-
-    selectDevice() {
-
-      fetchDevice().then((res) => {
-        console.log(res)
-        this.items = res.data
-        this.isChangeDevice = false
+    formatChartData() {
+        const { fields, items, name, num, unit, surfix } = this.items
+        const chartData = {}
+        const columns = [], rows = []
+        for(let i = 1; i <= 10; i++) {
+          fields.forEach(field => {
+            let fieldKey = field
+            let row = {}
+            row
+          });
+        }
+    },
+    formatTime(str) {
+      if(!str) return
+      return parseTime(new Date(str), '{y}-{m}-{d}')
+    },
+    handleConfirm(val, sType) {
+      this.searchDate[sType] = this.formatTime(val)
+    },
+    handleCancel(sType) {
+      this.searchDate[sType] = null
+    },
+    selectDevice(params) {
+      fetchHistoryDevice(this.getParams(params)).then((res) => {
+        this.items = res.data.devices
       })  
+    },
+    fetchHistoryData() {
+      this.selectDevice(this.device)
     },
     changeTimeStart() {
       this.$refs.pickerTimeStart.open();
@@ -194,6 +254,26 @@ export default {
     },
     clickProvince() {
       this.provinceOpen = true
+    },
+    clickCity() {
+      this.cityOpen = true
+    },
+    clickDevice() {
+      this.deviceOpen = true
+    },
+    clickRadio() {
+      this.searchDate = {
+        start: null,
+        end: null
+      }
+    },
+    getParams(curDevice = {}) {
+      const { value: device = null, device_type = null } = curDevice
+      let searchDate = Object.values(this.searchDate).filter(item => item);
+      return { device, device_type, searchDate, selectDate: this.selectDate, fmt: 'pc' }
+    },
+    getHistoryData() {
+      this.getParams()
     }
   },
   mounted() {
@@ -201,21 +281,23 @@ export default {
   },
   created() {
     fetchList().then((res) => {
-      this.items = res.data.items
-this.province = {value: 251, label: "广东省1"}
+      let province = res.data.province
       this.provinces = [
         {
           flex: 1,
-          // defaultIndex: 0,
-          values: [{value: 250, label: "广东省"},{value: 251, label: "广东省1"}],
+          values: province,
           className: 'slot2',
         }
       ]
-      
-console.log('main .............')
-      this.city = res.data.city
-      // this.device = res.data.device
 
+      const proFirst = getDataValue(province, [0, 'value'])
+      this.city = res.data.city
+      this.areaDevice = res.data.areaDevice
+      const firstCity = getDataValue(this.city, [proFirst, 0, 'value'])
+      const device = getDataValue(this.areaDevice, [firstCity, 0])
+      return device     
+    }).then((res) => {
+        this.selectDevice(res)
     })
   }
 }

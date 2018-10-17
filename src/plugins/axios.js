@@ -12,7 +12,7 @@ import router from '../router';
 
 const config = {
   baseURL: '/api',
-  timeout: 60 * 1000, // Timeout
+  timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
 
@@ -43,10 +43,8 @@ _axios.interceptors.response.use(
       store.dispatch('user/FedLogOut').then(() => {
         router.push({ name: 'login' });
       });
-    }else{
-      if (data.status !== 1) {
-        MessageBox.alert(data.msg || response.statusText, '提示');
-      }
+    } else if (data.status !== 1) {
+      MessageBox.alert(data.msg || response.statusText, '提示');
     }
     return response;
   },
