@@ -16,56 +16,49 @@
 
     <div class='fluid-content'>
         <div class="fluid-content-item">
-            <div class='item-monitor item item-right' @click="openRouter('air')">
+            <div class='item-power item item-right' @click="openRouter('sysmenu', 'power')">
                 <div class='wrap-item'>
                     <div class='icon'>
-                    <svg-icon icon-class='jmkt' class='item-icon'></svg-icon>
+                    <svg-icon icon-class='sys-power' class='item-icon'></svg-icon>
                     </div>
-                    <div class='icon-desc'>精密空调</div>
+                    <div class='icon-desc'>动力系统</div>
                 </div>
             </div>
-            <div class='item-alarm item item-right'  @click="openRouter('ups')">
-                <div class='wrap-item'>
-                    <div class='icon'>
-                        <svg-icon icon-class='ups'  class='item-icon'></svg-icon>
-                    </div>
-                    <div class='icon-desc'>UPS电源</div>
-                </div>
-            </div>
-            <div class='item-statistic item item-right'   @click="openRouter('electric')">
-                <div class='wrap-item'>
-                    <div class='icon'>
-                        <svg-icon icon-class='dlyi'  class='item-icon'></svg-icon>
-                    </div>
-                    <div class='icon-desc'>电量仪</div>
-                </div>
-            </div>
-        </div>
-        <div class="fluid-content-item">
-            <div class='item-remote item'   @click="openRouter('alarm')">
+            <div class='item-alarm item item-right'  @click="openRouter('alarm')">
                 <div class='wrap-item'>
                     <div class='icon'>
                         <svg-icon icon-class='afbj'  class='item-icon'></svg-icon>
                     </div>
-                    <div class='icon-desc'>安防报警</div>
+                    <div class='icon-desc'>实时告警</div>
                 </div>
             </div>
-            <div class='item-video item'   @click="openRouter('guard')">
+            <div class='item-statistic item item-right'   @click="openRouter('sysmenu', 'fire')">
                 <div class='wrap-item'>
                     <div class='icon'>
-                        <svg-icon icon-class='menjin'  class='item-icon'></svg-icon>
+                        <svg-icon icon-class='sys-xf'  class='item-icon'></svg-icon>
                     </div>
-                    <div class='icon-desc'>门禁控制</div>
+                    <div class='icon-desc'>消防系统</div>
                 </div>
             </div>
-            <div class='item-temp item'   @click="openRouter('temphu')">
+        </div>
+        <div class="fluid-content-item">
+            <div class='item-remote item'   @click="openRouter('sysmenu', 'env')">
                 <div class='wrap-item'>
                     <div class='icon'>
-                        <svg-icon icon-class='wsdu'  class='item-icon'></svg-icon>
-                    </div>    
-                    <div class='icon-desc'>温湿度</div>
+                        <svg-icon icon-class='sys-env'  class='item-icon'></svg-icon>
+                    </div>
+                    <div class='icon-desc'>环境系统</div>
                 </div>
             </div>
+            <div class='item-video item'   @click="openRouter('sysmenu', 'protect')">
+                <div class='wrap-item'>
+                    <div class='icon'>
+                        <svg-icon icon-class='sys-protect'  class='item-icon'></svg-icon>
+                    </div>
+                    <div class='icon-desc'>安保系统</div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -82,8 +75,9 @@ export default {
         }
     },
     methods: {
-        openRouter(name) {
-            this.$router.push({name})
+        openRouter(name, type) {
+            let params = type ? { type } : {}
+            this.$router.push({name, params: params})
         }
     },
     created() {
@@ -154,7 +148,7 @@ export default {
   .item-right {
     margin-right: 0;
   }
-  .item-monitor {
+  .item-power {
     background-color: #409eff;
     flex: 1.2;
   }

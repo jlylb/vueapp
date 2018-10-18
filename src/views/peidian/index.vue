@@ -1,6 +1,6 @@
 <template>
   <div>
-    门禁控制
+    peidian
   </div>
 </template>
 
@@ -11,5 +11,4 @@ export default {
 </script>
 
 <style>
-
 </style>

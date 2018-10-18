@@ -1,6 +1,6 @@
 export function fetchList(query) {
   return axios({
-    url: '/monitor/index',
+    url: '/donghuang/index',
     method: 'get',
     params: query,
   });
@@ -8,16 +8,10 @@ export function fetchList(query) {
 
 export function fetchDevice(data) {
   return axios({
-    url: '/donghuang/realdata',
+    url: '/donghuang/device',
     method: 'post',
     data,
   });
 }
 
-export function fetchAreaDevice(data) {
-  return axios({
-    url: '/monitor/areadevice',
-    method: 'post',
-    data,
-  });
-}
+export default {};

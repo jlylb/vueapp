@@ -30,9 +30,9 @@
         <mt-cell title="帮助中心" is-link to='/auth/help'>
             <svg-icon icon-class='help-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
-        <mt-cell title="意见反馈" is-link to='/auth/feedback'>
+        <!-- <mt-cell title="意见反馈" is-link to='/auth/feedback'>
             <svg-icon icon-class='adviser-circle' class='item-icon' slot='icon'></svg-icon>
-        </mt-cell>
+        </mt-cell> -->
         <mt-cell title="关于我们" is-link to='/auth/about'>
             <svg-icon icon-class='us-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>

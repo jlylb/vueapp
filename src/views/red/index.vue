@@ -1,6 +1,6 @@
 <template>
   <div>
-    电量仪
+    red
   </div>
 </template>
 
@@ -11,5 +11,4 @@ export default {
 </script>
 
 <style>
-
 </style>

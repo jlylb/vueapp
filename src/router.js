@@ -82,7 +82,7 @@ const router = new Router({
           path: '/alarm/index',
           name: 'alarm',
           meta: {
-            title: '安防报警',
+            title: '实时报警',
           },
           component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/index.vue'),
         },
@@ -127,20 +127,44 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "temphu" */ './views/temphu/index.vue'),
         },
         {
-          path: '/guard/index',
-          name: 'guard',
+          path: '/peidian/index',
+          name: 'peidian',
           meta: {
-            title: '门禁控制',
+            title: '精密配电',
           },
-          component: () => import(/* webpackChunkName: "guard" */ './views/guard/index.vue'),
+          component: () => import(/* webpackChunkName: "peidian" */ './views/peidian/index.vue'),
         },
         {
-          path: '/electric/index',
-          name: 'electric',
+          path: '/red/index',
+          name: 'red',
           meta: {
-            title: '电量仪',
+            title: '红外',
           },
-          component: () => import(/* webpackChunkName: "electric" */ './views/electric/index.vue'),
+          component: () => import(/* webpackChunkName: "red" */ './views/red/index.vue'),
+        },
+        {
+          path: '/yangan/index',
+          name: 'yangan',
+          meta: {
+            title: '烟感',
+          },
+          component: () => import(/* webpackChunkName: "yangan" */ './views/yangan/index.vue'),
+        },
+        {
+          path: '/sysmenu/index/:type',
+          name: 'sysmenu',
+          meta: {
+            title: '',
+          },
+          component: () => import(/* webpackChunkName: "sysmenu" */ './views/menu/index.vue'),
+        },
+        {
+          path: '/sysmenu/device/:type',
+          name: 'sysmenu_device',
+          meta: {
+            title: '',
+          },
+          component: () => import(/* webpackChunkName: "sysmenu" */ './views/menu/device.vue'),
         },
       ],
     },
