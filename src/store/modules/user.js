@@ -103,7 +103,7 @@ const user = {
         getUserInfo()
           .then((response) => {
             console.log(response);
-            if (!response.data) {
+            if (!response||!response.data) {
               reject('error');
             }
             const data = response.data.user;

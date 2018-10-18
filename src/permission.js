@@ -21,10 +21,12 @@ router.beforeEach((to, from, next) => {
           next();
         })
         .catch((err) => {
-          store.dispatch('user/FedLogOut').then(() => {
-            MessageBox.alert(err || '验证失败, 请重新登录!!');
-            next({ path: '/' });
-          });
+          console.log(err,'permission...........');
+          // next({ path: '/' });
+          // store.dispatch('user/FedLogOut').then(() => {
+          //   MessageBox.alert(err || '验证失败, 请重新登录!!');
+          //   next({ path: '/' });
+          // });
         });
     } else {
       // next({ path: '/401', replace: true, query: { noGoBack: true } });
