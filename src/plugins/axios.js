@@ -39,25 +39,25 @@ _axios.interceptors.response.use(
     console.log(response, 'ok....');
     const { data } = response;
 
-      // if (data.status !== 1) {
-      //   MessageBox.alert(data.msg || response.statusText, '提示');
-      // }
-    
+    // if (data.status !== 1) {
+    //   MessageBox.alert(data.msg || response.statusText, '提示');
+    // }
+
     return response;
   },
   (error) => {
-    console.log(error, error.response, 'response',  error.response.status === 401);
+    console.log(error, error.response, 'response', error.response.status === 401);
     MessageBox.alert(`${error.response.statusText}`, '提示');
-    if ( error.response.status === 401) {
+    if (error.response.status === 401) {
       store.dispatch('user/FedLogOut').then(() => {
         router.push({ name: 'login', replace: true });
       });
     }
-    
+
     // else{
     //   MessageBox.alert(`${error.response.statusText}`, '提示');
     // }
-   
+
     Promise.reject(error);
   },
 );

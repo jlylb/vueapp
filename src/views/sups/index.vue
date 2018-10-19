@@ -14,39 +14,12 @@
 
     <mt-tab-container-item id="tab-real"  class='real'>
 
-    <mt-cell is-link>
+    <mt-cell>
       
-        <v-circle :percent="fixPer(detail.rd_InVol1)"   dashboard>
+        <v-circle :percent="detail.rd_upsinvol/240"  dashboard>
             <p>输入电压</p>
             <p>
-              {{ detail.rd_InVol1 }}
-            </p>
-        </v-circle>
-
-
-
-    </mt-cell>
-
-        <mt-cell is-link>
-      
-
-        <v-circle :percent="fixPer(detail.rd_OutVol2)"   dashboard>
-            <p>输出电压</p>
-            <p>
-              {{ detail.rd_OutVol2 }}
-            </p>
-        </v-circle>
-
-    </mt-cell>
-
-
-
-    <mt-cell is-link>
-      
-        <v-circle :percent="fixPer(detail.rd_PassVol1)"  dashboard>
-            <p>旁路电压</p>
-            <p>
-              {{ detail.rd_PassVol1 }}
+              {{ detail.rd_upsinvol }}
             </p>
         </v-circle>
 
@@ -54,7 +27,50 @@
     </mt-cell>
 
         <mt-cell>
-            <mt-button type="primary" size='normal' @click.native.prevent="more">更多参数</mt-button>
+      
+        <v-circle :percent="detail.rd_upsoutvol/240"  dashboard>
+            <p>输出电压</p>
+            <p>
+              {{ detail.rd_upsinvol }}
+            </p>
+        </v-circle>
+
+    </mt-cell>
+
+    <mt-cell>
+      
+        <v-circle :percent="detail.rd_upsvolr/240"  dashboard>
+            <p>额定电压</p>
+            <p>
+              {{ detail.rd_upsvolr }}
+            </p>
+        </v-circle>
+
+    </mt-cell>
+
+    <mt-cell>
+      
+        <v-circle :percent="detail.rd_OutMaxVol/240"  dashboard>
+            <p>最大电压</p>
+            <p>
+              {{ detail.rd_OutMaxVol }}
+            </p>
+        </v-circle>
+
+    </mt-cell>
+
+    <mt-cell>
+      
+        <v-circle :percent="detail.rd_OutMinVol/240"  dashboard>
+            <p>最小电压</p>
+            <p>
+              {{ detail.rd_OutMinVol }}
+            </p>
+        </v-circle>
+
+    </mt-cell>
+        <mt-cell>
+            <mt-button type="primary" size='large' @click.native.prevent="more">更多参数</mt-button>
         </mt-cell>
     </mt-tab-container-item>
 
@@ -138,28 +154,15 @@ export default {
     }
   },
   computed: {
-    avgin() {
-      const { rd_InVol1, rd_InVol2, rd_InVol3 } = this.detail
-      return (rd_InVol1+rd_InVol2+rd_InVol3)/3
-    },
-    avgout() {
 
-    },
-    avgother() {
-
-    }
   },
   methods: {
-    fixPer(val) {
-      return Number((val*100/240).toFixed(2))
-    },
     selectButton(tab) {
       this.active = tab
     },
     more() {
       this.active = 'tab-temp'
-    },
-
+    }
   },
 
   created() {
@@ -197,12 +200,9 @@ export default {
   color: inherit;
 }
 .real {
-  p {
-    padding: 2px 0;
-  }
   /deep/ .mint-cell-value {
     position: relative;
-    justify-content: space-around;
+    justify-content: center;
     margin: 5px 0;
     width: 100%;
   }

@@ -2,7 +2,8 @@
   <div class='layout-container'>
     <top-component></top-component>
     <mt-cell 
-    :title='item.label' 
+    :title='item.label'
+    :label='"设备编号: " + item.value' 
     v-for='item in devices' 
     :key='item.value' 
     is-link 

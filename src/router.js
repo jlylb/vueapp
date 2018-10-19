@@ -111,6 +111,14 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "ups" */ './views/ups/index.vue'),
         },
         {
+          path: '/sups/index',
+          name: 'sups',
+          meta: {
+            title: 'UPS电源',
+          },
+          component: () => import(/* webpackChunkName: "ups" */ './views/sups/index.vue'),
+        },
+        {
           path: '/ups/device',
           name: 'ups_device',
           meta: {

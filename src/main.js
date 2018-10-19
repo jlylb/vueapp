@@ -14,6 +14,7 @@ import router from './router';
 import store from './store';
 import VeLine from 'v-charts/lib/line.common';
 import VeHistogram from 'v-charts/lib/histogram.common';
+import VeGauge from 'v-charts/lib/gauge.common';
 import './mock';
 import './icons';
 import './plugins/axios';
@@ -37,6 +38,7 @@ Vue.component('topComponent', TopComponent);
 
 Vue.component(VeLine.name, VeLine);
 Vue.component(VeHistogram.name, VeHistogram);
+Vue.component(VeGauge.name, VeGauge);
 
 new Vue({
   router,
