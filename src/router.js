@@ -103,7 +103,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/detail.vue'),
         },
         {
-          path: '/ups/index',
+          path: '/ups/index/:pdi',
           name: 'ups',
           meta: {
             title: 'UPS电源',
@@ -111,7 +111,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "ups" */ './views/ups/index.vue'),
         },
         {
-          path: '/sups/index',
+          path: '/sups/index/:pdi',
           name: 'sups',
           meta: {
             title: 'UPS电源',
@@ -127,7 +127,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "ups" */ './views/ups/device.vue'),
         },
         {
-          path: '/temphu/index',
+          path: '/temphu/index/:pdi',
           name: 'temphu',
           meta: {
             title: '温湿度',
@@ -135,7 +135,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "temphu" */ './views/temphu/index.vue'),
         },
         {
-          path: '/peidian/index',
+          path: '/peidian/index/:pdi',
           name: 'peidian',
           meta: {
             title: '精密配电',
@@ -143,7 +143,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "peidian" */ './views/peidian/index.vue'),
         },
         {
-          path: '/red/index',
+          path: '/red/index/:pdi',
           name: 'red',
           meta: {
             title: '红外',
@@ -151,7 +151,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "red" */ './views/red/index.vue'),
         },
         {
-          path: '/yangan/index',
+          path: '/yangan/index/:pdi',
           name: 'yangan',
           meta: {
             title: '烟感',

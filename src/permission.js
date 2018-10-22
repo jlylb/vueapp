@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
           next();
         })
         .catch((err) => {
-          console.log(err,'permission...........');
+          console.log(err, 'permission...........');
           // next({ path: '/' });
           // store.dispatch('user/FedLogOut').then(() => {
           //   MessageBox.alert(err || '验证失败, 请重新登录!!');
@@ -37,11 +37,12 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     console.log('last login', getGuide());
-    if (!getGuide()) {
-      next({ path: '/guide', replace: true });
-    } else {
-      next({ path: '/login', replace: true });
-    }
+    next({ path: '/login', replace: true });
+    // if (!getGuide()) {
+    //   next({ path: '/guide', replace: true });
+    // } else {
+    //   next({ path: '/login', replace: true });
+    // }
   }
 });
 

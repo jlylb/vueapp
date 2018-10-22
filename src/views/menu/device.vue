@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     openDetail(data) {
+      console.log(data, 'open menu.......')
       const { router: name, value: pdi, type } = data
       this.$router.push({name, params: { pdi, type } })
     }
@@ -39,5 +40,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang='scss' scoped>
+.item-icon {
+  color: darken($blue, 20%);
+}
+.cell-icon {
+  color: $blue;
+}
 </style>

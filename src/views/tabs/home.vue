@@ -67,10 +67,27 @@
 
 <script>
 // import testJpg from '@/assets/test.jpg'
+import testJpg1 from '@/assets/s1.jpg'
+import testJpg2 from '@/assets/s2.jpg'
+import testJpg3 from '@/assets/s3.jpg'
+
 export default {
     data() {
         return {
-            items : [],
+            items : [
+                {
+                    url: 'http://www.baidu.com',
+                    image: testJpg1,
+                },
+                {
+                    url: 'http://www.baidu.com',
+                    image: testJpg2,
+                },
+                {
+                    url: 'http://www.baidu.com',
+                    image: testJpg3,
+                },
+            ],
             // testJpg
         }
     },
@@ -86,7 +103,7 @@ export default {
             url: '/image/item'
         }).then((res)=>{
             console.log(res)
-            this.items = res.data.items
+           // this.items = res.data.items
         })
     }
 }
@@ -100,7 +117,8 @@ export default {
   & img {
     display: inline-block;
     height: 100%;
-    max-width: 100%;
+    width: 100%;
+    // max-width: 100%;
   }
 }
 .tab-container {
@@ -123,7 +141,7 @@ export default {
     justify-content: space-between;
   }
   .item {
-    padding: 20px;
+    // padding: 20px;
     margin: 10px;
     color: #ffff;
     display: flex;
@@ -139,6 +157,7 @@ export default {
   }
   .icon-desc {
     padding: 5px;
+    padding-bottom: 0;
   }
   .item-icon {
     width: 2.6em;
@@ -150,11 +169,11 @@ export default {
   }
   .item-power {
     background-color: #409eff;
-    flex: 1.2;
+    flex: 1.4;
   }
   .item-alarm {
     background-color: rgb(245, 108, 108);
-    flex: 1.8;
+    flex: 1.4;
   }
   .item-statistic {
     background-color: #a448bb;
