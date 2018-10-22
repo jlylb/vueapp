@@ -14,48 +14,43 @@
 
     <mt-tab-container-item id="tab-real"  class='real'>
 
-    <mt-cell is-link>
+    <mt-cell is-link @click.native="openDetail('in')">
       
-        <v-circle :percent="fixPer(detail.rd_InVol1)"   dashboard>
+        <v-circle :percent="fixPer(avgin)"   dashboard>
             <p>输入电压</p>
             <p>
-              {{ detail.rd_InVol1 }}
+              {{ avgin }}
             </p>
         </v-circle>
 
-
-
     </mt-cell>
 
-        <mt-cell is-link>
+    <mt-cell is-link @click.native="openDetail('out')">
       
-
-        <v-circle :percent="fixPer(detail.rd_OutVol2)"   dashboard>
+        <v-circle :percent="fixPer(avgout)"   dashboard>
             <p>输出电压</p>
             <p>
-              {{ detail.rd_OutVol2 }}
+              {{ avgout }}
             </p>
         </v-circle>
 
     </mt-cell>
 
-
-
-    <mt-cell is-link>
+    <mt-cell is-link @click.native="openDetail('other')">
       
-        <v-circle :percent="fixPer(detail.rd_PassVol1)"  dashboard>
+        <v-circle :percent="fixPer(avgother)"  dashboard>
             <p>旁路电压</p>
             <p>
-              {{ detail.rd_PassVol1 }}
+              {{ avgother }}
             </p>
         </v-circle>
 
-
     </mt-cell>
 
-        <mt-cell>
-            <mt-button type="primary" size='normal' @click.native.prevent="more">更多参数</mt-button>
-        </mt-cell>
+    <mt-cell>
+        <mt-button type="primary" size='small' @click.native.prevent="more">更多参数</mt-button>
+    </mt-cell>
+
     </mt-tab-container-item>
 
     <mt-tab-container-item id="tab-running" >
@@ -80,7 +75,7 @@
     </mt-tab-container-item>
 
   </mt-tab-container>
-
+    <popup-bottom :open.sync='openPop' :data='popData' :pop-prop='{ position: "bottom" }' :show-label='true'></popup-bottom>
  </div> 
 
 </template>
@@ -91,8 +86,10 @@ import { getDataValue } from '@/tools'
 import { mapGetters } from 'vuex'
 import VCircle from '@/components/vcircle'
 
+import PopupBottom from '@/components/dropdown'
+
 export default {
-  components: { VCircle },
+  components: { VCircle, PopupBottom },
   data() {
     return {
       rangeValue: 10,
@@ -107,51 +104,96 @@ export default {
       switch1: true,
       detail: {},
       running:[
-        {label: '开/关机', field: 'rd_upspoweroff', tLabel:'开', fLabel:'关' },
-        {label: 'UPS喇叭', field: 'rd_upssound', tLabel:'开', fLabel:'关' },
+        {label: '开/关机', field: 'rd_UPSShutWarn', tLabel:'开', fLabel:'关' },
+        {label: '系统状态', field: 'rd_SystemShutWarn', tLabel:'开', fLabel:'关' },
       ],
       alarm: [
-        {label: 'UPS故障', field: 'rd_upsfailstat',  tLabel:'无', fLabel:'有'},
-        {label: 'UPS旁路', field:  'rd_upsbypassstat', tLabel:'正常', fLabel:'异常'},
-        {label: '电池电压', field: 'rd_upsbatvollow', tLabel:'正常', fLabel:'过低'},
-        {label: '市电状态', field: 'rd_upsacfail', tLabel:'正常', fLabel:'中断'},
-        {label: '负载状态', field: 'rd_LoadAlarm', tLabel:'正常', fLabel:'过载'},
+        {label: '温度状态', field: 'rd_TempOverWarn',  tLabel:'正常', fLabel:'过高'},
+        {label: '输入状态', field:  'rd_InFailWarn', tLabel:'正常', fLabel:'故障'},
+        {label: '输出状态', field: 'rd_OutFailWarn', tLabel:'正常', fLabel:'故障'},
+        {label: '负载状态', field: 'rd_OverLoadWarn', tLabel:'正常', fLabel:'过载'},
+        {label: '旁路状态', field: 'rd_PassFailWarn', tLabel:'正常', fLabel:'故障'},
+        {label: '充电状态', field: 'rd_ChargeFailWarn', tLabel:'正常', fLabel:'故障'},
+        {label: '风扇状态', field: 'rd_FanFailWarn', tLabel:'正常', fLabel:'故障'},
+        {label: '熔丝状态', field: 'rd_FusiWarn', tLabel:'正常', fLabel:'告警'},
+        {label: '熔丝状态', field: 'rd_FusiWarn', tLabel:'正常', fLabel:'告警'},
+
+        {label: '市电恢复状态', field: 'rd_AwaitingPowerWarn', tLabel:'开机取消', fLabel:'自动开机'},
+        {label: '关机延时状态', field: 'rd_ShutLastWarn', tLabel:'取消', fLabel:'告警'},
+        {label: '立即关机状态', field: 'rd_FanFailWarn', tLabel:'取消', fLabel:'告警'},
+        {label: '设备连线状态', field: 'rd_DevDisWarn', tLabel:'连线', fLabel:'离线'},
+        {label: '电池状态', field: 'rd_BatFalutWarn', tLabel:'正常', fLabel:'故障'},
+
+        {label: '电池电压状态', field: 'rd_BatVolLowWarn', tLabel:'正常', fLabel:'低'},
+        {label: '旁路指示状态', field: 'rd_BypassWarn', tLabel:'正常', fLabel:'指示'},
+        {label: '电池状态', field: 'rd_BatFalutWarn', tLabel:'正常', fLabel:'故障'},
+
         {label: '网络状态', field: 'rd_NetCom', tLabel:'正常', fLabel:'断线'},
-        {label: '通讯状态', field: 'rd_upsdisconn', tLabel:'正常', fLabel:'断线'},
+
       ],
       boolFields: [
-        'rd_upspoweroff', 'rd_upssound'
+        'rd_UPSShutWarn', 'rd_SystemShutWarn'
       ],
       moreParams: [
-        {label: '当前负载', field: 'rd_upscurload',},
-        {label: '输入频率', field: 'rd_upsinfreq',},
-        {label: 'UPS电池单体电压', field: 'rd_ups1batvol',},
-        {label: 'UPS的温度', field: 'rd_upstemp',},
-        {label: '电池容量', field: 'rd_BattCap',},
+        {label: '厂商信息', field: 'rd_upsmanuinfo',},
+        {label: 'UPS机型', field: 'rd_upsmactype',},
+        {label: 'UPS版本', field: 'rd_upsver',},
+        {label: 'UPS额定电压', field: 'rd_upsvolr',},
+        {label: 'UPS额定电流', field: 'rd_upscurr',},
+        {label: 'UPS额定电池电压', field: 'rd_upsbatvolr',},
+        {label: 'UPS额定输入频率', field: 'rd_upsfreqr',},
+        {label: '电池可维持的时间', field: 'rd_BatLastTime',},
+
+        {label: '电池电压', field: 'rd_BatVol',},
+        {label: '电池电流', field: 'rd_BatCur',},
         {label: '电池温度', field: 'rd_BatTemp',},
-        {label: '电池总电压', field: 'rd_BatAllVol',},
-        {label: '剩余时间', field: 'rd_ReTime',},
+
       ],
       chartData: {},
       chartSettings: {},
-
+      openPop: false,
+      popData: [],
+      mapFields: {
+        in: [
+          { field: 'rd_InVol', label: '输入电压', unit: 'V' },
+          { field: 'rd_InFreq', label: '输入频率', unit: 'HZ'},
+          { field: 'rd_InCur', label: '输入电流', unit: 'A'},
+          { field: 'rd_InPower', label: '输入功率', unit: 'W' },
+        ],
+        out: [
+          { field: 'rd_OutVol', label: '输出电压', unit: 'V' },
+          { field: 'rd_OutCur', label: '输出电流', unit: 'A' },
+          { field: 'rd_OutPower', label: '输出功率', unit: 'W' },
+          { field: 'rd_OutLoad', label: '输出负载', unit: '%' },
+        ],
+        other: [
+          { field: 'rd_PassVol', label: '旁路电压', unit: 'V' },
+          { field: 'rd_PassCur', label: '旁路电流', unit: 'A' },
+          { field: 'rd_PassPower', label: '旁路功率', unit: 'HZ'},
+        ]
+      }
     }
   },
   computed: {
     avgin() {
       const { rd_InVol1, rd_InVol2, rd_InVol3 } = this.detail
-      return (rd_InVol1+rd_InVol2+rd_InVol3)/3
+      return this.round((rd_InVol1+rd_InVol2+rd_InVol3)/3)
     },
     avgout() {
-
+      const { rd_OutVol1, rd_OutVol2, rd_OutVol3 } = this.detail
+      return this.round(( rd_OutVol1 + rd_OutVol2 + rd_OutVol3)/3)
     },
     avgother() {
-
+      const { rd_PassVol1, rd_PassVol2, rd_PassVol3 } = this.detail
+      return this.round(( rd_PassVol1 + rd_PassVol2 + rd_PassVol3)/3)
     }
   },
   methods: {
     fixPer(val) {
-      return Number((val*100/240).toFixed(2))
+      return Number((val*100/240).toFixed(1))
+    },
+    round(val, surfix=1) {
+      return val && val.toFixed(surfix)
     },
     selectButton(tab) {
       this.active = tab
@@ -159,7 +201,21 @@ export default {
     more() {
       this.active = 'tab-temp'
     },
+    openDetail(pName) {
+      this.popData = []
+      this.openPop = true
+      let params = this.mapFields[pName]
+      const prefix = ['A相', 'B相', 'C相'];
+      [1, 2, 3].map((item) => {
+        params.map((v) => {
+          let { field, label, unit } = v
+          let fieldDesc = prefix[item-1] + label
+          this.popData.push({ label: fieldDesc, value: this.detail[field+item] + " " + unit })
+        })
 
+      })
+      console.log(this.popData, 'after open detail')
+    }
   },
 
   created() {

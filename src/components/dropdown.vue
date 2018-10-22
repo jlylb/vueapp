@@ -2,16 +2,17 @@
   <mt-popup
     v-model="isDrop"
     class='popup-menu'
+    v-bind="popProp"
     popup-transition="popup-fade">
       <mt-cell 
         :title="item.label" 
         v-for='(item, index) in data' 
-        :key='item.value' 
-        :class='{ "active-menu": (active?active===item.value:menuIndex==index) }'
+        :key='"dropdown" + index' 
+        :class='{ "active-menu": isActive && (active?active===item.value:menuIndex==index) }'
         @click.native='openPop(item, $event, index)'>
 
         <svg-icon :icon-class='item.icon' class='item-icon' slot='icon' v-if='item.icon'></svg-icon>
-
+        <span v-if='showLabel' style='color: green'> {{ item.value }} </span>
       </mt-cell>
   </mt-popup>
 </template>
@@ -35,9 +36,23 @@ export default {
       type: Boolean,
       default: false
     },
+    showLabel: {
+      type: Boolean,
+      default: false
+    },
+    isActive: {
+      type: Boolean,
+      default: true
+    },
     active: {
       type: [String, Number],
       default: null
+    },
+    popProp: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   watch: {
@@ -65,7 +80,8 @@ export default {
       color: #fff;
       vertical-align: inherit;
     }
-    .item-icon {
+    .item-icon,
+    span {
       color: #fff;
     }
   }

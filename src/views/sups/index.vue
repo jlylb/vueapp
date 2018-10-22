@@ -16,7 +16,7 @@
 
     <mt-cell>
       
-        <v-circle :percent="detail.rd_upsinvol/240"  dashboard>
+        <v-circle :percent="fixPer(detail.rd_upsinvol)"  dashboard>
             <p>输入电压</p>
             <p>
               {{ detail.rd_upsinvol }}
@@ -26,9 +26,9 @@
 
     </mt-cell>
 
-        <mt-cell>
+    <mt-cell>
       
-        <v-circle :percent="detail.rd_upsoutvol/240"  dashboard>
+        <v-circle :percent="fixPer(detail.rd_upsoutvol)"  dashboard>
             <p>输出电压</p>
             <p>
               {{ detail.rd_upsinvol }}
@@ -37,41 +37,10 @@
 
     </mt-cell>
 
-    <mt-cell>
-      
-        <v-circle :percent="detail.rd_upsvolr/240"  dashboard>
-            <p>额定电压</p>
-            <p>
-              {{ detail.rd_upsvolr }}
-            </p>
-        </v-circle>
-
-    </mt-cell>
 
     <mt-cell>
-      
-        <v-circle :percent="detail.rd_OutMaxVol/240"  dashboard>
-            <p>最大电压</p>
-            <p>
-              {{ detail.rd_OutMaxVol }}
-            </p>
-        </v-circle>
-
+        <mt-button type="primary" size='small' @click.native.prevent="more">更多参数</mt-button>
     </mt-cell>
-
-    <mt-cell>
-      
-        <v-circle :percent="detail.rd_OutMinVol/240"  dashboard>
-            <p>最小电压</p>
-            <p>
-              {{ detail.rd_OutMinVol }}
-            </p>
-        </v-circle>
-
-    </mt-cell>
-        <mt-cell>
-            <mt-button type="primary" size='large' @click.native.prevent="more">更多参数</mt-button>
-        </mt-cell>
     </mt-tab-container-item>
 
     <mt-tab-container-item id="tab-running" >
@@ -127,8 +96,8 @@ export default {
         {label: 'UPS喇叭', field: 'rd_upssound', tLabel:'开', fLabel:'关' },
       ],
       alarm: [
-        {label: 'UPS故障', field: 'rd_upsfailstat',  tLabel:'无', fLabel:'有'},
-        {label: 'UPS旁路', field:  'rd_upsbypassstat', tLabel:'正常', fLabel:'异常'},
+        {label: '故障状态', field: 'rd_upsfailstat',  tLabel:'取消', fLabel:'故障'},
+        {label: '旁路状态', field:  'rd_upsbypassstat', tLabel:'取消', fLabel:'故障'},
         {label: '电池电压', field: 'rd_upsbatvollow', tLabel:'正常', fLabel:'过低'},
         {label: '市电状态', field: 'rd_upsacfail', tLabel:'正常', fLabel:'中断'},
         {label: '负载状态', field: 'rd_LoadAlarm', tLabel:'正常', fLabel:'过载'},
@@ -139,6 +108,13 @@ export default {
         'rd_upspoweroff', 'rd_upssound'
       ],
       moreParams: [
+        {label: '厂商信息', field: 'rd_upsmanuinfo',},
+        {label: '机型', field: 'rd_upsmactype',},
+        {label: '版本', field: 'rd_upsver',},
+        {label: '额定电压', field: 'rd_upsvolr',},
+        {label: '额定电流', field: 'rd_upscurr',},
+        {label: '额定电池电压', field: 'rd_upsbatvolr',},
+        {label: '额定输入频率', field: 'rd_upsfreqr',},
         {label: '当前负载', field: 'rd_upscurload',},
         {label: '输入频率', field: 'rd_upsinfreq',},
         {label: 'UPS电池单体电压', field: 'rd_ups1batvol',},
@@ -157,6 +133,9 @@ export default {
 
   },
   methods: {
+    fixPer(val) {
+      return Number((val*100/240).toFixed(1))
+    },
     selectButton(tab) {
       this.active = tab
     },
@@ -166,18 +145,7 @@ export default {
   },
 
   created() {
-      this.extend = {
-          grid: { 
-            left: '5%',
-            right: '5%',
-            bottom: '1%',
-         },
-         xAxis: {
-           axisLabel: {
-             interval: 0
-           }
-         }
-      }
+
     const { pdi } = this.$route.params
     fetchDevice({ pdi }).then((res) => {
       console.log(res.data.devices)

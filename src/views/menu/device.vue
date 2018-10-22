@@ -24,8 +24,8 @@ export default {
   },
   methods: {
     openDetail(data) {
-      const { router: name, value: pdi } = data
-      this.$router.push({name, params: { pdi } })
+      const { router: name, value: pdi, type } = data
+      this.$router.push({name, params: { pdi, type } })
     }
   },
   created() {
