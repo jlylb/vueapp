@@ -27,9 +27,9 @@
             <div class='item-alarm item item-right'  @click="openRouter('alarm')">
                 <div class='wrap-item'>
                     <div class='icon'>
-                        <svg-icon icon-class='afbj'  class='item-icon'></svg-icon>
+                        <svg-icon icon-class='afbj'   :class='["animation2","item-icon", {"animation2-pause": notification == 0 }]'></svg-icon>
                     </div>
-                    <div class='icon-desc'>实时告警</div>
+                    <div class='icon-desc'>实时告警<mt-badge size="small" type='error'>{{ notification }}</mt-badge></div>
                 </div>
             </div>
             <div class='item-statistic item item-right'   @click="openRouter('sysmenu', 'fire')">
@@ -88,6 +88,7 @@ export default {
                     image: testJpg3,
                 },
             ],
+            notification: 40
             // testJpg
         }
     },
@@ -199,11 +200,14 @@ export default {
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .item-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate3d(-50%, -50%, 0);
   }
 }
 </style>

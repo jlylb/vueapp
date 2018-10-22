@@ -37,6 +37,30 @@ body {
   width: 100%;
 }
 
+@keyframes twinkling {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animation2 {
+  animation: twinkling 2.1s infinite ease-in-out;
+  animation-fill-mode: both;
+  animation-play-state: running;
+}
+.animation2-pause {
+  animation-play-state: paused;
+}
 // @media only screen and (min-width: 640px) {
 //   body,
 //   #app {
