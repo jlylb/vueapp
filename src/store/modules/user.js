@@ -71,6 +71,7 @@ const user = {
   },
   getters: {
     isget: state => state.isget,
+    notification: state => state.notification,
   },
   actions: {
     // 用户名登录
@@ -81,7 +82,8 @@ const user = {
           .then((response) => {
             console.log(response);
             const data = { ...response.data };
-            if (data.status === 0) {
+            const { status } = data;
+            if (status === 0) {
               reject(response);
               return;
             }
@@ -103,7 +105,7 @@ const user = {
         getUserInfo()
           .then((response) => {
             console.log(response);
-            if (!response||!response.data) {
+            if (!response || !response.data) {
               reject('error');
             }
             const data = response.data.user;

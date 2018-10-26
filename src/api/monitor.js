@@ -14,9 +14,25 @@ export function fetchDevice(data) {
   });
 }
 
-export function fetchAreaDevice(data) {
+export function fetchAllDevice(data) {
   return axios({
-    url: '/monitor/areadevice',
+    url: '/deviceinfo',
+    method: 'get',
+    params: data,
+  });
+}
+
+export function fetchDeviceType(data) {
+  return axios({
+    url: '/deviceinfo/devicetype/all',
+    method: 'get',
+    params: data,
+  });
+}
+
+export function postDevice(data) {
+  return axios({
+    url: '/donghuang/storedevice',
     method: 'post',
     data,
   });

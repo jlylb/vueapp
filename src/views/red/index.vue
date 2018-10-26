@@ -32,7 +32,7 @@ export default {
     const { pdi } = this.$route.params
     fetchDevice({ pdi }).then((res) => {
       const device = res.data.devices
-      this.detail = device
+      this.detail = device || {}
       this.subFields = res.data.subFields
     })
     

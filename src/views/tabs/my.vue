@@ -3,9 +3,9 @@
         <top-component></top-component> 
         <div class='user'>
             <div class='user-info'>
-                <div class='user-avatr'>
+                <div class='user-avatr' @click='openAvatar'>
                     <!-- <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon> -->
-                    <img :src='avatar' class='item-icon'/>
+                    <img :src='showAvatar()' class='item-icon'/>
                 </div>
             </div>
 
@@ -41,13 +41,24 @@
         </mt-cell> -->
         <mt-cell></mt-cell>
         <div class='sign-out' @click='logout("login")'>退出登录</div>
+
+
     </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import { getImageUrl } from '@/tools'
 
 export default {
+  components: {
+
+  },
+    data() {
+        return {
+
+        }
+    },
     computed: {
         ...mapState('user', [
             'name',
@@ -55,15 +66,21 @@ export default {
         ])
     },
     methods: {
-       gologin(name) {
-           this.$router.push({name})
-       },
-       logout(name) {
-           this.$store.dispatch('user/LogOut').then(()=>{
+        showAvatar() {
+            return this.avatar.indexOf('data:') > -1 ? this.avatar :  getImageUrl(this.avatar)
+        },
+        gologin(name) {
+            this.$router.push({name})
+        },
+        logout(name) {
+            this.$store.dispatch('user/LogOut').then(()=>{
                 this.$router.replace({name})
-           })
-           
-       } 
+            })
+            
+        },
+        openAvatar() {
+            this.$router.push({name: 'uploadAvatar'})
+        } 
     },
     created() {
 
@@ -99,7 +116,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(236, 236, 236, 0.3);
   color: #fff;
 
   //   & /deep/ .item-icon {
@@ -107,8 +124,8 @@ export default {
   //     height: 150px;
   //   }
   .item-icon {
-    width: 150px;
-    height: 150px;
+    width: 190px;
+    height: 190px;
     border-radius: 60%;
   }
 }

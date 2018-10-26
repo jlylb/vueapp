@@ -70,6 +70,7 @@
 import testJpg1 from '@/assets/s1.jpg'
 import testJpg2 from '@/assets/s2.jpg'
 import testJpg3 from '@/assets/s3.jpg'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -88,9 +89,12 @@ export default {
                     image: testJpg3,
                 },
             ],
-            notification: 40
-            // testJpg
         }
+    },
+    computed: {
+        ...mapGetters('user',[
+        'notification'
+        ]), 
     },
     methods: {
         openRouter(name, type) {
@@ -100,12 +104,6 @@ export default {
     },
     created() {
         this.$store.commit('app/BAR_TITLE', '首页')
-        this.$axios({
-            url: '/image/item'
-        }).then((res)=>{
-            console.log(res)
-           // this.items = res.data.items
-        })
     }
 }
 </script>

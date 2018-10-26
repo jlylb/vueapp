@@ -13,7 +13,7 @@
   <mt-tab-container v-model="active">
     <mt-tab-container-item id="tab-real" name='参数' class='real'>
 
-     <mt-cell  title="回风温度" :label='"当前: "+detail.rd_air_backwindtemp'>
+     <mt-cell  title="回风温度" :label='"当前: "+ convertInt(detail.rd_air_backwindtemp)'>
       <mt-range
         class='air-range'
         v-model="detail.rd_air_backwindtemp"
@@ -25,7 +25,7 @@
       </mt-range>
      </mt-cell>
 
-    <mt-cell  title="回风湿度" :label='"当前: "+detail.rd_air_backwindhum'>
+    <mt-cell  title="回风湿度" :label='"当前: "+ convertInt(detail.rd_air_backwindhum)'>
       <mt-range
         class='air-range'
         v-model="detail.rd_air_backwindhum"
@@ -37,7 +37,7 @@
       </mt-range>
      </mt-cell>
 
-    <mt-cell  title="送风温度" :label='"当前: "+detail.rd_air_sendwindtemp'>
+    <mt-cell  title="送风温度" :label='"当前: " + convertInt(detail.rd_air_sendwindtemp)'>
       <mt-range
         class='air-range'
         v-model="detail.rd_air_sendwindtemp"
@@ -49,7 +49,7 @@
       </mt-range>
      </mt-cell>
 
-    <mt-cell  title="送风湿度" :label='"当前: "+detail.rd_air_sendwindhum'>
+    <mt-cell  title="送风湿度" :label='"当前: " + convertInt(detail.rd_air_sendwindhum)'>
       <mt-range
         class='air-range'
         v-model="detail.rd_air_sendwindhum"
@@ -61,7 +61,7 @@
       </mt-range>
      </mt-cell>
 
-    <mt-cell  title="室内温度" :label='"当前: "+detail.rd_air_innertemp'>
+    <mt-cell  title="室内温度" :label='"当前: " + convertInt(detail.rd_air_innertemp)'>
       <mt-range
         class='air-range'
         v-model="detail.rd_air_innertemp"
@@ -73,7 +73,7 @@
       </mt-range>
      </mt-cell>
 
-    <mt-cell  title="室内湿度" :label='"当前: "+detail.rd_air_innerhum'>
+    <mt-cell  title="室内湿度" :label='"当前: " + convertInt(detail.rd_air_innerhum)'>
       <mt-range
         class='air-range'
         v-model="detail.rd_air_innerhum"
@@ -194,6 +194,9 @@ export default {
       }
 
     },
+    convertInt(val) {
+      return val?val:0
+    }
   },
 
   created() {

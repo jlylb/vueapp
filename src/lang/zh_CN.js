@@ -8,5 +8,11 @@ export default {
       required: () => '密码不能为空',
       min: () => '密码最少长度6位',
     },
+    pdi: {
+      required: () => '设备编码不能为空',
+    },
+    name: {
+      required: () => '设备名称不能为空',
+    },
   },
 };

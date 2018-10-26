@@ -54,6 +54,14 @@ const router = new Router({
           },
         },
         {
+          path: '/upload',
+          name: 'uploadAvatar',
+          component: () => import(/* webpackChunkName: "device" */ './views/tabs/upload.vue'),
+          meta: {
+            title: '上传头像',
+          },
+        },
+        {
           path: '/geo',
           name: 'geo',
           component: () => import(/* webpackChunkName: "geo" */ './views/geo/index.vue'),
@@ -143,7 +151,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "peidian" */ './views/peidian/index.vue'),
         },
         {
-          path: '/red/index/:pdi',
+          path: '/red/index/:pdi/:type',
           name: 'red',
           meta: {
             title: '红外',
@@ -151,7 +159,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "red" */ './views/red/index.vue'),
         },
         {
-          path: '/yangan/index/:pdi',
+          path: '/yangan/index/:pdi/:type',
           name: 'yangan',
           meta: {
             title: '烟感',
@@ -239,10 +247,11 @@ const router = new Router({
         title: '我的-添加设备2',
       },
     },
+
     {
       path: '/addDevice_page',
       name: 'addDevice_page',
-      component: () => import(/* webpackChunkName: "device" */ './views/tabs/addDevice2.vue'),
+      component: () => import(/* webpackChunkName: "device" */ './views/tabs/addDevice_page.vue'),
       meta: {
         title: '我的-添加设备2',
       },

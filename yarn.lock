@@ -2033,6 +2033,10 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+cropperjs@^1.1.3:
+  version "1.4.3"
+  resolved "http://registry.npm.taobao.org/cropperjs/download/cropperjs-1.4.3.tgz#dc44d6c9e73269e7f96894c726ab91e8913f9e90"
+
 cross-spawn@^3.0.0:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/cross-spawn/download/cross-spawn-3.0.1.tgz#1256037ecb9f0c5f79e3d6ef135e30770184b982"
@@ -7382,6 +7386,12 @@ vue-cli-plugin-axios@^0.0.4:
   version "0.0.4"
   resolved "http://registry.npm.taobao.org/vue-cli-plugin-axios/download/vue-cli-plugin-axios-0.0.4.tgz#29d4eb48275c7fe15b92e1fd5d95fbe2a966436f"
 
+vue-cropperjs@^2.2.2:
+  version "2.2.2"
+  resolved "http://registry.npm.taobao.org/vue-cropperjs/download/vue-cropperjs-2.2.2.tgz#5b897b3bbe6ed28ba6ae3654d0e35e53caf56ad2"
+  dependencies:
+    cropperjs "^1.1.3"
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/vue-eslint-parser/download/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -7411,6 +7421,13 @@ vue-loader@^15.3.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-qr@^1.5.2:
+  version "1.5.2"
+  resolved "http://registry.npm.taobao.org/vue-qr/download/vue-qr-1.5.2.tgz#a10614ea97f9f2bd55892bbebcd09b708bda1686"
+  dependencies:
+    uuid "^3.3.2"
+    vue "^2.5.16"
+
 vue-router@^3.0.1:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/vue-router/download/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
@@ -7437,7 +7454,7 @@ vue-waterfall@^1.0.6:
   version "1.0.6"
   resolved "http://registry.npm.taobao.org/vue-waterfall/download/vue-waterfall-1.0.6.tgz#00324a8f97f449bf6f8cdebb4974b60cffac9eed"
 
-vue@^2.5.17:
+vue@^2.5.16, vue@^2.5.17:
   version "2.5.17"
   resolved "http://registry.npm.taobao.org/vue/download/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
 

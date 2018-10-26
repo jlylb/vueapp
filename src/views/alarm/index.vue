@@ -17,6 +17,7 @@
         <svg-icon :icon-class='icons[item.pdi_type]' class='item-icon' slot='icon' v-if='icons[item.pdi_type]'></svg-icon>
       </mt-cell>
     </div>
+    <!-- <vue-qr  text="Hello world!" :size="200"></vue-qr> -->
     <p v-show="loading" class="page-infinite-loading">
       <mt-spinner type="fading-circle"></mt-spinner>
       加载中...
@@ -42,7 +43,9 @@
 
 <script>
 import { fetchList } from '@/api/alarm'
+// import VueQr from 'vue-qr'
 export default {
+  components: {  },
   data() {
     return {
       device: [],
