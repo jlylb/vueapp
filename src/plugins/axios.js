@@ -11,7 +11,7 @@ import router from '../router';
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const config = {
-  baseURL: '/api',
+  baseURL: process.env.NODE_ENV === 'production' ? 'http://192.168.1.7/api' : '/api',
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
