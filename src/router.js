@@ -38,6 +38,14 @@ const router = new Router({
           },
         },
         {
+          path: '/upload',
+          name: 'uploadAvatar',
+          component: () => import(/* webpackChunkName: "device" */ './views/tabs/upload.vue'),
+          meta: {
+            title: '上传头像',
+          },
+        },
+        {
           path: '/mydevice',
           name: 'mydevice',
           component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/mydevice.vue'),

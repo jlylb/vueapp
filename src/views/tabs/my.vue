@@ -3,29 +3,12 @@
         <top-component></top-component> 
         <div class='user'>
             <div class='user-info'>
-                <div class='user-avatr'>
+                <div class='user-avatr' @click='openAvatar'>
                     <!-- <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon> -->
-                    <img :src='avatar' class='item-icon'/>
+                     <img :src='showAvatar()' class='item-icon'/>
                 </div>
             </div>
-            <div class='user-device'>
-                <div class='device-item'>
-                    <div class='device-title'>
-                        设备数量
-                    </div>
-                    <div class='device-num'>
-                        10
-                    </div>
-                </div>
-                <div class='device-item'>
-                    <div class='device-title'>
-                        大棚数量
-                    </div>
-                    <div class='device-num'>
-                        5
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <mt-cell title="个人信息" is-link to='/auth/userinfo'>
@@ -62,7 +45,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
+import { getImageUrl } from '@/tools'
 
 export default {
     computed: {
@@ -72,15 +56,21 @@ export default {
         ])
     },
     methods: {
+        showAvatar() {
+            return this.avatar
+            return this.avatar.indexOf('data:') > -1 ? this.avatar :  getImageUrl(this.avatar)
+        },
        gologin(name) {
            this.$router.push({name})
        },
        logout(name) {
            this.$store.dispatch('user/LogOut').then(()=>{
                 this.$router.replace({name})
-           })
-           
-       } 
+           }) 
+       },
+        openAvatar() {
+            this.$router.push({name: 'uploadAvatar'})
+        } 
     },
     created() {
 
@@ -118,7 +108,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(236, 236, 236, 0.3);
   color: #fff;
 
   //   & /deep/ .item-icon {
@@ -126,8 +116,8 @@ export default {
   //     height: 150px;
   //   }
   .item-icon {
-    width: 150px;
-    height: 150px;
+    width: 190px;
+    height: 190px;
     border-radius: 60%;
   }
 }
