@@ -7,14 +7,22 @@
 
 <div class='chart-block'>
 
-    <h1 class='chart-title' >空气温湿度趋势图</h1>
+    <h1 class='chart-title' v-if='allRows.length > 0'>{{ deviceName }}趋势图</h1>
 
         <ve-line
           :data="chartData"
           :data-zoom="dataZoom"
           :settings="chartSettings"
+          :loading="loading"
+          :data-empty="dataEmpty"
+          :extend='extend'
           :after-set-option-once='afterRoom'>
         </ve-line>
+
+      <div class='selectButton' @click='deviceFileter' v-if='allRows.length > 0'>
+        <label> {{ deviceName }}{{ curIndex }} </label>
+        <i :class='["item-arrow-icon", {"item-arrow-up": !arrow, "item-arrow-down": arrow}]'> </i>
+      </div>
 
     </div>
   
@@ -64,9 +72,27 @@
 
   <my-popup v-model="province" :open.sync='provinceOpen' :slots="provinces"></my-popup>
 
-  <my-popup v-model="area" :open.sync='cityOpen' :slots="citySlots"></my-popup>
+  <my-popup v-model="area" :open.sync='cityOpen' :slots="citySlots" show-key='alias'></my-popup>
 
   <my-popup v-model="device" :open.sync='deviceOpen' :slots="deviceSlots"></my-popup>
+
+  <mt-popup
+    v-model="isSelectDevice"
+    class='popup-device'
+    :style='{height: "240px", "overflow-y": "auto"}'
+    position="bottom">
+
+    <mt-cell 
+    :title="deviceName + item" 
+    @click.native='openDevice(item)'
+    :class='{ itemSelect: curIndex===item }' 
+    is-link 
+    v-for='item in num' 
+    :key='item'>
+    <svg-icon :icon-class='deviceIcon' class='item-icon' slot='icon' v-if='deviceIcon'></svg-icon>
+    </mt-cell>
+
+  </mt-popup>
 
 </div>
 
@@ -79,29 +105,16 @@ import { Toast } from 'mint-ui'
 import 'echarts/lib/component/dataZoom'
 import MyPopup from '@/components/popup'
 import { getDataValue } from '@/tools'
+import 'v-charts/lib/style.css'
 
 
 export default {
   components: { MyPopup },
   data() {
-    this.dataZoom = [
-        {
-          type: 'slider',
-          start: 0,
-          end: 20
-        }
-    ]
+
     return {
-    chartData: {
-        columns: ['日期', '温度', '湿度'],
-        rows: [
-          { '日期': '2018-10-16 17:50', '温度': 15, '湿度': 12 },
-          { '日期': '2018-10-16 18:50', '温度': 12, '湿度': 25 },
-          { '日期': '2018-10-16 19:50', '温度': 21, '湿度': 10 },
-          { '日期': '2018-10-16 20:50', '温度': 41, '湿度': 32 },
-          { '日期': '2018-10-16 21:50', '温度': 31, '湿度': 30 },
-          { '日期': '2018-10-16 22:50', '温度': 71, '湿度': 55 }
-        ]
+      chartData: {
+
       },
       items: [],
       popupVisible: false,
@@ -149,6 +162,19 @@ export default {
           value: 'year'
         },
       ],
+      curIndex: 0,
+      deviceName: '',
+      curRow: [],
+      allRows: [],
+      chart: null,
+      isSelectDevice: false,
+      num: 10,
+      dataZoom: [],
+      loading: false,
+      dataEmpty: false,
+      arrow: false,
+      extend: {},
+      deviceIcon: null
       // provinceLabel: ''
     }
   },
@@ -157,7 +183,7 @@ export default {
       return this.province ? this.province.label : ''
     },
     areaLabel() {
-      return this.area ? this.area.label : ''
+      return this.area ? this.area.alias  : ''
     },
     deviceLabel() {
       return this.device ? this.device.label : ''
@@ -187,12 +213,12 @@ export default {
     searchDate: {
       handler(newval) {
         console.log(newval, 'watch search date ......')
-        if(newval.start && newval.end) {
+        if(newval.start || newval.end) {
           this.selectDate = null
         }
-        if(!newval.start && !newval.end) {
-          this.selectDate = 'day'
-        }
+        // if(!newval.start && !newval.end) {
+        //   this.selectDate = 'day'
+        // }
       },
       deep: true
     },
@@ -200,46 +226,152 @@ export default {
       if(newval) {
         this.searchDate = { start: null, end: null }
       }
+    },
+    curIndex(newVal) {
+      if(newVal===0){
+        return
+      }
+      this.curRow = this.allRows[newVal-1]?this.allRows[newVal-1]:[]
+      this.formatChartData()
+
+    },
+    isSelectDevice(newval){
+      this.arrow = newval
     }
   },
   filters: {
     parseTime
   },
   methods: {
-          afterRoom($chart) {
-            let i=0
-    setInterval(function () {
-      let s = i
-      let e = i+1
+    deviceFileter() {
+      this.isSelectDevice = true
+      // this.arrow = !this.arrow
+    },
+    openDevice(item) {
+      this.curIndex = item
+    },
+    afterRoom($chart) {
+      this.chart = $chart
+      let i=0
+      const len = this.curRow.length
+
+      console.log(len, 'after room...')
+      let sint
+      if(sint){
+        clearInterval(sint)
+      }
+      sint = setInterval(function () {
+        if(len===0){
+          clearInterval(sint)
+          return
+        }
+        let s = i
+        let e = i+1
+        console.log(s,e,'data room........')
         $chart.dispatchAction({
-            type: 'dataZoom',
-            dataZoomIndex: 0,
-            // 开始位置的百分比，0 - 100
-            startValue: s,
-            // 结束位置的百分比，0 - 100
-            endValue: e,
+              type: 'dataZoom',
+              dataZoomIndex: 0,
+              // 开始位置的百分比，0 - 100
+              startValue: s,
+              // 结束位置的百分比，0 - 100
+              endValue: e,
 
-        })
-        if(i==4) {
-          i = 0
-        }else{
-          i++
-        }
-        
-    }, 1000)
+          })
+          if(i==len-2) {
+            i = 0
+          }else{
+            i++
+          }
+          
+      }, 1000)
 
-      },
+
+    },
+    formatRows() {
+      const { fields, items, name, icon } = this.items
+      console.log(this.chart,'rows....')
+      if((!fields && this.chart)||!items){
+        this.curIndex = 0
+        this.chart.clear()
+        this.allRows = []
+        this.dataEmpty = true
+        return;
+      }
+      this.dataEmpty = false
+      this.deviceIcon = icon
+      const  rows = []
+      this.deviceName = name
+      for(let i = 1; i <= 10; i++) {
+        let row = {}
+        fields.forEach(field => {
+          let fieldKey = field + i
+          let curItem = items[field][fieldKey];
+          Object.keys(curItem).sort().map((item) => {
+            if(!row[item]) {
+              row[item] = { date: item, [field]: curItem[item]}
+            }else{
+              row[item] = Object.assign(row[item], { [field]: curItem[item] })
+            }
+          })
+        });
+        rows.push(Object.values(row))
+      }
+      this.allRows = rows
+    },
     formatChartData() {
-        const { fields, items, name, num, unit, surfix } = this.items
-        const chartData = {}
-        const columns = [], rows = []
-        for(let i = 1; i <= 10; i++) {
-          fields.forEach(field => {
-            let fieldKey = field
-            let row = {}
-            row
-          });
+        const { items, fields, num, unit, surfix } = this.items
+        if(!items) {
+          this.allRows = []
+          this.curIndex = 0
+          this.chart.clear()
+          return ;
         }
+        console.log(fields, 'chart data............')
+        const chartData = {}
+
+        let columns = ['date'].concat(fields)
+        
+        this.chartData = {
+          columns,
+          rows: this.curRow
+        }
+        let axisSite = { right: [columns[columns.length-1]] }
+        let yAxisType = []
+        let min = [], max = [], labelMap = {}
+        labelMap = surfix
+        let yAxisName = []
+        fields.forEach((field) => {
+          yAxisType.push('value')
+          min.push(0)
+          max.push(100)
+          yAxisName.push(surfix[field] + ' ' + unit[field])
+        })
+
+        this.chartSettings = {
+          axisSite,
+          yAxisType,
+          yAxisName,
+          labelMap,
+          min,
+          max
+        }
+        this.dataZoom = [
+            {
+              type: 'slider',
+              start: 0,
+              end: 20,
+              // left: '20%',
+              // right: '20%',
+              labelFormatter: function (value) {
+              }
+            }
+        ]
+      this.extend = {
+         'xAxis.0.axisLabel.formatter': (value) => {
+           return value.split(/\s/).join('\n')
+         }
+      }
+      console.log('format chart data......')
     },
     formatTime(str) {
       if(!str) return
@@ -252,11 +384,19 @@ export default {
       this.searchDate[sType] = null
     },
     selectDevice(params) {
+      this.loading = true
       fetchHistoryDevice(this.getParams(params)).then((res) => {
-        this.items = res.data.devices
+        this.items = res.data.devices 
+        this.formatRows()
+        this.curIndex = 1
+        this.loading = false
+        // this.formatChartData()
+      }).catch((res)=>{
+        this.loading = false
       })  
     },
     fetchHistoryData() {
+
       this.selectDevice(this.device)
     },
     changeTimeStart() {
@@ -323,12 +463,12 @@ export default {
       return device     
     }).then((res) => {
         this.selectDevice(res)
+        // this.curIndex = 1
     })
       this.chartSettings = {
-        axisSite: { right: ['湿度'] },
-        yAxisType: ['value', 'value'],
-        yAxisName: ['温度', '湿度']
+
       }
+
   }
 }
 </script>
@@ -366,5 +506,73 @@ export default {
 }
 .radio-time /deep/ .mint-radiolist-title {
   text-align: left;
+}
+.itemSelect {
+  background-color: $blue;
+  /deep/ {
+    .mint-cell-text {
+      color: #fff;
+      vertical-align: inherit;
+    }
+    .item-icon {
+      color: #fff;
+    }
+  }
+}
+.item-arrow-icon {
+  &::after {
+    border: solid 2px $blue;
+    content: ' ';
+    top: 50%;
+    right: 20px;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    transform: translateY(-50%) rotate(45deg);
+    letter-spacing: normal;
+    cursor: pointer;
+  }
+}
+.item-arrow-right {
+  &::after {
+    border-bottom-width: 0;
+    border-left-width: 0;
+  }
+}
+.item-arrow-down {
+  &::after {
+    border-top-width: 0;
+    border-left-width: 0;
+  }
+}
+.item-arrow-up {
+  &::after {
+    border-bottom-width: 0;
+    border-right-width: 0;
+  }
+}
+.item-arrow-left {
+  &::after {
+    border-top-width: 0;
+    border-right-width: 0;
+  }
+}
+.selectButton {
+  border: 1px solid $blue;
+  background-color: transparent;
+  color: $blue;
+  display: block;
+  width: 90%;
+  border-radius: 4px;
+  font-size: 18px;
+  height: 41px;
+  outline: 0;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
 }
 </style>

@@ -8,7 +8,7 @@
         :slots="slots"
         ref='picker1' 
         @change="slotsChange" 
-        value-key='label'>
+        :value-key='showKey'>
       </mt-picker>
     </slot>
 
@@ -34,6 +34,10 @@ export default {
         default() {
           return []
         }
+      },
+      showKey: {
+        type: String,
+        default: 'label',
       }
     },
   watch: {
