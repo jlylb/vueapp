@@ -57,7 +57,6 @@ export default {
     },
     methods: {
         showAvatar() {
-            return this.avatar
             return this.avatar.indexOf('data:') > -1 ? this.avatar :  getImageUrl(this.avatar)
         },
        gologin(name) {
@@ -88,10 +87,8 @@ export default {
 .user {
   background-color: #fff;
   margin-bottom: 20px;
-  border-bottom: 1px solid #dfdfdf;
 }
 .user-info {
-  border-bottom: 1px solid #dfdfdf;
   padding: 10px 0;
 }
 .user-info,

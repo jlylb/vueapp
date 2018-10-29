@@ -75,3 +75,8 @@ export function getDataValue(data, keys, other = '') {
   dataVal = dataVal || other;
   return index && index == len ? dataVal : other;
 }
+
+export function getImageUrl(path) {
+  if (!path) return '';
+  return `/image/${path}`;
+}
