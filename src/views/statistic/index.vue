@@ -396,7 +396,7 @@ export default {
       })  
     },
     fetchHistoryData() {
-
+      this.curIndex = 0
       this.selectDevice(this.device)
     },
     changeTimeStart() {
