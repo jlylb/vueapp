@@ -29,3 +29,19 @@ export function fetchHistoryDevice(data) {
     data,
   });
 }
+
+export function fetchDeviceType(data) {
+  return axios({
+    url: '/deviceinfo/devicetype/all',
+    method: 'get',
+    params: data,
+  });
+}
+
+export function postDevice(data) {
+  return axios({
+    url: '/donghuang/storedevice',
+    method: 'post',
+    data,
+  });
+}

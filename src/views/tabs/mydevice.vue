@@ -5,27 +5,34 @@
       <span slot='right' @click='openAdd'>添加</span>
     </top-component> 
 
-    <mt-cell 
-    :title="item.name" 
-    :label="item.type"
-    @click.native='openDevice(item)' 
-    is-link 
-    v-for='(item, index) in device' 
-    :key='index'>
+    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+      <mt-cell 
+      :title='String(item.pdi_index)'
+      :label="item.pdi_name"
+      @click.native='openDevice(item)' 
+      is-link 
+      v-for='(item, index) in device' 
+      :key='index'>
 
-    </mt-cell>
+      </mt-cell>
+    </mt-loadmore>
 
   <mt-popup
     v-model="popupDetail"
     class='popup-device'
     position="bottom">
-
+    <mt-cell title="设备索引">
+      {{ item.pdi_index }}
+    </mt-cell>
     <mt-cell title="设备名称">
-      {{ item.name }}
+      {{ item.pdi_name }}
+    </mt-cell>
+    <mt-cell title="设备类型">
+      {{ item.dpt_id }}
     </mt-cell>
 
-    <mt-cell title="设备类型">
-      {{ item.type }}
+    <mt-cell title="公司">
+      {{ item.company && item.company.Co_Name }}
     </mt-cell>
 
   </mt-popup>
@@ -37,11 +44,26 @@
     :close-on-click-modal='false'
     popup-transition="popup-fade">
 
-    <mt-field label="设备编号" placeholder="请输入设备编号" v-model="deviceModel.pdi"></mt-field>
-
-    <mt-field label="设备分类" placeholder="请输入设备分类" v-model="deviceModel.type" @click.native="openType"></mt-field>
-
-    <mt-field label="区域" placeholder="请选择区域" v-model="deviceModel.area" @click.native="openArea"></mt-field>
+    <mt-field 
+      label="设备编号" 
+      placeholder="请输入设备编号" 
+      v-model="deviceModel.pdi" 
+      data-vv-name='pdi'
+      :state= 'states["pdi"]'
+      v-validate="{ required: true}" ></mt-field>
+      <p class='field-error' v-if='states["pdi"]=="error"'>{{ errors.first('pdi') }}</p>
+      <mt-field 
+        label="设备名称" 
+        placeholder="请输入设备名称" 
+        v-model="deviceModel.name"
+        data-vv-name='name'
+        :state= 'states["name"]'
+        v-validate="{ required: true}">
+        </mt-field>
+        <p class='field-error' v-if='states["name"]=="error"'>{{ errors.first('name') }}</p>
+    <mt-cell title="设备分类" class='type-device' @click.native="openType">
+      {{ typeLabel }}
+    </mt-cell>
 
     <mt-cell title="">
         <mt-button type="primary" @click='save'>保存</mt-button> 
@@ -50,19 +72,12 @@
 
   </mt-popup>
 
-    <mt-popup
-    v-model="popupDetailArea"
-    class='popup-device'
-    position="bottom">
-      <mt-picker :slots="slots" @change="onValuesChange" ref='pickArea'></mt-picker>
-   </mt-popup>
-
 
   <mt-popup
     v-model="popupDetailType"
     class='popup-device'
     position="bottom">
-      <mt-picker :slots="typeSlots" @change="onTypeChange" ref='pickType' :value-key='"areaName"'></mt-picker>
+      <mt-picker :slots="typeSlots" @change="onTypeChange" ref='pickType' :value-key='"label"'></mt-picker>
    </mt-popup>
 
   <mt-popup
@@ -78,73 +93,79 @@
 </template>
 
 <script>
-import { MessageBox } from 'mint-ui';
-  const   areas = {
-        '广东': ['广州', '深圳', '珠海', '汕头', '韶关', '佛山', '江门', '湛江', '茂名', '肇庆', '惠州', '梅州', '汕尾', '河源', '阳江', '清远', '东莞', '中山', '潮州', '揭阳', '云浮'],
-        '上海': ['上海'],
-        '天津': ['天津'],
-        '重庆': ['重庆']
-    };
-  const first = Object.keys(areas);
+import { MessageBox, Toast  } from 'mint-ui';
+import { fetchAllDevice, fetchDeviceType, postDevice } from '@/api/monitor';
+
 export default {
   data() {
     return {
       popupVisible: false,
       popupDetail: false,
-      popupDetailArea: false,
       popupDetailType: false,
       isAdd: false,
       device: [
-        {name: 'pdi_1', icon: 'temp', type: '空气温室度传感器'},
-        {name: 'pdi_2', icon: 'light', type: '光照度传感器'},
-        {name: 'pdi_3', icon: 'co2', type: '二氧化碳传感器'},
-        {name: 'pdi_4', icon: 'soil', type: '土壤墒情传感器'},
-        {name: 'pdi_5', icon: 'liquid', type: '液位传感器'},
-        {name: 'pdi_6', icon: 'video', type: 'IP摄像头'},
-        {name: 'pdi_7', icon: 'temp', type: '空气温室度传感器'},
-
       ],
+      search: {
+        page: 1,
+        pageSize: 15
+      },
       item: {},
       deviceModel: {
         pdi: '',
-        area: '',
-        type: ''
+        type: '',
+        name: ''
       },
-      slots: [
-        {
-          flex: 1,
-          values: first,
-          className: 'slot1',
-          textAlign: 'right'
-        }, {
-          divider: true,
-          content: '-',
-          className: 'slot2'
-        }, {
-          flex: 1,
-          values: areas[first[0]],
-          className: 'slot3',
-          textAlign: 'left'
-        }
-      ],
-      typeSlots: [
+      types: [],
+      selectType: {},
+      allLoaded: false,
+      typeLabel : '',
+      states: {},
+    }
+  },
+  computed: {
+    typeSlots() {
+      return [
         { 
           flex: 1,
-          values: [
-            {areaId: 1, areaName: '空气温室度传感器'},
-            {areaId: 2, areaName: '光照度传感器'},
-            {areaId: 3, areaName: '二氧化碳传感器'},
-            {areaId: 4, areaName: '土壤墒情传感器'},
-            {areaId: 5, areaName: '液位传感器'},
-            {areaId: 6, areaName: 'IP摄像头'},
-          ],
+          values: this.types,
           className: 'type-slot',
           textAlign: 'center'
         },
       ]
     }
   },
+  watch: {
+    selectType(newval) {
+      const { value, label } = newval
+      this.deviceModel.type = value
+      this.typeLabel = label
+    },
+    fields: {
+      handler(newval) {
+        this.getStates()
+      },
+      deep: true
+    }
+  },
   methods: {
+    getStates() {
+      let states = {}
+      Object.keys(this.fields).map((field)=>{
+        if(this.errors.has(field)){
+          if(this.fields[field].invalid && this.fields[field].dirty){
+            states[field] = 'error'
+          }else{
+            states[field] = 'none'
+          }
+        }else{
+          if(this.fields[field].valid){
+            states[field] = 'success'
+          }
+        }
+      })
+      this.states = states
+      console.log(this.states, 'states....', this.fields)
+    },
     openDevice(item) {
       this.popupDetail = true
       this.item = item
@@ -159,41 +180,99 @@ export default {
     handAdd() {
       this.isAdd = false
       this.popupVisible = true;
+      this.errors.clear();
+      this.states = {}
+    },
+    handtest() {
+      this.$router.push({ name: 'addDevice_page' })
     },
     cancel() {
       this.deviceModel = {
         pdi: '',
-        area: ''
+        type: '',
+        name: ''
       };
       this.popupVisible = false;
     },
-    onValuesChange(picker, values) {
-      console.log(values, areas[values[0]])
-      picker.setSlotValues(1, areas[values[0]]);
-      this.deviceModel.area = values[1];
-      
-    },
-    openArea() {
-      this.popupDetailArea = true
-    },
+
     openType() {
       this.popupDetailType = true
     },
     onTypeChange(picker, values) {
-      console.log(values[0].areaId)
+      if(!values[0]) return
+      this.selectType = values[0]
     },
     save() {
-      this.popupVisible = false;
-    }
+      this.$validator.validate().then((valid) => {
+      let states = {}
+      Object.keys(this.fields).map((field)=>{
+        if(this.errors.has(field)){
+          states[field] = 'error'
+        }else{
+          states[field] = 'success'
+        }
+      })
+      this.states = states
+      if(!valid) return;
+        MessageBox.confirm('确定保存?').then(action => {
+            this.popupVisible = false;
+            const { pdi: pdi_code, name: pdi_name, type: dpt_id } = this.deviceModel
+            postDevice({ pdi_code, pdi_name, dpt_id })
+            .then((res) => {
+              Toast(res.data.msg)
+            })
+        });
+      })
+
+    },
+    loadTop() {
+      this.search = {
+        page: 1,
+        pageSize: 15
+      }
+      this.getData()
+      this.$refs.loadmore.onTopLoaded();
+    },
+    loadBottom() {
+      this.search.page = this.search.page + 1
+      this.getData(true)
+      this.$refs.loadmore.onBottomLoaded();
+    },
+    getData(more=false) {
+      fetchAllDevice(this.search)
+      .then((res) => {
+        let data = res.data.data.data
+        if(data.length===0) {
+          this.allLoaded = true;
+        }else{
+          this.allLoaded = false;
+        }
+        if(more) {
+          this.device = this.device.concat(data)
+        }else{
+          this.device = data;
+        }
+        
+      })
+    },
+    getAllType() {
+      fetchDeviceType().then((res) => {
+        this.types = res.data.data
+      })
+    },
+  },
+  mounted() {
+    console.log(this.fields, 'created ....')
   },
   created() {
     const params = this.$route.params;
- 
     if(params.success) {
       this.popupVisible = true;
     }else{
       this.popupVisible = false;
     }
+   this.getData()
+   this.getAllType()
   }
 }
 </script>
@@ -208,5 +287,20 @@ export default {
     width: 48%;
     // margin-right: 10px;
   }
+}
+.type-device /deep/ {
+  .mint-cell-title {
+    width: 105px;
+    flex: none;
+  }
+  .mint-cell-value {
+    width: auto;
+    text-align: right;
+  }
+}
+.field-error {
+  text-align: left;
+  padding-left: 10px;
+  color: $red;
 }
 </style>
