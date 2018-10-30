@@ -61,14 +61,19 @@
         v-validate="{ required: true}">
         </mt-field>
         <p class='field-error' v-if='states["name"]=="error"'>{{ errors.first('name') }}</p>
-    <mt-cell title="设备分类" class='type-device' @click.native="openType">
-      {{ typeLabel }}
-    </mt-cell>
 
-    <mt-cell title="">
-        <mt-button type="primary" @click='save'>保存</mt-button> 
-        <mt-button type="danger" @click='cancel'>取消</mt-button>
-    </mt-cell>
+      <mt-cell title="设备分类" class='type-device' @click.native="openType">
+        {{ typeLabel }}
+      </mt-cell>
+
+      <mt-cell title="区域" class='type-device' @click.native="openArea">
+        {{ areaLabel }}
+      </mt-cell>
+
+      <mt-cell title="">
+          <mt-button type="primary" @click='save'>保存</mt-button> 
+          <mt-button type="danger" @click='cancel'>取消</mt-button>
+      </mt-cell>
 
   </mt-popup>
 
@@ -78,6 +83,13 @@
     class='popup-device'
     position="bottom">
       <mt-picker :slots="typeSlots" @change="onTypeChange" ref='pickType' :value-key='"label"'></mt-picker>
+   </mt-popup>
+
+  <mt-popup
+    v-model="popupArea"
+    class='popup-device'
+    position="bottom">
+      <mt-picker :slots="areaSlots" @change="onAreaChange" ref='pickArea' :value-key='"label"'></mt-picker>
    </mt-popup>
 
   <mt-popup
@@ -94,7 +106,7 @@
 
 <script>
 import { MessageBox, Toast  } from 'mint-ui';
-import { fetchAllDevice, fetchDeviceType, postDevice } from '@/api/monitor';
+import { fetchAllDevice, fetchDeviceType, postDevice, fetchAreas } from '@/api/monitor';
 
 export default {
   data() {
@@ -113,13 +125,19 @@ export default {
       deviceModel: {
         pdi: '',
         type: '',
-        name: ''
+        name: '',
+        area: ''
       },
       types: [],
       selectType: {},
       allLoaded: false,
-      typeLabel : '',
+      typeLabel: '',
       states: {},
+      areaLabel: '',
+      provinces: [],
+      cities: {},
+      selectArea: {},
+      popupArea: false,
     }
   },
   computed: {
@@ -132,6 +150,32 @@ export default {
           textAlign: 'center'
         },
       ]
+    },
+    areaSlots() {
+      let city = []
+      if(this.provinces.length > 0){
+        let first = this.provinces[0].value
+        city = this.cities[first]
+      }
+      
+      return [
+          {
+            flex: 1,
+            values: this.provinces,
+            className: 'slot1',
+            textAlign: 'center'
+          }, {
+            divider: true,
+            content: '-',
+            className: 'slot2'
+          }, {
+            flex: 1,
+            values: city,
+            className: 'slot3',
+            textAlign: 'center'
+          }
+        ]
+      return 
     }
   },
   watch: {
@@ -139,6 +183,11 @@ export default {
       const { value, label } = newval
       this.deviceModel.type = value
       this.typeLabel = label
+    },
+    selectArea(newval) {
+      const { value, label } = newval
+      this.deviceModel.area = value
+      this.areaLabel = label
     },
     fields: {
       handler(newval) {
@@ -182,17 +231,24 @@ export default {
       this.popupVisible = true;
       this.errors.clear();
       this.states = {}
+      // this.deviceModel = {
+      //   pdi: '',
+      //   name: '',
+      // };
     },
     handtest() {
       this.$router.push({ name: 'addDevice_page' })
     },
     cancel() {
+      this.popupVisible = false;
+      this.errors.clear();
+      this.states = {}
       this.deviceModel = {
         pdi: '',
-        type: '',
-        name: ''
+        name: '',
+        // area: '',
+        // type: '',
       };
-      this.popupVisible = false;
     },
 
     openType() {
@@ -215,11 +271,20 @@ export default {
       this.states = states
       if(!valid) return;
         MessageBox.confirm('确定保存?').then(action => {
-            this.popupVisible = false;
-            const { pdi: pdi_code, name: pdi_name, type: dpt_id } = this.deviceModel
-            postDevice({ pdi_code, pdi_name, dpt_id })
+          console.log(this.deviceModel, 'confirm ........', this.selectType, this.selectArea)
+            const { pdi: pdi_code, name: pdi_name } = this.deviceModel
+            const { value: dpt_id } = this.selectType
+            const { value: AreaId } = this.selectArea
+            postDevice({ pdi_code, pdi_name, dpt_id, AreaId })
             .then((res) => {
-              Toast(res.data.msg)
+              if(res && res.data.status===1) {
+                this.popupVisible = false;
+                let first = this.provinces[0]
+                this.$refs.pickArea.setSlotValue(0, first)
+                this.$refs.pickArea.setSlotValue(1, this.cities[first.value][0])
+                this.$refs.pickType.setSlotValue(0, this.types[0])
+              }
+              res && Toast(res.data.msg)
             })
         });
       })
@@ -242,7 +307,7 @@ export default {
       fetchAllDevice(this.search)
       .then((res) => {
         let data = res.data.data.data
-        if(data.length===0) {
+        if(data.length < this.search.pageSize) {
           this.allLoaded = true;
         }else{
           this.allLoaded = false;
@@ -260,6 +325,24 @@ export default {
         this.types = res.data.data
       })
     },
+    getAreas() {
+      fetchAreas().then((res) => {
+        const { province, city } = res.data
+        this.provinces = province
+        this.cities = city
+
+      })
+    },
+    onAreaChange(picker, values) {
+      console.log(values,'on area change ..........')
+      if(!values[0]) return
+      picker.setSlotValues(1, this.cities[values[0].value]);
+      this.selectArea = values[1]
+
+    },
+    openArea() {
+      this.popupArea = true
+    }
   },
   mounted() {
     console.log(this.fields, 'created ....')
@@ -273,6 +356,7 @@ export default {
     }
    this.getData()
    this.getAllType()
+   this.getAreas()
   }
 }
 </script>

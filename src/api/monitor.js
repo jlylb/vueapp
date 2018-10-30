@@ -30,6 +30,14 @@ export function fetchHistoryDevice(data) {
   });
 }
 
+export function fetchAllDevice(data) {
+  return axios({
+    url: '/deviceinfo',
+    method: 'get',
+    params: data,
+  });
+}
+
 export function fetchDeviceType(data) {
   return axios({
     url: '/deviceinfo/devicetype/all',
@@ -38,9 +46,17 @@ export function fetchDeviceType(data) {
   });
 }
 
+export function fetchAreas(data) {
+  return axios({
+    url: '/monitor/index',
+    method: 'get',
+    params: { ...data, isArea: false },
+  });
+}
+
 export function postDevice(data) {
   return axios({
-    url: '/donghuang/storedevice',
+    url: '/deviceinfo',
     method: 'post',
     data,
   });
