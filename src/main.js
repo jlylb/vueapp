@@ -14,7 +14,7 @@ import router from './router';
 import store from './store';
 import VeLine from 'v-charts/lib/line.common';
 import VeHistogram from 'v-charts/lib/histogram.common';
-import './mock';
+// import './mock';
 import './icons';
 import './plugins/axios';
 

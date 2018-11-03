@@ -1,13 +1,13 @@
 <template>
     <div class='single-container'>
-        <top-component></top-component> 
+        <!-- <top-component></top-component>  -->
         <barcode-component2></barcode-component2>
     </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import BarcodeComponent2 from '@/components/barcode2';
+import BarcodeComponent2 from '@/components/barcode4';
 
 
 export default {

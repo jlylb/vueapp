@@ -2,8 +2,7 @@
     <div class='layout-container'>
         <top-component @top-btn='openPusher'>
         </top-component>
-        <video-component ref='pusher'></video-component>
-        <!-- <pusher-component ref='pusher'></pusher-component> -->
+        <pusher-component ref='pusher'></pusher-component>
 
 <mt-popup
     v-model="isOpen"
@@ -18,18 +17,17 @@
     v-for='(item, index) in items' 
     :key='index'>
     </mt-cell>
-    <mt-cell title='直播流' @click.native='goPusher'></mt-cell>
-    <mt-cell title='js播放' @click.native='goVideo'></mt-cell>
+    <mt-cell title='视频流' @click.native='goPlayer'></mt-cell>
   </mt-popup>
     </div>
 </template>
 
 <script>
-import videoComponent from '@/components/video.vue';
+import PusherComponent from '@/components/pushvideo.vue';
 
 export default {
     components: {
-        videoComponent,
+        PusherComponent
     },
     data() {
         return {
@@ -49,24 +47,15 @@ export default {
         changeUrl(item) {
             this.$refs.pusher.updateVideoUrl(item.value)
         },
-        goPusher() {
-            this.$router.push({name: 'video_pusher'})
-        },
-        goVideo() {
-            this.$router.push({name: 'jsvideo'})
-        },
-    },
-    mounted() {
-
-    },
-    destroyed() {
-
+        goPlayer() {
+            this.$router.push({name: 'video_player'})
+        }
     },
     created() {
-
+        this.src = this.$route.params.url
     }
 }
 </script>
 
-<style scoped>
+<style>
 </style>

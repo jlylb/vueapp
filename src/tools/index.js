@@ -78,5 +78,6 @@ export function getDataValue(data, keys, other = '') {
 
 export function getImageUrl(path) {
   if (!path) return '';
-  return `/image/${path}`;
+  const prefix = process.env.NODE_ENV === 'production' ? 'http://192.168.1.7/upload' : '/image';
+  return `${prefix}/${path}`;
 }

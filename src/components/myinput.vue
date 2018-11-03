@@ -38,7 +38,7 @@
       :number="inputType === 'number'"
       v-else
       :type="inputType"
-      @focus="active = true"
+      @focus="active = true;"
       :disabled="disabled"
       :readonly="readonly"
       :value="currentValue"
@@ -112,7 +112,9 @@ export default {
   },
   methods: {
     doCloseActive() {
+      console.log('doCloseActive........')
       this.active = false;
+      this.$emit('click-out', this.active)
     },
     handleInput(evt) {
       this.currentValue = evt.target.value;
@@ -151,38 +153,38 @@ export default {
 
 <style lang="css" scoped>
 .mint-field-clear {
-    opacity: 1;
+  opacity: 1;
 }
 .mint-field-core {
-    background-color: transparent;
-    color: #fff;
+  background-color: transparent;
+  color: #fff;
 }
 .active-field-input {
-    /* border: 1px solid #ff00ff; */
+  /* border: 1px solid #ff00ff; */
 }
 .mint-field {
-    background-color: transparent;
-    align-items: center;
-    border: 1px solid #fff;
-    margin: 10px auto;
-    /* margin: 10px auto; */
+  background-color: transparent;
+  align-items: center;
+  border: 1px solid #fff;
+  margin: 10px auto;
+  /* margin: 10px auto; */
 }
 .mint-field >>> .mint-cell-wrapper {
-    background-image: none;
+  background-image: none;
 }
 
 .mint-field >>> .mint-cell-left {
-    transform: none;
-    position: inherit;
-    padding-left: 10px;
+  transform: none;
+  position: inherit;
+  padding-left: 10px;
 }
 .mint-field >>> .mint-cell-right {
-    transform: none;
-    position: inherit;
-    padding-right: 10px;
+  transform: none;
+  position: inherit;
+  padding-right: 10px;
 }
-.mint-field:active, .mint-field:hover {
-    border-color: #26a2ff
+.mint-field:active,
+.mint-field:hover {
+  border-color: #26a2ff;
 }
-
 </style>

@@ -21,7 +21,7 @@
       <mt-spinner type="fading-circle"></mt-spinner>
       加载中...
     </p>
-
+  <!-- <vue-qr :text="text"  qid="testid"></vue-qr> -->
   <mt-popup
     v-model="popupVisible"
     class='popup-device'
@@ -42,7 +42,10 @@
 
 <script>
 import { fetchList } from '@/api/alarm'
+// import VueQr from 'vue-qr'
+
 export default {
+  // components: { VueQr },
   data() {
     return {
       device: [],
@@ -51,7 +54,8 @@ export default {
       loading: false,
       moreLoading: false,
       selectItem: {},
-      popupVisible: false
+      popupVisible: false,
+      text: '83569001&qr code test1'
     }
   },
   methods: {

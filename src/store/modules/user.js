@@ -81,7 +81,7 @@ const user = {
           .then((response) => {
             console.log(response);
             const data = { ...response.data };
-            if (data.status === 0) {
+            if (data && data.status === 0) {
               reject(response);
               return;
             }

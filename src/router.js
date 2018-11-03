@@ -167,7 +167,8 @@ const router = new Router({
           meta: {
             title: '视频控制',
           },
-          component: () => import(/* webpackChunkName: "video" */ './views/video/index.vue'),
+          component: () =>
+            import(/* webpackChunkName: "video_plaer" */ './views/video/videoPlayer.vue'),
         },
         {
           path: '/video/player',
@@ -175,7 +176,17 @@ const router = new Router({
           meta: {
             title: '视频控制',
           },
-          component: () => import(/* webpackChunkName: "video" */ './views/video/videoPlayer.vue'),
+          component: () =>
+            import(/* webpackChunkName: "video_plaer" */ './views/video/videoPlayer.vue'),
+        },
+        {
+          path: '/video/pusher',
+          name: 'video_pusher',
+          meta: {
+            title: '直播流',
+          },
+          component: () =>
+            import(/* webpackChunkName: "video_plaer" */ './views/video/pusherPlayer.vue'),
         },
       ],
     },

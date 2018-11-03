@@ -1,6 +1,6 @@
 <template>
     <div class='single-container'>
-        <!-- <top-component></top-component> -->
+        <top-component></top-component>
         <barcode-component-test></barcode-component-test>
 
     </div>

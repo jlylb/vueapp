@@ -70,12 +70,12 @@ export default {
     },
     created() {
         this.$store.commit('app/BAR_TITLE', '首页')
-        this.$axios({
-            url: '/image/item'
-        }).then((res)=>{
-            console.log(res)
-            this.items = res.data.items
-        })
+        // this.$axios({
+        //     url: '/image/item'
+        // }).then((res)=>{
+        //     console.log(res)
+        //     this.items = res.data.items
+        // })
     }
 }
 </script>

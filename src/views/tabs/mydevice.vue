@@ -100,6 +100,8 @@
     </mt-cell>
     <mt-cell title="手动添加"  @click.native='handAdd'>
     </mt-cell>
+    <mt-cell title="扫码添加1"  @click.native='handtest'>
+    </mt-cell>
 </mt-popup>
   </div>
 </template>
@@ -348,8 +350,11 @@ export default {
     console.log(this.fields, 'created ....')
   },
   created() {
-    const params = this.$route.params;
-    if(params.success) {
+    const { code, success } = this.$route.params;
+
+    if(success) {
+      const [ pdi, name ] = code.split('&')
+      this.deviceModel= Object.assign(this.deviceModel, { pdi, name })
       this.popupVisible = true;
     }else{
       this.popupVisible = false;

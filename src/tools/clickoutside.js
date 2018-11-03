@@ -1,6 +1,7 @@
 const clickoutsideContext = '@@clickoutsideContext';
 export default {
   bind(el, binding, vnode) {
+    console.log(el, binding, vnode, 'clickout.....');
     const documentHandler = function (e) {
       if (vnode.context && !el.contains(e.target)) {
         vnode.context[el[clickoutsideContext].methodName]();

@@ -37,12 +37,12 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   (response) => {
     console.log(response, 'ok....');
-    const { data } = response;
 
-    if (response.status === 401) {
-      store.dispatch('user/FedLogOut').then(() => {
-        router.push({ name: 'login' });
-      });
+    if (response.status === 200) {
+      const { data } = response;
+      if (data && data.status !== 1 && data.msg) {
+        MessageBox.alert(data.msg, '提示');
+      }
     }
     return response;
   },

@@ -60,7 +60,9 @@ export default {
       if(!window.plus) return
       plus.camera.getCamera().captureImage((p) => {
         this.appendFile(p);
-      });	
+      }, (err)=> {
+        console.log('打开失败....', JSON.stringify(err))
+      }, {});	
     },
     openPhoto() {
       if(!window.plus) return

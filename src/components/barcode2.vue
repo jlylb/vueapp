@@ -1,22 +1,12 @@
 <template>
-  <div class="scan">
+  <!-- <div class="scan"> -->
     <div id="bcid">
       <div style="height:40%"></div>
       <p class="tip">...载入中...</p>
     </div>
 
-    <footer>
-    <div class='tools-bar'>
-      <div class='tools-item'>
-        <p>
-          <svg-icon icon-class='light-open' class='item-icon' slot='icon'></svg-icon>
-        </p>
-        <p>闪光灯</p>
-      </div>
-    </div>
-    </footer>
 
-  </div>
+  <!-- </div> -->
 </template>
 
 <script type='text/ecmascript-6'>
@@ -33,14 +23,16 @@
       startRecognize() {
         let that = this;
         if (!window.plus) return;
-        scan = new plus.barcode.Barcode('bcid', [plus.barcode.QR], {
+        scan = plus.barcode.create('abcid', [plus.barcode.QR], {
           position: 'absolute',
-          height: '200px',
-          width: '200px',
           top: '0',
+          left: '0',
+          height: '100%',
           frameColor:'#00FF00',
           scanbarColor:'#00FF00'
         });
+        let view = plus.nativeObj.View.getViewById('abcid');
+        console.log('begin bcid',view, 'barcode bcid......')
         scan.onmarked = onmarked;
         function onmarked(type, result, file) {
           switch (type) {
@@ -63,11 +55,21 @@
           that.closeScan();
           that.$parent.$router.push({name: 'addDevice_page'});
         }
+        plus.webview.currentWebview().append(scan);
       },
       //开始扫描
       startScan() {
         if (!window.plus) return;
         scan.start();
+      },
+      createView(){
+          if(!window.plus) return;
+          let view = new plus.nativeObj.View('test',
+          {top:'auto',left:'40px',height:'44px',width:'100%'});
+          view.draw([
+            {tag:'font',id:'font',text:'原生控件',textStyles:{size:'18px'}},
+            ]);
+          view.show();
       },
       //关闭扫描
       cancelScan() {
@@ -86,13 +88,18 @@
       },
       setStyle(position) {
         if (!window.plus) return;
-        scan.setStyles({position});
+        scan.setStyles(position);
       },
 
     },
     mounted() {
-      this.startRecognize()
-      this.startScan()
+      this.$nextTick(()=>{
+        this.startRecognize()
+        const bar = document.getElementById('bcid')
+
+        this.startScan()
+      })
+
     },
     beforeDestroy() {
       this.cancelScan()
@@ -104,44 +111,22 @@
   }
 </script>
 <style lang="scss">
-.scan {
-  height: 100%;
-  position: relative;
-  #bcid {
-    width: 100%;
-    // height: 100%;
-    position: absolute;
-    left: 0;
-    // right: 0;
-    top: 0;
-    bottom: 0;
-    text-align: center;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 0;
-    margin: 0;
-  }
-  footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    // height: 2rem;
-    // line-height: 2rem;
-    z-index: 3002;
-    width: 100%;
-    // height: 60px;
-    color: #fff;
-  }
-  .tools-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .tools-item {
-    width: 50%;
-    // display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+// .scan {
+//   height: 100%;
+//   position: relative;
+#bcid {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  left: 0;
+  // right: 0;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
 }
+//}
 </style>

@@ -71,6 +71,8 @@ export default {
   }
 }
 .popup-menu /deep/ {
+  overflow-y: auto;
+  max-height: 480px;
   .mint-cell-text {
     vertical-align: inherit;
   }

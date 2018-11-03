@@ -95,23 +95,15 @@ export default {
       //}
       // document.addEventListener('plusready', plusReady, false);
     }},
-    addGuide() {
-      if(!window.plus) return;
-      if(!getGuide()){
-        const cself = plus.webview.getLaunchWebview();
-        const csecond = plus.webview.create('guide.html','guide');
-        csecond.show();
-        cself.append(csecond);
-      }
-
-    },
-    closeGuide() {
-
-    },
   },
   mounted() {
     this.addEventTest();
-    // this.addGuide();
+    if(!window.plus) {
+      return
+    }
+    if(plus.navigator.hasSplashscreen()){
+      plus.navigator.closeSplashscreen();
+    }
   },
   created() {
     console.log(this.$store)

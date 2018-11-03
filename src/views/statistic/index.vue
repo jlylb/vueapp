@@ -7,7 +7,7 @@
 
 <div class='chart-block'>
 
-    <h1 class='chart-title' v-if='allRows.length > 0'>{{ deviceName }}趋势图</h1>
+    <!-- <h1 class='chart-title' v-if='allRows.length > 0'>{{ deviceName }}趋势图</h1> -->
 
         <ve-line
           :data="chartData"
@@ -30,9 +30,16 @@
 
   <mt-popup
   v-model="filterLeft"
-  position="bottom"
-  class='popup-menu popup-menu-right'
-  popup-transition="popup-fade">
+  position="right"
+  class='popup-menu-right'>
+  <top-component :fixed='false' :title='"筛选条件"'>
+      <template slot='left'>
+        <mt-button icon="back" @click="cancelFilter" >返回</mt-button>
+     </template>
+    <template slot='right'>
+        <mt-button  slot="right" @click='fetchHistoryData'>确定</mt-button>
+     </template>
+  </top-component> 
     <mt-cell title='选择省份' @click.native="clickProvince"> {{ provinceLabel }} </mt-cell>
     <mt-cell title='选择大棚' @click.native="clickCity"> {{ areaLabel }} </mt-cell>
     <mt-cell title='选择设备' @click.native="clickDevice"> {{ deviceLabel }} </mt-cell>
@@ -50,8 +57,15 @@
       <mt-cell title='结束时间' @click.native="changeTimeEnd"> {{ formatTime(searchDate.end) }} </mt-cell>
 
     </div>
-    <mt-button size="large" type='primary' @click="fetchHistoryData">筛选</mt-button>
+
+    <my-loading :visible='loadingSpinner'></my-loading>
+    <!-- <div>
+      <mt-button  type='danger' @click="cancelFilter" :style='{width: "40%", "margin-right": "10px"}'>关闭</mt-button>
+      <mt-button  type='primary' @click="fetchHistoryData" :style='{width: "40%"}'>筛选</mt-button>
+    </div> -->
 </mt-popup>
+
+
 
   <mt-datetime-picker
     ref="pickerTimeStart"
@@ -101,15 +115,15 @@
 <script>
 import { fetchList, fetchHistoryDevice } from '@/api/monitor'
 import { parseTime } from '@/tools/'
-import { Toast } from 'mint-ui'
+import { Toast,Indicator } from 'mint-ui'
 import 'echarts/lib/component/dataZoom'
 import MyPopup from '@/components/popup'
 import { getDataValue } from '@/tools'
 import 'v-charts/lib/style.css'
-
+import MyLoading from '@/components/loading'
 
 export default {
-  components: { MyPopup },
+  components: { MyPopup, MyLoading },
   data() {
 
     return {
@@ -174,7 +188,8 @@ export default {
       dataEmpty: false,
       arrow: false,
       extend: {},
-      deviceIcon: null
+      deviceIcon: null,
+      loadingSpinner: false,
       // provinceLabel: ''
     }
   },
@@ -243,6 +258,9 @@ export default {
     parseTime
   },
   methods: {
+    cancelFilter() {
+      this.filterLeft = false
+    },
     deviceFileter() {
       this.isSelectDevice = true
       // this.arrow = !this.arrow
@@ -384,14 +402,24 @@ export default {
       this.searchDate[sType] = null
     },
     selectDevice(params) {
+      // Indicator.open({
+      //   text: '加载中...',
+      //   spinnerType: 'fading-circle'
+      // });
       this.loading = true
+      this.loadingSpinner = true
       fetchHistoryDevice(this.getParams(params)).then((res) => {
         this.items = res.data.devices 
         this.formatRows()
         this.curIndex = 1
         this.loading = false
+        this.loadingSpinner = false
+        this.filterLeft = false
+       // Indicator.close();
         // this.formatChartData()
       }).catch((res)=>{
+        // Indicator.close();
+        this.loadingSpinner = false
         this.loading = false
       })  
     },
@@ -500,9 +528,11 @@ export default {
   // flex: 1;
 }
 .popup-menu-right {
-  width: 80%;
+  width: 100%;
   height: 100%;
   left: auto;
+  overflow-y: auto;
+  // top: 0;
 }
 .radio-time /deep/ .mint-radiolist-title {
   text-align: left;
