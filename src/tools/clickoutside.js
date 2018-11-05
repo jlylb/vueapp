@@ -2,11 +2,13 @@ const clickoutsideContext = '@@clickoutsideContext';
 export default {
   bind(el, binding, vnode) {
     console.log(el, binding, vnode, 'clickout.....');
-    const documentHandler = function (e) {
+    // eslint-disable-next-line
+    const documentHandler = function(e) {
       if (vnode.context && !el.contains(e.target)) {
         vnode.context[el[clickoutsideContext].methodName]();
       }
     };
+    // eslint-disable-next-line
     el[clickoutsideContext] = {
       documentHandler,
       methodName: binding.expression,
@@ -16,6 +18,7 @@ export default {
   },
 
   update(el, binding) {
+    // eslint-disable-next-line
     el[clickoutsideContext].methodName = binding.expression;
   },
 
