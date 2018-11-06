@@ -14,5 +14,14 @@ export default {
     name: {
       required: () => '设备名称不能为空',
     },
+    phone: {
+      required: () => '手机号不能为空',
+      digits: () => '手机号由11位数字组成',
+      regex: () => '手机号格式不正确',
+    },
+    code: {
+      required: () => '验证码不能为空',
+      digits: () => '验证码由6位数字组成',
+    },
   },
 };

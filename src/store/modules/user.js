@@ -1,4 +1,4 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login';
+import { loginByUsername, logout, getUserInfo, forgotPassword } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/tools/auth';
 
 const user = {
@@ -178,6 +178,19 @@ const user = {
           commit('SET_AVATAR', data.avatar);
           commit('SET_INTRODUCTION', data.introduction);
           resolve();
+        });
+      });
+    },
+    forgetPassword({ dispatch }, info) {
+      return new Promise((resolve, reject) => {
+        dispatch('FedLogOut').then(() => {
+          forgotPassword(info)
+            .then((res) => {
+              resolve(res);
+            })
+            .catch((error) => {
+              reject(error);
+            });
         });
       });
     },

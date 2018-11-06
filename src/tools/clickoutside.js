@@ -1,7 +1,6 @@
 const clickoutsideContext = '@@clickoutsideContext';
 export default {
   bind(el, binding, vnode) {
-    console.log(el, binding, vnode, 'clickout.....');
     // eslint-disable-next-line
     const documentHandler = function(e) {
       if (vnode.context && !el.contains(e.target)) {

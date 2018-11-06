@@ -24,7 +24,7 @@
         <mt-cell title="我的设备" is-link  to='mydevice'>
             <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
         </mt-cell> -->
-        <mt-cell title="定位" is-link to='/geo'>
+        <!-- <mt-cell title="定位" is-link to='/geo'>
             <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
         <mt-cell title="帮助中心" is-link to='/auth/help'>
@@ -32,13 +32,13 @@
         </mt-cell>
         <mt-cell title="意见反馈" is-link to='/auth/feedback'>
             <svg-icon icon-class='adviser-circle' class='item-icon' slot='icon'></svg-icon>
-        </mt-cell>
+        </mt-cell> -->
         <mt-cell title="关于我们" is-link to='/auth/about'>
             <svg-icon icon-class='us-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>
-        <mt-cell title="login" is-link to='/login4'>
+        <!-- <mt-cell title="login" is-link to='/login4'>
             <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
-        </mt-cell>
+        </mt-cell> -->
         <mt-cell></mt-cell>
         <div class='sign-out' @click='logout("login")'>退出登录</div>
     </div>

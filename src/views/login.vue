@@ -37,8 +37,8 @@
               <div class='error' v-if='errors.has("password")'>{{ errors.first("password") }}</div>
               <mt-button size="large" type="primary" @click='handleLogin' class='bt-login'>登  录</mt-button>
 
-                <a class='forget-password'>
-                    忘记密码?
+                <a class='forget-password' >
+                    <span @click.stop='forgetPwd'>忘记密码?</span>
                 </a>
             </div>
       
@@ -96,6 +96,9 @@ export default {
       const cover = document.getElementById('login-cover');
       this.keyboard = body.clientHeight
       // console.log(body.clientHeight, app.clientHeight,html.clientHeight,cover.clientHeight, str)
+    },
+    forgetPwd() {
+      this.$router.push({ name: 'auth_forget' })
     }
   },
   computed: {
