@@ -17,7 +17,9 @@ module.exports = (on, config) => {
     screenshotsFolder: 'tests/e2e/screenshots',
     videosFolder: 'tests/e2e/videos',
     supportFile: 'tests/e2e/support/index.js',
+    pluginsFile: 'tests/e2e/plugins/index.js',
     viewportHeight: 640,
     viewportWidth: 360,
+    projectId: '1wpryd',
   });
 };
