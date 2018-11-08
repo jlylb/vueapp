@@ -79,7 +79,7 @@ export default {
       this.items = res.data.items
       this.province = res.data.province
       this.city = res.data.city
-      this.device = res.data.device
+      this.device = res.data.areaDevice
       if(this.currentProvince) {
         this.firstProvince = this.currentProvince
         return 

@@ -1,59 +1,100 @@
 <template>
-  <div class='layout-container'>
+ <div class='layout-container'>
 
-    <top-component></top-component> 
+  <top-component @top-btn='selectProvince'></top-component>
 
-    <mt-cell :title="`${index + 1}号大棚`" is-link :to='{name: "remote_device"}' v-for='(item, index) in dapeng' :key='index'>
-      <span style="color: green">正常</span>
-      <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
-    </mt-cell>
+  <mt-cell :title="`${index + 1}号大棚`" is-link  v-for='(item, index) in selectCity' :key='index' @click.native='openDetail(item, index)'>
+    <span style="color: green"> {{ countDevice(item.value, device) }}个设备</span>
+    <svg-icon icon-class='dapeng' class='item-icon' slot='icon'></svg-icon>
+  </mt-cell>
 
-  </div>
+  <drop-menu :open.sync='openMenu' :data='province' @menuItem='clickMenu' :active='currentProvince'></drop-menu>
+
+ </div> 
+
 </template>
 
 <script>
+import { fetchList } from '@/api/control'
+import DropMenu from '@/components/dropdown'
+import { getDataValue } from '@/tools'
+import { mapGetters } from 'vuex'
+
 export default {
+  components: { DropMenu },
   data() {
     return {
-
-      dapeng: [
-        '201501', '201502', '201503', '201504', '201505', '201506'
-      ],
-
+      openMenu: false,
+      menu: [],
+      province: [],
+      city: [],
+      firstProvince: null,
+      firstCity: null,
+      selectCity: [],
+      device: null,
+      deviceType: null,
+      selectDeviceType: null,
+      selectDevice: null,
     }
   },
+  computed: {
+    ...mapGetters('app',[
+      'currentProvince'
+    ]),
+  },
   methods: {
-
-
+    closeBottomSheet(val, val1) {
+      console.log(val, val1)
+    },
+    selectProvince() {
+      console.log(this.openMenu, 'select ....')
+      this.openMenu = true
+    },
+    clickMenu(item) {
+      this.openMenu = false
+      this.firstProvince = item.value
+      this.setProvince()
+    },
+    countDevice(cityId, data) {
+      console.log(getDataValue(data, [cityId], []),'count ....')
+      if(!data) {
+        return 0
+      }
+      return Object.keys(getDataValue(data, [cityId], [])).length
+    },
+    openDetail(item, index) {
+      this.$router.push({name: 'remote_device', params: { dapeng: index + 1, areaId: item.value } })
+    },
+    setProvince() {
+      this.$store.commit('app/PROVINCE', this.firstProvince);
+    }
+  },
+  watch: {
+    firstProvince(newVal) {
+      this.selectCity = getDataValue(this.city, [newVal], [])
+    },
   },
   created() {
-    
+    fetchList().then((res) => {
+      this.items = res.data.items
+      this.province = res.data.province
+      this.city = res.data.city
+      this.device = res.data.areaDevice
+      if(this.currentProvince) {
+        this.firstProvince = this.currentProvince
+        return 
+      }
+      this.firstProvince = getDataValue(this.province, [0, 'value'], null)
+      this.setProvince()
+    })
   }
 
 }
 </script>
 
 <style lang='scss' scoped>
-.layout-container /deep/ .popup-device {
-  width: 100%;
-}
-.popup-device /deep/ .picker-toolbar {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #eaeaea;
+.sheet .mu-item-action {
   justify-content: center;
-}
-
-.item-left {
-  position: absolute;
-  right: 10px;
-  display: inline-block;
-  color: #26a2ff;
-}
-.popup-device /deep/ .slot1 {
-  text-align: center;
-}
-.layout-container /deep/ .mint-cell-title {
-  text-align: left;
+  color: inherit;
 }
 </style>

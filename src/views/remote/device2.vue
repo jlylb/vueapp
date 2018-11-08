@@ -1,7 +1,7 @@
 <template>
    <div class='layout-container'>
 
-    <top-component @top-btn='selectType'></top-component> 
+    <top-component></top-component> 
 
     <mt-cell 
     :title="item.name" 
@@ -48,47 +48,19 @@
     </mt-cell>
 
   </mt-popup>
-
-   <drop-menu :open.sync='openMenu' :data='deviceData' @menuItem='clickMenu'></drop-menu>
-
   </div>
 </template>
 
 <script>
 import { MessageBox } from 'mint-ui';
-import { fetchAreaDevice } from '@/api/control'
-import DropMenu from '@/components/dropdown'
-import { getDataValue } from '@/tools'
 
 export default {
-  components: { DropMenu },
   data() {
     return {
       popupVisible: false,
       deviceStatus: true,
       workStatus: true,
-      device: [],
-      item: {},
-      dapeng: null,
-      deviceData: null,
-      pdiIndex: null,
-      openMenu: false,
-    }
-  },
-  methods: {
-    openDevice(item) {
-      this.popupVisible = true
-      this.item = item
-    },
-    selectType() {
-      this.openMenu = true
-    },
-    clickMenu(item) {
-      this.openMenu = false
-      this.pdiIndex = item
-    },
-    getData(data) {
-      this.device = [
+      device: [
         {name: 'pdi_1', icon: 'temp', type: '空气温室度传感器'},
         {name: 'pdi_2', icon: 'light', type: '光照度传感器'},
         {name: 'pdi_3', icon: 'co2', type: '二氧化碳传感器'},
@@ -96,7 +68,15 @@ export default {
         {name: 'pdi_5', icon: 'liquid', type: '液位传感器'},
         {name: 'pdi_6', icon: 'video', type: 'IP摄像头'},
         {name: 'pdi_7', icon: 'temp', type: '空气温室度传感器'},
-      ]
+
+      ],
+      item: {}
+    }
+  },
+  methods: {
+    openDevice(item) {
+      this.popupVisible = true
+      this.item = item
     },
     changeWork(val) {
       console.log(val)
@@ -118,26 +98,6 @@ export default {
         this.deviceStatus = val
       }); 
     }
-  },
-  watch: {
-    pdiIndex(newVal) {
-      const { value: device } = newVal
-      this.getData({ ...newVal, device })
-    },
-  },
-  created() {
-    console.log(this.$route.params)
-    const { areaId, dapeng } = this.$route.params
-    this.dapeng = dapeng
-    fetchAreaDevice({ areaId })
-    .then((res) => {
-      this.deviceData = res.data.devices
-      if(!this.deviceData) {
-          MessageBox.alert(`该大棚没有设备！`, '提示');
-          return
-      }
-      this.pdiIndex = getDataValue(this.deviceData, [0], null)
-    })
   }
 }
 </script>
