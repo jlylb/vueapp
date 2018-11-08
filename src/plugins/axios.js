@@ -52,7 +52,7 @@ _axios.interceptors.response.use(
     let errorMsg;
     if (res.status === 401) {
       store.dispatch('user/FedLogOut').then(() => {
-        router.push({ name: 'login' });
+        router.push({ name: 'login', replace: true });
       });
     } else if (res.status === 422) {
       const firstKey = Object.keys(res.data)[0];
