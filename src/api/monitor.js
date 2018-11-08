@@ -37,3 +37,11 @@ export function postDevice(data) {
     data,
   });
 }
+
+export function fetchAreaDevice(data) {
+  return axios({
+    url: '/monitor/areadevice',
+    method: 'post',
+    data,
+  });
+}

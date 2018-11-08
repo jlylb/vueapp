@@ -4,7 +4,7 @@ import { getGuide } from '@/tools/guide';
 import router from './router';
 import store from './store';
 
-const whiteList = ['/login', '/guide', '/login3', '/login4'];
+const whiteList = ['/login', '/guide', '/login3', '/login4', '/auth/forget'];
 
 console.log(store.getters);
 

@@ -27,6 +27,10 @@
         <!-- <mt-cell title="定位" is-link to='/geo'>
             <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
         </mt-cell> -->
+        <mt-cell title="修改密码" is-link to='/auth/password'>
+            <svg-icon icon-class='password-circle' class='item-icon' slot='icon'></svg-icon>
+        </mt-cell>
+        
         <mt-cell title="帮助中心" is-link to='/auth/help'>
             <svg-icon icon-class='help-circle' class='item-icon' slot='icon'></svg-icon>
         </mt-cell>

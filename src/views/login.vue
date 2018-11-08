@@ -10,6 +10,7 @@
              <my-input 
              placeholder="请输入用户名"
              data-vv-name='username'
+             class='my-input'
              v-validate="{ required: true}"  
              v-model="validateForm.username">
               <svg-icon icon-class="user" class='login-input-icon' slot='prepend'></svg-icon>
@@ -18,6 +19,7 @@
              <my-input 
              placeholder="请输入密码"
              data-vv-name='password'
+             class='my-input'
              v-validate="{ required: true, min: 6 }" 
              type="password"
              autocomplete="off" 
@@ -27,8 +29,8 @@
               <div class='error' v-if='errors.has("password")'>{{ errors.first("password") }}</div>
               <mt-button size="large" type="primary" @click='handleLogin'>登  录</mt-button>
 
-                <a class='forget-password'>
-                    忘记密码?
+                <a class='forget-password' >
+                    <span @click.stop='forgetPwd'>忘记密码?</span>
                 </a>
             </div>
         </div>
@@ -64,7 +66,9 @@ export default {
           
         }
       })
-
+    },
+    forgetPwd() {
+      this.$router.push({ name: 'auth_forget' })
     }
   },
   computed: {
@@ -83,6 +87,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+$icon-color: #29c2ff;
+
 .login-container {
   background-image: url('../assets/bg.png');
   background-repeat: no-repeat;
@@ -117,9 +123,9 @@ export default {
   height: 200px;
   text-align: center;
   margin: 0 auto;
-  background-color: bisque;
+  background-color: rgba($icon-color, 0.5);
   border-radius: 50%;
-  border: 5px solid #fff;
+  border: 2px solid #fff;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -138,10 +144,13 @@ export default {
 .home-content /deep/ .login-input-icon {
   width: 1.5em;
   height: 1.5em;
-  color: #fff;
+  color: $icon-color;
 }
 .error {
   color: #ef4f4f;
   text-align: left;
+}
+.my-input /deep/ .mint-field-clear {
+  color: $icon-color;
 }
 </style>

@@ -40,3 +40,19 @@ export function modifyPassword(data) {
     data,
   });
 }
+
+export function forgotPassword(data) {
+  return axios({
+    url: '/auth/forgetpassword',
+    method: 'post',
+    data,
+  });
+}
+
+export function sendcode(data) {
+  return axios({
+    url: '/auth/sendcode',
+    method: 'post',
+    data,
+  });
+}

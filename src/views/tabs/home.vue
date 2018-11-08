@@ -29,7 +29,7 @@
                     <div class='icon'>
                         <svg-icon icon-class='afbj'   :class='["animation2","item-icon", {"animation2-pause": notification == 0 }]'></svg-icon>
                     </div>
-                    <div class='icon-desc'>实时告警<mt-badge size="small" type='error'>{{ notification }}</mt-badge></div>
+                    <div class='icon-desc'>实时告警<mt-badge size="small" type='error' v-if='notification > 0'>{{ notification }}</mt-badge></div>
                 </div>
             </div>
             <div class='item-statistic item item-right'   @click="openRouter('sysmenu', 'fire')">

@@ -222,6 +222,22 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "auth" */ './views/auth/feedback.vue'),
         },
+        {
+          path: '/auth/password',
+          name: 'auth_password',
+          meta: {
+            title: '修改密码',
+          },
+          component: () => import(/* webpackChunkName: "auth" */ './views/auth/password.vue'),
+        },
+        {
+          path: '/auth/forget',
+          name: 'auth_forget',
+          meta: {
+            title: '忘记密码',
+          },
+          component: () => import(/* webpackChunkName: "auth" */ './views/auth/forget.vue'),
+        },
       ],
     },
     {
