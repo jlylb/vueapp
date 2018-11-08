@@ -55,11 +55,18 @@
 </template>
 
 <script>
-// import testJpg from '@/assets/test.jpg'
+import slider1 from '@/assets/s11.jpg'
+import slider2 from '@/assets/s12.jpg'
+import slider3 from '@/assets/s13.jpg'
+
 export default {
     data() {
         return {
-            items : [],
+            items : [
+                { image: slider1 },
+                { image: slider2 },
+                { image: slider3 },
+            ],
             // testJpg
         }
     },
@@ -88,7 +95,7 @@ export default {
   & img {
     display: inline-block;
     height: 100%;
-    max-width: 100%;
+    width: 100%;
   }
 }
 .tab-container {

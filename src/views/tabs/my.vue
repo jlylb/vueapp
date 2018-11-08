@@ -15,6 +15,9 @@
             <svg-icon icon-class='user-circle' class='item-icon' slot='icon'></svg-icon>
             您好, {{ name }}
         </mt-cell>
+        <mt-cell title="修改密码" is-link to='/auth/password'>
+            <svg-icon icon-class='password-circle' class='item-icon' slot='icon'></svg-icon>
+        </mt-cell>
         <!-- <mt-cell title="添加设备" is-link  to='tab_my/addDevice'>
             <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
         </mt-cell>

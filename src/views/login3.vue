@@ -66,7 +66,7 @@ export default {
 
 <style lang='scss' scoped>
 .login-container {
-  background-image: url('../assets/bg.png');
+  // background-image: url('../assets/bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   -moz-background-size: 100% 100%;

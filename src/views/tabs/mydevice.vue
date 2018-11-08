@@ -100,8 +100,8 @@
     </mt-cell>
     <mt-cell title="手动添加"  @click.native='handAdd'>
     </mt-cell>
-    <mt-cell title="扫码添加1"  @click.native='handtest'>
-    </mt-cell>
+    <!-- <mt-cell title="扫码添加1"  @click.native='handtest'>
+    </mt-cell> -->
 </mt-popup>
   </div>
 </template>

@@ -1,4 +1,4 @@
-import { loginByUsername, logout, getUserInfo, forgotPassword } from '@/api/login';
+import { loginByUsername, logout, getUserInfo, forgotPassword, modifyPassword } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/tools/auth';
 
 const user = {
@@ -192,6 +192,18 @@ const user = {
               reject(error);
             });
         });
+      });
+    },
+    password({ dispatch }, info) {
+      return new Promise((resolve, reject) => {
+        modifyPassword(info)
+          .then((res) => {
+            dispatch('FedLogOut');
+            resolve(res);
+          })
+          .catch((error) => {
+            reject(error);
+          });
       });
     },
   },
