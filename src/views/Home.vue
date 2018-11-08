@@ -16,7 +16,7 @@
       设备
     </mt-tab-item>
     <mt-tab-item id="tab_my" @click.native="tabClick('tab_my')">
-      <svg-icon icon-class="user" slot='icon'></svg-icon>
+      <svg-icon icon-class="tab-user" slot='icon'></svg-icon>
       我的
     </mt-tab-item>
   </mt-tabbar>
