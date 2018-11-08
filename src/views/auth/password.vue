@@ -12,7 +12,7 @@
           autocomplete="off"
           key='password'
           v-model="validateForm.password">
-          <svg-icon icon-class="password"  class='login-input-icon' slot='prepend'></svg-icon>
+          <svg-icon icon-class="new-password"  class='login-input-icon' slot='prepend'></svg-icon>
           </my-input>
         <div class='error' v-if='errors.has("password")' >{{ errors.first("password") }}</div>
 
