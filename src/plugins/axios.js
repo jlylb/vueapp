@@ -61,8 +61,12 @@ _axios.interceptors.response.use(
       //   errorMsg = Array.isArray(res.data[msgKey]) ? res.data[msgKey][0] : res.data[msgKey];
       //   break;
       // }
+    } else if (res.status === 404) {
+      errorMsg = '页面不存在';
     } else if (res.status === 403) {
       errorMsg = '用户没有权限';
+    } else if (res.status === 504) {
+      errorMsg = '请求超时';
     } else if (res.status === 500) {
       errorMsg = '服务器程序运行异常,请联系管理员';
     } else {
