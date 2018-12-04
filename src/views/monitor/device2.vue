@@ -1,89 +1,95 @@
 <template>
-   <div class='layout-container'>
+  <div class="layout-container">
+    <top-component @top-btn="selectType"></top-component>
 
-    <top-component @top-btn='selectType'>
-    </top-component> 
-
-
-    <div class='chart-block'>
-      <ve-histogram 
-        :data="chartData" 
-        :settings="chartSettings" 
-        :extend="extend" 
+    <div class="chart-block">
+      <ve-histogram
+        :data="chartData"
+        :settings="chartSettings"
+        :extend="extend"
         :data-empty="dataEmpty"
         :loading="loading"
-        :after-set-option='afterSet'
-        height='100%' ></ve-histogram>
+        :after-set-option="afterSet"
+        height="100%"
+      ></ve-histogram>
     </div>
-    <div class='chart-desc' v-if='item'>
-      <div class='chart-desc-title'>
-        <div class='chart-desc-item chart-desc-item-left'>
-          <div class='chart-desc-icon'>
-            <svg-icon icon-class='dapeng' class='item-icon'></svg-icon>
+    <div class="chart-desc" v-if="item">
+      <div class="chart-desc-title">
+        <div class="chart-desc-item chart-desc-item-left">
+          <div class="chart-desc-icon">
+            <svg-icon icon-class="dapeng" class="item-icon"></svg-icon>
           </div>
         </div>
-        <div class='chart-desc-item chart-desc-item-right'>
-          <p>{{ dapeng }}号大棚 
-            <span class='item-title item-title-select' @click='deviceFileter'>{{ pdiIndex && pdiIndex.label }}</span>
+        <div class="chart-desc-item chart-desc-item-right">
+          <p>
+            {{ dapeng }}号大棚
+            <span
+              class="item-title item-title-select"
+              @click="deviceFileter"
+            >{{ pdiIndex && pdiIndex.label }}</span>
           </p>
           <p>
-            {{ item['consta']['consta_name'] }}: 
-            <mt-badge :type="item['consta']['consta_value']===0?'success':'error'">{{ item['consta']['consta_value']===0?'正常':'断线' }}</mt-badge>
-           </p>
+            {{ item['consta']['consta_name'] }}:
+            <mt-badge
+              :type="item['consta']['consta_value']===0?'success':'error'"
+            >{{ item['consta']['consta_value']===0?'正常':'断线' }}</mt-badge>
+          </p>
         </div>
       </div>
-      <div class='chart-desc-block'>
-        
-        <div :class='["chart-desc-block-item", itemClass[itemFields.indexOf(index)]]' v-for='(itemValue, index) in item' :key='index' v-if='index!=="consta"'>
-          <p :class='{column: isColumn}'>
+      <div class="chart-desc-block">
+        <div
+          :class="['chart-desc-block-item', itemClass[itemFields.indexOf(index)]]"
+          v-for="(itemValue, index) in item"
+          :key="index"
+          v-if="index!=='consta'"
+        >
+          <p :class="{column: isColumn}">
             <span>{{ itemValue[index+'_name'] }}</span>
-            <span>{{ itemValue[index+'_value'] }}  {{ unit[index] }}</span> </p>
-          <p :class='{column: isColumn}'>
+            <span>{{ itemValue[index+'_value'] }} {{ unit[index] }}</span>
+          </p>
+          <p :class="{column: isColumn}">
             <span>上限告警</span>
-            <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span> 
+            <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span>
           </p>
-          <p :class='{column: isColumn}'>
+          <p :class="{column: isColumn}">
             <span>下限告警</span>
-            <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span> 
+            <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span>
           </p>
-
         </div>
-
-
       </div>
     </div>
 
-  <mt-popup
-    v-model="selectDevice"
-    class='popup-device'
-    :style='{height: "240px"}'
-    position="bottom">
+    <mt-popup
+      v-model="selectDevice"
+      class="popup-device"
+      :style="{height: '240px'}"
+      position="bottom"
+    >
+      <mt-cell
+        :title="deviceName + item"
+        @click.native="openDevice(item)"
+        :class="['dapeng-item', { itemSelect: itemIndex===item }]"
+        is-link
+        v-for="item in num"
+        :key="item"
+      >
+        <!-- <svg-icon :icon-class='pdiIndex.icon' class='item-icon' slot='icon' v-if='pdiIndex'></svg-icon> -->
+        <icon-bg :icon="pdiIndex.icon" slot="icon"></icon-bg>
+      </mt-cell>
+    </mt-popup>
 
-    <mt-cell 
-    :title="deviceName + item" 
-    @click.native='openDevice(item)'
-    :class='{ itemSelect: itemIndex===item }' 
-    is-link 
-    v-for='item in num' 
-    :key='item'>
-      <svg-icon :icon-class='pdiIndex.icon' class='item-icon' slot='icon' v-if='pdiIndex'></svg-icon>
-    </mt-cell>
-
-  </mt-popup>
-
-  <drop-menu :open.sync='openMenu' :data='deviceData' @menuItem='clickMenu'></drop-menu>
-
+    <drop-menu :open.sync="openMenu" :data="deviceData" @menuItem="clickMenu"></drop-menu>
   </div>
 </template>
 
 <script>
-import { MessageBox } from 'mint-ui';
-import { fetchDevice, fetchAreaDevice } from '@/api/monitor'
-import DropMenu from '@/components/dropdown'
-import { getDataValue } from '@/tools'
-
+import { MessageBox } from "mint-ui";
+import { fetchDevice, fetchAreaDevice } from "@/api/monitor";
+import DropMenu from "@/components/dropdown";
+import { getDataValue } from "@/tools";
+import IconBg from "@/components/iconBg";
 export default {
-  components: { DropMenu },
+  components: { DropMenu, IconBg },
   data() {
     return {
       selectDevice: false,
@@ -96,155 +102,176 @@ export default {
       chartData: {},
       chartSettings: {},
       num: 0,
-      deviceName: '',
+      deviceName: "",
       itemFields: null,
       unit: null,
       icons: null,
       itemIndex: null,
-      itemClass: ['red', 'yellow', 'primary'],
+      itemClass: ["red", "yellow", "primary"],
       dapeng: null,
-      itemSelect: 'itemSelect',
+      itemSelect: "itemSelect",
       dataEmpty: false,
       chart: null,
       loading: false,
       isColumn: false
-    }
+    };
   },
   methods: {
     getDataValue,
     afterSet(chart) {
-      this.chart = chart
+      this.chart = chart;
     },
     openDevice(item) {
-      this.itemIndex = item
+      this.itemIndex = item;
     },
     deviceFileter() {
-      this.selectDevice = true
+      this.selectDevice = true;
     },
     clickMenu(item) {
       // this.selectDevice = true
-      this.openMenu = false
-      this.pdiIndex = item
+      this.openMenu = false;
+      this.pdiIndex = item;
     },
     selectType() {
-      this.openMenu = true
-      this.itemIndex = null
+      this.openMenu = true;
+      this.itemIndex = null;
     },
     formatChartData() {
-      this.isColumn = false
-      if(!this.itemIndex) return
-      const item = this.items[this.itemIndex - 1]
-      this.item = item
-      let yAxisName = [], yAxisType = ['value'], axisSite = {}, rows = [], columns = []
-      let chartRow = {}, min = [0], max = [100], labelMap = {}
-      chartRow['name'] = this.deviceName ? (this.deviceName + this.itemIndex) : ''
-      console.log(this.itemFields, 'format chartdata')
-      this.itemFields.map((temp) => {
-        let cur = item[temp]
-        let itemKey = temp+'_name', itemValue = temp+'_value'
-        let curKeyVal = cur[itemKey], curValueVal = cur[itemValue]
-        yAxisName.push(curKeyVal + ' ' + this.unit[temp])
-        columns.push(temp)
-        chartRow[temp] = curValueVal
-        labelMap[temp] = curKeyVal
-      })
-      console.log(yAxisName, 'yAxisName...')
-      let len = yAxisName.length
-      if(len > 1) {
-        axisSite = { right: [columns[len-1]] }
-        yAxisType.push('value')
-        min.push(0),
-        max.push(100)
+      this.isColumn = false;
+      if (!this.itemIndex) return;
+      const item = this.items[this.itemIndex - 1];
+      this.item = item;
+      let yAxisName = [],
+        yAxisType = ["value"],
+        axisSite = {},
+        rows = [],
+        columns = [];
+      let chartRow = {},
+        min = [0],
+        max = [100],
+        labelMap = {};
+      chartRow["name"] = this.deviceName
+        ? this.deviceName + this.itemIndex
+        : "";
+      console.log(this.itemFields, "format chartdata");
+      this.itemFields.map(temp => {
+        let cur = item[temp];
+        let itemKey = temp + "_name",
+          itemValue = temp + "_value";
+        let curKeyVal = cur[itemKey],
+          curValueVal = cur[itemValue];
+        yAxisName.push(curKeyVal + " " + this.unit[temp]);
+        columns.push(temp);
+        chartRow[temp] = curValueVal;
+        labelMap[temp] = curKeyVal;
+      });
+      console.log(yAxisName, "yAxisName...");
+      let len = yAxisName.length;
+      if (len > 1) {
+        axisSite = { right: [columns[len - 1]] };
+        yAxisType.push("value");
+        min.push(0), max.push(100);
       }
-      rows.push(chartRow)
+      rows.push(chartRow);
       this.chartSettings = {
-        axisSite, yAxisType, yAxisName, min, max, labelMap
+        axisSite,
+        yAxisType,
+        yAxisName,
+        min,
+        max,
+        labelMap
+      };
+      if (columns.length > 1) {
+        this.isColumn = true;
       }
-      if(columns.length > 1) {
-        this.isColumn = true
-      }
-      columns = ['name'].concat(columns)
+      columns = ["name"].concat(columns);
       this.chartData = {
-        columns, rows
-      }
-      console.log()
+        columns,
+        rows
+      };
+      console.log();
     },
     getData(data) {
-      this.loading = true
-      fetchDevice(data).then((res) => {
-        this.loading = false
-        console.log(res)
-        this.device = res.data.devices
-        if(this.device.length === 0) {
-          MessageBox.alert(`该设备没有数据！`, '提示');
-          this.items = []
-          this.num = 0
-          this.itemFields = []
-          this.deviceName = null
-          this.item = null
-          this.dataEmpty = true
+      this.loading = true;
+      fetchDevice(data).then(res => {
+        this.loading = false;
+        console.log(res);
+        this.device = res.data.devices;
+        if (this.device.length === 0) {
+          MessageBox.alert(`该设备没有数据！`, "提示");
+          this.items = [];
+          this.num = 0;
+          this.itemFields = [];
+          this.deviceName = null;
+          this.item = null;
+          this.dataEmpty = true;
           this.chartData = {
-            columns: [], rows: []
-          }
+            columns: [],
+            rows: []
+          };
           this.chartSettings = {
-            axisSite: {}, yAxisType: [], yAxisName: [], min: [], max: [], labelMap: {}
+            axisSite: {},
+            yAxisType: [],
+            yAxisName: [],
+            min: [],
+            max: [],
+            labelMap: {}
+          };
+          console.log(this.chart, "chart instance....");
+          if (this.chart) {
+            this.chart.clear();
           }
-          console.log(this.chart, 'chart instance....')
-          if(this.chart) {
-            this.chart.clear()
-          }
-          this.itemIndex = null
-          return
+          this.itemIndex = null;
+          return;
         }
-        this.dataEmpty = false
-        this.items = getDataValue(this.device, ['items'], [])
-        this.num = getDataValue(this.device, ['num'], 0)
-        this.itemFields = getDataValue(this.device, ['fields'], [])
-        this.deviceName = getDataValue(this.device, ['name'], '')
-        this.unit = getDataValue(this.device, ['unit'], null)
-        this.icons = getDataValue(this.device, ['typeicons'], null)
-        this.itemIndex = 1
-      }) 
+        this.dataEmpty = false;
+        this.items = getDataValue(this.device, ["items"], []);
+        this.num = getDataValue(this.device, ["num"], 0);
+        this.itemFields = getDataValue(this.device, ["fields"], []);
+        this.deviceName = getDataValue(this.device, ["name"], "");
+        this.unit = getDataValue(this.device, ["unit"], null);
+        this.icons = getDataValue(this.device, ["typeicons"], null);
+        this.itemIndex = 1;
+      });
     }
   },
   watch: {
     pdiIndex(newVal) {
-      let { value: device } = newVal
-      this.getData({ ...newVal, device })
+      let { value: device } = newVal;
+      this.getData({ ...newVal, device });
     },
     itemIndex(newVal) {
       // this.getData(newVal)
-      this.formatChartData()
+      this.formatChartData();
     },
     selectDevice(newVal) {
-      if(newVal===false) this.openMenu = false
+      if (newVal === false) this.openMenu = false;
     },
-    '$route': function(to) {
-      console.log(to, 'device to .....')
+    $route: function(to) {
+      console.log(to, "device to .....");
     }
   },
   created() {
-    console.log(this.$route.params)
-    const { areaId, dapeng } = this.$route.params
-    this.dapeng = dapeng
+    console.log(this.$route.params);
+    const { areaId, dapeng } = this.$route.params;
+    this.dapeng = dapeng;
     this.extend = {
-          grid: { 
-            left: '5%',
-            right: '5%',
-            bottom: '1%',
-         },
-    }
-   fetchAreaDevice({ areaId })
-   .then((res) => {
-     this.deviceData = res.data.devices
-     this.pdiIndex = getDataValue(this.deviceData, [0], null)
-     if(!this.deviceData) {
-        MessageBox.alert(`该大棚没有设备！`, '提示');
-        return
-     }
-   })
+      grid: {
+        left: "5%",
+        right: "5%",
+        bottom: "1%"
+      }
+    };
+    fetchAreaDevice({ areaId }).then(res => {
+      this.deviceData = res.data.devices;
+      this.pdiIndex = getDataValue(this.deviceData, [0], null);
+      if (!this.deviceData) {
+        MessageBox.alert(`该大棚没有设备！`, "提示");
+        return;
+      }
+    });
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>
@@ -274,7 +301,7 @@ export default {
     border: solid 2px #67c23a;
     border-bottom-width: 0;
     border-left-width: 0;
-    content: ' ';
+    content: " ";
     position: absolute;
     width: 6px;
     height: 6px;
@@ -328,7 +355,7 @@ export default {
   p {
     &:first-child {
       color: #67c23a;
-      letter-spacing: 5px;
+      // letter-spacing: 5px;
     }
     text-align: left;
     padding: 5px;

@@ -84,7 +84,9 @@
   </mt-datetime-picker>
 
 
-  <my-popup v-model="province" :open.sync='provinceOpen' :slots="provinces"></my-popup>
+  <!-- <my-popup v-model="province" :open.sync='provinceOpen' :slots="provinces"></my-popup> -->
+
+  <my-popup2 v-model="provinceArea" :open.sync='provinceAreaOpen' :slots="provinceAreaSlots" @inputChange='changeCompany' @confirm='confirmOk'></my-popup2>
 
   <my-popup v-model="area" :open.sync='cityOpen' :slots="citySlots" show-key='alias'></my-popup>
 
@@ -118,12 +120,13 @@ import { parseTime } from '@/tools/'
 import { Toast,Indicator } from 'mint-ui'
 import 'echarts/lib/component/dataZoom'
 import MyPopup from '@/components/popup'
+import MyPopup2 from '@/components/popup2'
 import { getDataValue } from '@/tools'
 import 'v-charts/lib/style.css'
 import MyLoading from '@/components/loading'
 
 export default {
-  components: { MyPopup, MyLoading },
+  components: { MyPopup, MyLoading, MyPopup2 },
   data() {
 
     return {
@@ -134,7 +137,6 @@ export default {
       popupVisible: false,
       filterOpen: false,
       filterLeft: false,
-      provinceOpen: false,
       cityOpen: false,
       deviceOpen: false,
 
@@ -142,9 +144,14 @@ export default {
       isChangeDevice: false,
       pickerStart: new Date(),
       pickerEnd: new Date(),
-      province: null,
-      provinces: null,
-      provincesSlots: [],
+
+      firstProvince: null,
+      firstCompany: null,
+      provinceArea: [],
+      provinceAreaOpen: false,
+      provinceAreaSlots: [],
+      company: null,
+      company_pro: null,
 
       area: null,
       city: null,
@@ -195,7 +202,7 @@ export default {
   },
   computed: {
     provinceLabel() {
-      return this.province ? this.province.label : ''
+      return this.firstProvince ? this.firstProvince.label : ''
     },
     areaLabel() {
       return this.area ? this.area.alias  : ''
@@ -205,7 +212,7 @@ export default {
     }
   },
   watch: {
-    province(newval) {
+    firstProvince(newval) {
       this.citys = newval ? this.city[newval.value] : []
       this.citySlots = [
         {
@@ -446,7 +453,8 @@ export default {
       }
     },
     clickProvince() {
-      this.provinceOpen = true
+// this.provinceOpen = true
+      this.provinceAreaOpen = true
     },
     clickCity() {
       this.cityOpen = true
@@ -467,7 +475,22 @@ export default {
     },
     getHistoryData() {
       this.getParams()
-    }
+    },
+    changeCompany(values, picker) {
+      console.log(values, picker, 'log.......')
+      if(values[0] && values[1]){
+        picker.setSlotValues(1, getDataValue(this.company_pro, [values[0].value], []));
+      }
+      
+    },
+    confirmOk() {
+      const [currentCompay , currentProvince ] = this.provinceArea
+      console.log(currentProvince, currentCompay)
+      this.firstProvince = currentProvince
+      this.firstCompany = currentCompay
+      // this.setProvince()
+      this.provinceAreaOpen = false
+    },
   },
   mounted() {
 
@@ -475,19 +498,45 @@ export default {
   created() {
     fetchList().then((res) => {
       let province = res.data.province
-      this.provinces = [
-        {
-          flex: 1,
-          values: province,
-          className: 'slot2',
-        }
-      ]
 
       const proFirst = getDataValue(province, [0, 'value'])
       this.city = res.data.city
       this.areaDevice = res.data.areaDevice
-      const firstCity = getDataValue(this.city, [proFirst, 0, 'value'])
+
+      this.company = res.data.company
+      this.company_pro = res.data.company_province
+      let firstKey
+      if(this.currentProvince) {
+        let [ company, province ] = this.currentProvince
+        this.firstProvince = province
+        firstKey =  company
+      }else{
+        firstKey = getDataValue(this.company, [0], null)
+        this.firstProvince = getDataValue(this.company_pro, [firstKey.value, 0], null)
+      }
+      const firstCity = getDataValue(this.city, [this.firstProvince.value, 0, 'value'])
       const device = getDataValue(this.areaDevice, [firstCity, 0])
+      this.firstCompany = firstKey
+      const area = getDataValue(this.company_pro, [firstKey.value], [])
+      this.provinceAreaSlots = [
+        {
+          flex: 1,
+          values: this.company,
+          className: 'slot1',
+          textAlign: 'center',
+        }, {
+          divider: true,
+          content: '-',
+          className: 'slot2'
+        }, {
+          flex: 1,
+          values: area,
+          className: 'slot3',
+          textAlign: 'center',
+        }
+      ]
+      this.provinceArea =  [firstKey, this.firstProvince]
+      
       return device     
     }).then((res) => {
         this.selectDevice(res)

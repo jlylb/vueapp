@@ -30,12 +30,17 @@ body {
   transform: translate3d(0, 0, 0);
   right: 0px;
   top: 40px;
+  left: 30%;
 }
 
 .layout-container .filter-button .mint-cell-value {
   width: 100%;
 }
 
+.dapeng-item .mint-cell-title {
+  display: flex;
+  align-items: center;
+}
 // @media only screen and (min-width: 640px) {
 //   body,
 //   #app {

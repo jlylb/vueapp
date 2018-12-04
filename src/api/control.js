@@ -14,3 +14,33 @@ export function fetchAreaDevice(params) {
     data,
   });
 }
+
+export function fetchDeviceData(data) {
+  return axios({
+    url: '/control/devicedata',
+    method: 'get',
+    params: data,
+  });
+}
+
+export function saveCommand(data) {
+  return axios({
+    url: '/control/command',
+    method: 'post',
+    params: data,
+  });
+}
+export function saveSwitch(data) {
+  return axios({
+    url: '/control/switch',
+    method: 'post',
+    params: data,
+  });
+}
+export function saveOut(data) {
+  return axios({
+    url: '/control/out',
+    method: 'post',
+    params: data,
+  });
+}
