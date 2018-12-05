@@ -14,5 +14,9 @@ export default {
     name: {
       required: () => '设备名称不能为空',
     },
+    code: {
+      required: () => '验证码不能为空',
+      digits: () => '验证码6个数字',
+    },
   },
 };

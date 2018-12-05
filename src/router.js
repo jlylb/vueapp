@@ -70,7 +70,7 @@ const router = new Router({
           },
         },
         {
-          path: '/air/index',
+          path: '/air/index/:pdi',
           name: 'air',
           meta: {
             title: '精密空调',

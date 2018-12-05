@@ -1,102 +1,81 @@
 <template>
-   <div class='layout-container'>
-
+  <div class="layout-container">
     <top-component>
-      <span slot='right' @click='openAdd'>添加</span>
-    </top-component> 
+      <span slot="right" @click="openAdd">添加</span>
+    </top-component>
 
-    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-      <mt-cell 
-      :title='String(item.pdi_index)'
-      :label="item.pdi_name"
-      @click.native='openDevice(item)' 
-      is-link 
-      v-for='(item, index) in device' 
-      :key='index'>
-
-      </mt-cell>
+    <mt-loadmore
+      :top-method="loadTop"
+      :bottom-method="loadBottom"
+      :bottom-all-loaded="allLoaded"
+      :auto-fill="false"
+      ref="loadmore"
+    >
+      <mt-cell
+        :title="String(item.pdi_index)"
+        :label="item.pdi_name"
+        @click.native="openDevice(item)"
+        is-link
+        v-for="(item, index) in device"
+        :key="index"
+      ></mt-cell>
     </mt-loadmore>
 
-  <mt-popup
-    v-model="popupDetail"
-    class='popup-device'
-    position="bottom">
-    <mt-cell title="设备索引">
-      {{ item.pdi_index }}
-    </mt-cell>
-    <mt-cell title="设备名称">
-      {{ item.pdi_name }}
-    </mt-cell>
-    <mt-cell title="设备类型">
-      {{ item.dpt_id }}
-    </mt-cell>
+    <mt-popup v-model="popupDetail" class="popup-device" position="bottom">
+      <mt-cell title="设备索引">{{ item.pdi_index }}</mt-cell>
+      <mt-cell title="设备名称">{{ item.pdi_name }}</mt-cell>
+      <mt-cell title="设备类型">{{ item.dpt_id }}</mt-cell>
 
-    <mt-cell title="公司">
-      {{ item.company && item.company.Co_Name }}
-    </mt-cell>
+      <mt-cell title="公司">{{ item.company && item.company.Co_Name }}</mt-cell>
+    </mt-popup>
 
-  </mt-popup>
-
-  <mt-popup
-    v-model="popupVisible"
-    ref='addDevice'
-    class='popup-device add-device'
-    :close-on-click-modal='false'
-    popup-transition="popup-fade">
-
-    <mt-field 
-      label="设备编号" 
-      placeholder="请输入设备编号" 
-      v-model="deviceModel.pdi" 
-      data-vv-name='pdi'
-      :state= 'states["pdi"]'
-      v-validate="{ required: true}" ></mt-field>
-      <p class='field-error' v-if='states["pdi"]=="error"'>{{ errors.first('pdi') }}</p>
-      <mt-field 
-        label="设备名称" 
-        placeholder="请输入设备名称" 
+    <mt-popup
+      v-model="popupVisible"
+      ref="addDevice"
+      class="popup-device add-device"
+      :close-on-click-modal="false"
+      popup-transition="popup-fade"
+    >
+      <mt-field
+        label="设备编号"
+        placeholder="请输入设备编号"
+        v-model="deviceModel.pdi"
+        data-vv-name="pdi"
+        :state="states['pdi']"
+        v-validate="{ required: true}"
+      ></mt-field>
+      <p class="field-error" v-if="states['pdi']=='error'">{{ errors.first('pdi') }}</p>
+      <mt-field
+        label="设备名称"
+        placeholder="请输入设备名称"
         v-model="deviceModel.name"
-        data-vv-name='name'
-        :state= 'states["name"]'
-        v-validate="{ required: true}">
-        </mt-field>
-        <p class='field-error' v-if='states["name"]=="error"'>{{ errors.first('name') }}</p>
-    <mt-cell title="设备分类" class='type-device' @click.native="openType">
-      {{ typeLabel }}
-    </mt-cell>
+        data-vv-name="name"
+        :state="states['name']"
+        v-validate="{ required: true}"
+      ></mt-field>
+      <p class="field-error" v-if="states['name']=='error'">{{ errors.first('name') }}</p>
+      <mt-cell title="设备分类" class="type-device" @click.native="openType">{{ typeLabel }}</mt-cell>
 
-    <mt-cell title="">
-        <mt-button type="primary" @click='save'>保存</mt-button> 
-        <mt-button type="danger" @click='cancel'>取消</mt-button>
-    </mt-cell>
+      <mt-cell title>
+        <mt-button type="primary" @click="save">保存</mt-button>
+        <mt-button type="danger" @click="cancel">取消</mt-button>
+      </mt-cell>
+    </mt-popup>
 
-  </mt-popup>
+    <mt-popup v-model="popupDetailType" class="popup-device" position="bottom">
+      <mt-picker :slots="typeSlots" @change="onTypeChange" ref="pickType" :value-key="'label'"></mt-picker>
+    </mt-popup>
 
-
-  <mt-popup
-    v-model="popupDetailType"
-    class='popup-device'
-    position="bottom">
-      <mt-picker :slots="typeSlots" @change="onTypeChange" ref='pickType' :value-key='"label"'></mt-picker>
-   </mt-popup>
-
-  <mt-popup
-  v-model="isAdd"
-  class='popup-menu'
-  popup-transition="popup-fade">
-    <mt-cell title="扫码添加"  @click.native='scanAdd'>
-    </mt-cell>
-    <mt-cell title="手动添加"  @click.native='handAdd'>
-    </mt-cell>
-    <mt-cell title="手动测试"  @click.native='handtest'>
-    </mt-cell>
-</mt-popup>
+    <mt-popup v-model="isAdd" class="popup-menu" popup-transition="popup-fade">
+      <mt-cell title="扫码添加" @click.native="scanAdd"></mt-cell>
+      <mt-cell title="手动添加" @click.native="handAdd"></mt-cell>
+    </mt-popup>
   </div>
 </template>
 
 <script>
-import { MessageBox, Toast  } from 'mint-ui';
-import { fetchAllDevice, fetchDeviceType, postDevice } from '@/api/monitor';
+import { MessageBox, Toast } from "mint-ui";
+import { fetchAllDevice, fetchDeviceType, postDevice } from "@/api/monitor";
 
 export default {
   data() {
@@ -105,178 +84,177 @@ export default {
       popupDetail: false,
       popupDetailType: false,
       isAdd: false,
-      device: [
-      ],
+      device: [],
       search: {
         page: 1,
         pageSize: 15
       },
       item: {},
       deviceModel: {
-        pdi: '',
-        type: '',
-        name: ''
+        pdi: "",
+        type: "",
+        name: ""
       },
       types: [],
       selectType: {},
       allLoaded: false,
-      typeLabel : '',
-      states: {},
-    }
+      typeLabel: "",
+      states: {}
+    };
   },
   computed: {
     typeSlots() {
       return [
-        { 
+        {
           flex: 1,
           values: this.types,
-          className: 'type-slot',
-          textAlign: 'center'
-        },
-      ]
+          className: "type-slot",
+          textAlign: "center"
+        }
+      ];
     }
   },
   watch: {
     selectType(newval) {
-      const { value, label } = newval
-      this.deviceModel.type = value
-      this.typeLabel = label
+      const { value, label } = newval;
+      this.deviceModel.type = value;
+      this.typeLabel = label;
     },
     fields: {
       handler(newval) {
-        this.getStates()
+        this.getStates();
       },
       deep: true
     }
   },
   methods: {
     getStates() {
-      let states = {}
-      Object.keys(this.fields).map((field)=>{
-        if(this.errors.has(field)){
-          if(this.fields[field].invalid && this.fields[field].dirty){
-            states[field] = 'error'
-          }else{
-            states[field] = 'none'
+      let states = {};
+      Object.keys(this.fields).map(field => {
+        if (this.errors.has(field)) {
+          if (this.fields[field].invalid && this.fields[field].dirty) {
+            states[field] = "error";
+          } else {
+            states[field] = "none";
           }
-        }else{
-          if(this.fields[field].valid){
-            states[field] = 'success'
+        } else {
+          if (this.fields[field].valid) {
+            states[field] = "success";
           }
         }
-      })
-      this.states = states
-      console.log(this.states, 'states....', this.fields)
+      });
+      this.states = states;
+      console.log(this.states, "states....", this.fields);
     },
     openDevice(item) {
-      this.popupDetail = true
-      this.item = item
+      this.popupDetail = true;
+      this.item = item;
     },
     openAdd() {
-      this.isAdd = true
+      this.isAdd = true;
     },
     scanAdd() {
-      this.isAdd = false
-      this.$router.push({name: 'addtest'})
+      this.isAdd = false;
+      this.$router.push({ name: "addtest" });
     },
     handAdd() {
-      this.isAdd = false
+      this.isAdd = false;
       this.popupVisible = true;
       this.errors.clear();
-      this.states = {}
+      this.states = {};
     },
     handtest() {
-      this.$router.push({ name: 'addDevice_page' })
+      this.$router.push({ name: "addDevice_page" });
     },
     cancel() {
       this.deviceModel = {
-        pdi: '',
-        type: '',
-        name: ''
+        pdi: "",
+        type: "",
+        name: ""
       };
       this.popupVisible = false;
     },
 
     openType() {
-      this.popupDetailType = true
+      this.popupDetailType = true;
     },
     onTypeChange(picker, values) {
-      if(!values[0]) return
-      this.selectType = values[0]
+      if (!values[0]) return;
+      this.selectType = values[0];
     },
     save() {
-      this.$validator.validate().then((valid) => {
-      let states = {}
-      Object.keys(this.fields).map((field)=>{
-        if(this.errors.has(field)){
-          states[field] = 'error'
-        }else{
-          states[field] = 'success'
-        }
-      })
-      this.states = states
-      if(!valid) return;
-        MessageBox.confirm('确定保存?').then(action => {
-            this.popupVisible = false;
-            const { pdi: pdi_code, name: pdi_name, type: dpt_id } = this.deviceModel
-            postDevice({ pdi_code, pdi_name, dpt_id })
-            .then((res) => {
-              Toast(res.data.msg)
-            })
+      this.$validator.validate().then(valid => {
+        let states = {};
+        Object.keys(this.fields).map(field => {
+          if (this.errors.has(field)) {
+            states[field] = "error";
+          } else {
+            states[field] = "success";
+          }
         });
-      })
-
+        this.states = states;
+        if (!valid) return;
+        MessageBox.confirm("确定保存?").then(action => {
+          this.popupVisible = false;
+          const {
+            pdi: pdi_code,
+            name: pdi_name,
+            type: dpt_id
+          } = this.deviceModel;
+          postDevice({ pdi_code, pdi_name, dpt_id }).then(res => {
+            Toast(res.data.msg);
+          });
+        });
+      });
     },
     loadTop() {
       this.search = {
         page: 1,
         pageSize: 15
-      }
-      this.getData()
+      };
+      this.getData();
       this.$refs.loadmore.onTopLoaded();
     },
     loadBottom() {
-      this.search.page = this.search.page + 1
-      this.getData(true)
+      this.search.page = this.search.page + 1;
+      this.getData(true);
       this.$refs.loadmore.onBottomLoaded();
     },
-    getData(more=false) {
-      fetchAllDevice(this.search)
-      .then((res) => {
-        let data = res.data.data.data
-        if(data.length===0) {
+    getData(more = false) {
+      fetchAllDevice(this.search).then(res => {
+        let data = res.data.data.data;
+        if (data.length === 0) {
           this.allLoaded = true;
-        }else{
+        } else {
           this.allLoaded = false;
         }
-        if(more) {
-          this.device = this.device.concat(data)
-        }else{
+        if (more) {
+          this.device = this.device.concat(data);
+        } else {
           this.device = data;
         }
-        
-      })
+      });
     },
     getAllType() {
-      fetchDeviceType().then((res) => {
-        this.types = res.data.data
-      })
-    },
+      fetchDeviceType().then(res => {
+        this.types = res.data.data;
+      });
+    }
   },
   mounted() {
-    console.log(this.fields, 'created ....')
+    console.log(this.fields, "created ....");
   },
   created() {
     const params = this.$route.params;
-    if(params.success) {
+    if (params.success) {
       this.popupVisible = true;
-    }else{
+    } else {
       this.popupVisible = false;
     }
-   this.getData()
-   this.getAllType()
+    this.getData();
+    this.getAllType();
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>
