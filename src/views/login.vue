@@ -1,53 +1,52 @@
 <template>
+  <div class="login-container" id="login-container">
+    <div class="home-content" id="login-cover">
+      <transition name="logo-scale">
+        <div class="logo" v-show="showLogo">
+          <svg-icon icon-class="dapeng" class="logo-icon"></svg-icon>
+        </div>
+      </transition>
 
-    <div class='login-container' id='login-container' > 
+      <my-input
+        placeholder="请输入用户名"
+        class="input-active"
+        data-vv-name="username"
+        key="username"
+        @click.native="smallLogo"
+        @click-out="bigLogo"
+        v-validate="{ required: true}"
+        v-model="validateForm.username"
+      >
+        <svg-icon icon-class="user" class="login-input-icon" slot="prepend"></svg-icon>
+      </my-input>
+      <div class="error" v-if="errors.has('username')">{{ errors.first("username") }}</div>
+      <my-input
+        placeholder="请输入密码"
+        data-vv-name="password"
+        class="input-active"
+        v-validate="{ required: true, min: 6 }"
+        type="password"
+        autocomplete="off"
+        key="password"
+        @click.native="smallLogo"
+        @click-out="bigLogo"
+        v-model="validateForm.password"
+      >
+        <svg-icon icon-class="password" class="login-input-icon" slot="prepend"></svg-icon>
+      </my-input>
+      <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
+      <mt-button size="large" type="primary" @click="handleLogin" class="bt-login">登 录</mt-button>
 
-            <div class='home-content' id='login-cover'>
-              <transition name="logo-scale">
-                <div class='logo' v-show='showLogo'>
-                    <svg-icon icon-class="user" class='logo-icon'></svg-icon>
-                </div>
-              </transition>
-
-             <my-input 
-             placeholder="请输入用户名"
-             class='input-active'
-             data-vv-name='username'
-             key='username'
-             @click.native="smallLogo"
-             @click-out="bigLogo"
-             v-validate="{ required: true}"  
-             v-model="validateForm.username">
-              <svg-icon icon-class="user" class='login-input-icon' slot='prepend'></svg-icon>
-             </my-input>
-             <div class='error' v-if='errors.has("username")'>{{ errors.first("username") }}</div>
-             <my-input 
-             placeholder="请输入密码"
-             data-vv-name='password'
-             class='input-active'
-             v-validate="{ required: true, min: 6 }" 
-             type="password"
-             autocomplete="off"
-             key='password'
-             @click.native="smallLogo"
-             @click-out="bigLogo"
-             v-model="validateForm.password">
-              <svg-icon icon-class="password"  class='login-input-icon' slot='prepend'></svg-icon>
-             </my-input>
-              <div class='error' v-if='errors.has("password")'>{{ errors.first("password") }}</div>
-              <mt-button size="large" type="primary" @click='handleLogin' class='bt-login'>登  录</mt-button>
-
-                <a class='forget-password' >
-                    <span @click.stop='forgetPwd'>忘记密码?</span>
-                </a>
-            </div>
-      
+      <a class="forget-password">
+        <span @click.stop="forgetPwd">忘记密码?</span>
+      </a>
     </div>
-
+  </div>
 </template>
 
 <script>
 import MyInput from "@/components/myinput";
+import { mapState } from "vuex";
 
 export default {
   components: { MyInput },
@@ -60,49 +59,51 @@ export default {
         password: "123456"
       },
       showLogo: true,
-      keyboard: null,
+      keyboard: null
     };
   },
-  directives: {
-    
-  },
+  directives: {},
   methods: {
     handleLogin() {
-      this.$validator.validate().then((valid) => {
-        console.log(valid,this.errors.all(), this.errors.collect(), this.fields)
-        if(valid) {
-          console.log(this.validateForm)
-          this.$store.dispatch('user/LoginByUsername', this.validateForm)
-          .then((res) => {
-              console.log(res, 333333333)
+      this.$validator.validate().then(valid => {
+        console.log(
+          valid,
+          this.errors.all(),
+          this.errors.collect(),
+          this.fields
+        );
+        if (valid) {
+          console.log(this.validateForm);
+          this.$store
+            .dispatch("user/LoginByUsername", this.validateForm)
+            .then(res => {
+              console.log(res, 333333333);
               this.$router.push({ path: "/tab_home" });
-          })
-          
+            });
         }
-      })
-
+      });
     },
     smallLogo(e) {
-      e.stopPropagation()
-      this.showLogo = false
+      e.stopPropagation();
+      this.showLogo = false;
     },
     bigLogo() {
-      this.showLogo = true
+      this.showLogo = true;
     },
-    output(str='init.....') {
-      const body = document.getElementsByTagName('body')[0];
-      const app = document.getElementById('app');
-      const html = document.getElementById('login-container');
-      const cover = document.getElementById('login-cover');
-      this.keyboard = body.clientHeight
+    output(str = "init.....") {
+      const body = document.getElementsByTagName("body")[0];
+      const app = document.getElementById("app");
+      const html = document.getElementById("login-container");
+      const cover = document.getElementById("login-cover");
+      this.keyboard = body.clientHeight;
       // console.log(body.clientHeight, app.clientHeight,html.clientHeight,cover.clientHeight, str)
     },
     forgetPwd() {
-      this.$router.push({ name: 'auth_forget' })
+      this.$router.push({ name: "auth_forget" });
     }
   },
   computed: {
-
+    ...mapState("user", ["companyLogo"])
   },
   mounted() {
     // const body = document.getElementsByTagName('body')[0];
@@ -116,16 +117,16 @@ export default {
     // this.output()
   },
   created() {
-    window.addEventListener('resize', ()=>{
-      const body = document.getElementsByTagName('body')[0];
-      if(this.keyboard > body.clientHeight) {
-        this.showLogo = false
-      }else{
-        this.showLogo = true
+    window.addEventListener("resize", () => {
+      const body = document.getElementsByTagName("body")[0];
+      if (this.keyboard > body.clientHeight) {
+        this.showLogo = false;
+      } else {
+        this.showLogo = true;
       }
 
-      this.output('resize.......')
-    })
+      this.output("resize.......");
+    });
   }
 };
 </script>
@@ -169,15 +170,19 @@ $logo-color: #c4e1ff;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  .input-active:active,
+  .input-active:hover {
+    border-color: $input-color;
+  }
 }
 .logo {
   width: 180px;
   height: 180px;
   text-align: center;
   margin: 0 auto;
-  background-color: $logo-color;
+  // background-color: $logo-color;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 5px solid rgba(#fff, 0.5);
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -187,20 +192,17 @@ $logo-color: #c4e1ff;
 .logo /deep/ .logo-icon {
   width: 120px;
   height: 120px;
-  color: #fff;
+  color: rgba(#fff, 0.5);
 }
 .input {
   margin: 10px 0;
   background-color: transparent;
-  color: #fff;
+  color: rgba(#fff, 0.5);
 }
 .bt-login {
   background-color: $input-color;
 }
-.input-active:active,
-.input-active:hover {
-  border-color: $input-color;
-}
+
 .input-active /deep/ .mint-field-clear {
   color: $input-color;
 }

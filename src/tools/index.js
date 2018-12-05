@@ -1,3 +1,5 @@
+import { imageUrl } from '@/tools/config';
+
 export function parseTime(time, cFormat) {
   if (!time) {
     return '';
@@ -78,6 +80,6 @@ export function getDataValue(data, keys, other = '') {
 
 export function getImageUrl(path) {
   if (!path) return '';
-  const prefix = process.env.NODE_ENV === 'production' ? 'http://192.168.1.7/upload' : '/image';
+  const prefix = process.env.NODE_ENV === 'production' ? imageUrl : '/image';
   return `${prefix}/${path}`;
 }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getToken } from '@/tools/auth';
 import store from '@/store';
 import { MessageBox } from 'mint-ui';
+import apiUrl from '@/tools/config';
 import router from '../router';
 
 // Full config:  https://github.com/axios/axios#request-config
@@ -11,7 +12,7 @@ import router from '../router';
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const config = {
-  baseURL: process.env.NODE_ENV === 'production' ? 'http://192.168.1.3/api' : '/api',
+  baseURL: process.env.NODE_ENV === 'production' ? apiUrl : '/api',
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };

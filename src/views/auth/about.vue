@@ -1,16 +1,17 @@
 <template>
-      <div class='layout-container'>
-        <top-component></top-component>
-        <div>
-          武汉盛世奈特科技有限公司
-        </div> 
-      </div>
+  <div class="layout-container">
+    <top-component></top-component>
+    <div>{{ companyName }}</div>
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-
-}
+  computed: {
+    ...mapState("user", ["companyName"])
+  }
+};
 </script>
 
 <style>
