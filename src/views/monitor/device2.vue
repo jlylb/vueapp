@@ -28,7 +28,7 @@
               @click="deviceFileter"
             >{{ pdiIndex && pdiIndex.label }}</span>
           </p>
-          <p>
+          <p class="net-status">
             {{ item['consta']['consta_name'] }}:
             <mt-badge
               :type="item['consta']['consta_value']===0?'success':'error'"
@@ -283,7 +283,8 @@ export default {
   // overflow: hidden;
 }
 .itemSelect {
-  background-color: $blue;
+  background-color: darken($theme-color, 10%);
+
   /deep/ {
     .mint-cell-text {
       color: #fff;
@@ -292,11 +293,14 @@ export default {
     .item-icon {
       color: #fff;
     }
+    .mint-cell-allow-right::after {
+      border-color: #fff;
+    }
   }
 }
 .item-title {
   letter-spacing: normal;
-  cursor: pointer;
+  // cursor: pointer;
   &::after {
     border: solid 2px #67c23a;
     border-bottom-width: 0;
@@ -334,7 +338,7 @@ export default {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #67c23a;
+  background-color: $theme-color;
   position: relative;
   margin: 0 auto;
   .item-icon {
@@ -359,7 +363,7 @@ export default {
     }
     text-align: left;
     padding: 5px;
-    color: rgba(0, 0, 0, 0.5);
+    color: $theme-color;
     span {
       display: inline-block;
       // padding-left: 3px;

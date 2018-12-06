@@ -132,8 +132,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-$input-color: #052fa7;
-$cover-color: rgb(89, 141, 236);
+$cover-color: #4a9026;
+$input-color: darken($cover-color, 10%);
 $logo-color: #c4e1ff;
 .login-container {
   // background-image: url('../assets/bg.png');

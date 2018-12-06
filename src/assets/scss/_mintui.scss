@@ -1,0 +1,78 @@
+.mint-header {
+  background-color: $theme-color;
+}
+.mint-tabbar {
+  background-color: $theme-color;
+}
+
+.mint-tabbar > .mint-tab-item {
+  color: #ccc;
+}
+
+.mint-tabbar > .mint-tab-item.is-selected {
+  color: #fff;
+  background-color: lighten($theme-color, 10%);
+}
+.mint-cell-text {
+  // color: darken($theme-color, 20%);
+}
+.mint-cell-label {
+  // color: $theme-color;
+}
+.mint-cell-wrapper {
+  background-image: linear-gradient(
+    180deg,
+    $theme-color,
+    rgba($theme-color, 0.12) 50%,
+    transparent 50%
+  );
+}
+.mint-cell-title {
+  color: $theme-color;
+}
+.mint-cell-allow-right::after {
+  border-color: $theme-color;
+}
+.mint-checkbox-input:checked + .mint-checkbox-core {
+  background-color: $theme-color;
+  border-color: $theme-color;
+}
+.mint-radio-input:checked + .mint-radio-core {
+  background-color: $theme-color;
+  border-color: $theme-color;
+}
+.mint-button--primary {
+  background-color: $theme-color;
+}
+.mint-switch-input:checked + .mint-switch-core {
+  border-color: $theme-color;
+  background-color: $theme-color;
+}
+.mint-badge.is-primary {
+  background-color: $theme-color;
+}
+.mt-range-progress {
+  background-color: $theme-color;
+}
+.mt-progress-progress {
+  background-color: $theme-color;
+}
+.mint-msgbox-confirm {
+  color: $theme-color;
+}
+.mint-msgbox-title {
+  color: $theme-color;
+}
+.mint-msgbox-confirm:active {
+  color: $theme-color;
+}
+.mint-datetime-action {
+  color: $theme-color;
+}
+
+.picker-item {
+  color: grayscale($theme-color);
+  &.picker-selected {
+    color: $theme-color;
+  }
+}

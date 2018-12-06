@@ -103,7 +103,7 @@ export default {
   border-radius: 0;
   display: inline-block;
   border: 0;
-  // color: inherit;
+  color: $theme-color;
   font-size: 18px;
   height: 41px;
   outline: 0;
