@@ -27,20 +27,20 @@ export function saveCommand(data) {
   return axios({
     url: '/control/command',
     method: 'post',
-    params: data,
+    data,
   });
 }
 export function saveSwitch(data) {
   return axios({
     url: '/control/switch',
     method: 'post',
-    params: data,
+    data,
   });
 }
 export function saveOut(data) {
   return axios({
     url: '/control/out',
     method: 'post',
-    params: data,
+    data,
   });
 }

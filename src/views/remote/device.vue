@@ -73,12 +73,24 @@
               :index="String(index+1)"
             >
               <mt-cell :key="'out_'+index+'_'+itemIndex" v-for="(item, itemIndex) in items">
-                <icon-bg slot="title">{{ items.length > 2 ? three[itemIndex] : two[itemIndex] }}</icon-bg>
-                <mt-switch
-                  v-model="item.bStatus"
-                  @change="changeControl($event, items, item,  index)"
-                  :disabled="item.bStatus || device.in[1].status==0"
-                ></mt-switch>
+                <icon-bg
+                  slot="title"
+                >{{ itemIndex==0?(items.length > 1 ? three[item.status] : two[item.status]): four[item.status] }}</icon-bg>
+                <template v-if="items.length==1">
+                  <mt-switch
+                    v-model="item.bStatus"
+                    @change="changeControl($event, items, item,  index)"
+                    :disabled="device.in[1].status==0"
+                  ></mt-switch>
+                </template>
+                <template v-if="items.length==2">
+                  <my-switch
+                    @switch-change="changeControl($event, items, item,  index)"
+                    :disabled="device.in[1].status==0"
+                    :sstatus.sync="item.bStatus"
+                    :true-label="itemIndex==0?'起':'落'"
+                  ></my-switch>
+                </template>
               </mt-cell>
               <mt-cell is-link>
                 <icon-bg slot="icon" :icon="items.length > 0?items[0].ts_Icon:'control'"></icon-bg>
@@ -122,9 +134,10 @@ import { getDataValue } from "@/tools";
 import MyPopup from "@/components/popup";
 import { Indicator, Toast } from "mint-ui";
 import IconBg from "@/components/iconBg";
+import MySwitch from "@/components/mySwitch";
 
 export default {
-  components: { DropMenu, MyPopup, IconBg },
+  components: { DropMenu, MyPopup, IconBg, MySwitch },
   data() {
     return {
       popupVisible: false,
@@ -138,8 +151,9 @@ export default {
       openMenu: false,
       netStatus: false,
       allLoaded: false,
-      two: ["开", "关"],
-      three: ["起", "停", "落"],
+      two: ["关", "开"],
+      three: ["停", "起"],
+      four: ["停", "落"],
       out: false,
       sub: [],
       formatSub: {},
@@ -385,30 +399,44 @@ export default {
         closeOnClickModal: false
       })
         .then(action => {
-          if (current.bStatus) {
-            Indicator.open("正在处理中...");
-            const { tu_Warnid: dpId } = current;
-            const { value: pdi_index } = this.pdiIndex;
-            saveCommand({ status: 1, dp_id: dpId, pdi_index: pdi_index })
-              .then(res => {
-                data = data.map(item => {
-                  if (item.tu_Warnid != dpId) {
-                    item.bStatus = false;
-                  }
-                  return item;
-                });
+          Indicator.open("正在处理中...");
+          const { tu_Warnid: dpId } = current;
+          const { value: pdi_index } = this.pdiIndex;
+          const params = [];
+          params.push({ status: current.bStatus ? 1 : 0, dp_id: dpId });
+          data.map(item => {
+            if (item.tu_Warnid != dpId) {
+              params.push({
+                status: 0,
+                dp_id: item.tu_Warnid
+              });
+            }
+          });
+          saveCommand({ params, pdi_index: pdi_index })
+            .then(res => {
+              data.map(item => {
+                if (item.tu_Warnid != dpId) {
+                  item.bStatus = false;
+                  item.status = 0;
+                }
+                return item;
+              });
+              current.status = current.bStatus ? 1 : 0;
+              setTimeout(() => {
                 Indicator.close();
                 Toast(res.data.msg);
-              })
-              .catch(() => {
-                current.bStatus = false;
-                Indicator.close();
-                Toast("已取消更改");
-              });
-          }
+              }, 3000);
+            })
+            .catch(() => {
+              current.bStatus = !current.bStatus;
+              current.status = current.bStatus ? 1 : 0;
+              Indicator.close();
+              Toast("已取消更改");
+            });
         })
         .catch(res => {
-          current.bStatus = val;
+          current.bStatus = !current.bStatus;
+          current.status = current.bStatus ? 1 : 0;
           Indicator.close();
         });
     }

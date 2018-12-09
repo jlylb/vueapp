@@ -39,7 +39,7 @@ $small-icon: 1em;
   background-color: darken($blue, 30%);
   text-align: center;
   position: relative;
-  display: inline-block;
+  // display: inline-block;
   margin-right: 5px;
   &-small {
     width: $small;
