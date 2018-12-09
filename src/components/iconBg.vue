@@ -34,9 +34,9 @@ $small-icon: 1em;
 .icon-background {
   width: $normal;
   height: $normal;
-  border: 1px solid $blue;
+  border: 1px solid $theme-color;
   border-radius: 50%;
-  background-color: darken($blue, 30%);
+  background-color: $theme-color;
   text-align: center;
   position: relative;
   // display: inline-block;

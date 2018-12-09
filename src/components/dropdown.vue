@@ -59,7 +59,7 @@ export default {
 
 <style lang='scss' scoped>
 .active-menu {
-  background-color: $blue;
+  background-color: darken($theme-color, 10%);
   /deep/ {
     .mint-cell-text {
       color: #fff;

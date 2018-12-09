@@ -73,7 +73,6 @@
         v-for="item in num"
         :key="item"
       >
-        <!-- <svg-icon :icon-class='pdiIndex.icon' class='item-icon' slot='icon' v-if='pdiIndex'></svg-icon> -->
         <icon-bg :icon="pdiIndex.icon" slot="icon"></icon-bg>
       </mt-cell>
     </mt-popup>
@@ -332,7 +331,7 @@ export default {
   align-items: center;
   // padding: 10px 0;
   height: 25%;
-  background-color: #e6effb;
+  background-color: darken($theme-color, 10%);
 }
 .chart-desc-icon {
   width: 60px;
@@ -363,7 +362,7 @@ export default {
     }
     text-align: left;
     padding: 5px;
-    color: $theme-color;
+    color: #67c23a;
     span {
       display: inline-block;
       // padding-left: 3px;
