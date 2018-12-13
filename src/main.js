@@ -1,3 +1,4 @@
+// import devtools from '@vue/devtools';
 import Vue from 'vue';
 import VeeValidate, { Validator } from 'vee-validate';
 import messages from '@/lang/zh_CN';
@@ -37,6 +38,11 @@ Vue.component('topComponent', TopComponent);
 
 Vue.component(VeLine.name, VeLine);
 Vue.component(VeHistogram.name, VeHistogram);
+
+// devtools.connect(
+//   '192.168.1.33',
+//   8098,
+// );
 
 new Vue({
   router,

@@ -9,7 +9,7 @@
         :value-key="showKey"
       >
         <span @click="cancelButton" class="w50">取消</span>
-        <span type="default" @click="okButton" class="w50">确定</span>
+        <span @click="okButton" class="w50">确定</span>
       </mt-picker>
     </slot>
   </mt-popup>
@@ -50,7 +50,7 @@ export default {
       console.log("slots........", newval, this.value);
       this.$nextTick(function() {
         const picker = this.$refs.picker1;
-        if (this.value[0] && this.value[1]) {
+        if (this.value[0]) {
           if (this.isObject(this.value[0])) {
             this.slots[0].defaultIndex = this.getSlotIndex(
               this.value[0],
@@ -70,15 +70,34 @@ export default {
         }
       });
     },
-    value(newval) {
-      console.log("value........", newval);
+    value(newval, oldval) {
+      console.log("value........", newval, oldval);
+    },
+    "value.0": function(newval, oldval) {
+      console.log("value........value0", newval, oldval);
     }
   },
   methods: {
     slotsChange(picker, values) {
-      console.log(values, ".............costom pick1", picker.getValues());
-      this.$emit("input", values);
+      console.log(
+        this.value,
+        values,
+        ".............costom pick1",
+        picker.getValues()
+      );
+
+      // const [first] = this.value;
+      // const [second] = values;
+      // if (first && second) {
+      //   let { value: firstValue } = first;
+      //   let { value: SecondValue } = second;
+      //   console.log(firstValue, SecondValue, "compareing ....");
+      //   if (firstValue != SecondValue) {
+      //     this.$emit("inputChange", values, picker);
+      //   }
+      // }
       this.$emit("inputChange", values, picker);
+      this.$emit("input", values);
     },
     cancelButton() {
       this.popupVisible = false;
@@ -112,21 +131,5 @@ export default {
 <style lang='scss' scoped>
 .toolbar {
   display: flex;
-}
-.w50 {
-  width: 50%;
-  border-radius: 0;
-  display: inline-block;
-  border: 0;
-  color: $theme-color;
-  font-size: 18px;
-  height: 41px;
-  outline: 0;
-  overflow: hidden;
-  position: relative;
-  text-align: center;
-  line-height: 41px;
-  border-bottom: 1px solid rgb(245, 245, 245);
-  // cursor: pointer;
 }
 </style>

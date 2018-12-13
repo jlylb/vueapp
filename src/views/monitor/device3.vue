@@ -37,25 +37,26 @@
         </div>
       </div>
       <div class="chart-desc-block">
-        <div
-          :class="['chart-desc-block-item', itemClass[itemFields.indexOf(index)]]"
-          v-for="(itemValue, index) in item"
-          :key="index"
-          v-if="index!=='consta'"
-        >
-          <p :class="{column: isColumn}">
-            <span>{{ itemValue[index+'_name'] }}</span>
-            <span>{{ itemValue[index+'_value'] }} {{ unit[index] }}</span>
-          </p>
-          <p :class="{column: isColumn}">
-            <span>上限告警</span>
-            <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span>
-          </p>
-          <p :class="{column: isColumn}">
-            <span>下限告警</span>
-            <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span>
-          </p>
-        </div>
+        <mt-swipe :auto="0" :style="{'height': '300px'}">
+          <mt-swipe-item
+            v-for="(itemValue, index) in item"
+            :key="'swipe_'+index"
+            v-if="index!=='consta'"
+          >
+            <p>
+              <span>{{ itemValue[index+'_name'] }}</span>
+              <span>{{ itemValue[index+'_value'] }} {{ unit[index] }}</span>
+            </p>
+            <p>
+              <span>上限告警</span>
+              <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span>
+            </p>
+            <p>
+              <span>下限告警</span>
+              <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span>
+            </p>
+          </mt-swipe-item>
+        </mt-swipe>
       </div>
     </div>
 
@@ -73,7 +74,7 @@
         v-for="item in num"
         :key="item"
       >
-        <icon-bg :icon="pdiIndex.icon" slot="icon"></icon-bg>
+        <icon-bg :icon="pdiIndex.icon" slot="icon" small></icon-bg>
       </mt-cell>
     </mt-popup>
 

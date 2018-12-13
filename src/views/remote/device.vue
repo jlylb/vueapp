@@ -3,107 +3,118 @@
     <top-component @top-btn="selectType"></top-component>
 
     <mt-swipe :auto="0" @change="handlerChange" :show-indicators="false">
-      <mt-swipe-item class="slide1" key="slide1">
-        <mt-loadmore
-          :top-method="loadTop"
-          :bottom-all-loaded="allLoaded"
-          ref="loadmore1"
-          :auto-fill="false"
+      <mt-swipe-item class="slide1" key="slide1" ref="index1">
+        <mt-index-list
+          :show-indicator="false"
+          v-if="device"
+          key="index-list1"
+          class="mylist"
+          v-sindex
         >
-          <mt-index-list :show-indicator="false" :height="500" v-if="device" key="index-list1">
-            <mt-index-section :index="'输入'">
-              <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
-              <mt-cell title="网络状态">
-                <mt-switch v-model="netStatus" disabled></mt-switch>
-              </mt-cell>
-            </mt-index-section>
-            <mt-index-section v-for="(items, index) in device.in" :key="'in_'+index" :index="index">
-              <mt-cell :key="items.dp_paramname" v-if="index > 1">
-                <template slot="title">
-                  <span @click="titleChange(items, index)">{{ items.dp_paramdesc }}</span>
-                </template>
-                <span style="color: green" v-if="items.bStatus">正常</span>
-                <span style="color: red" v-else>异常</span>
-              </mt-cell>
-              <mt-cell v-if="index==1">
-                <icon-bg slot="icon" :icon="items.status==1?'auto':'manual'"></icon-bg>
-                <mt-badge :type="items.status==1?'primary':'error'">{{ items.status==1?"自动":"手动" }}</mt-badge>
-              </mt-cell>
-              <mt-cell is-link v-if="index>1">
-                <icon-bg slot="icon" :icon="items.ts_Icon?items.ts_Icon:'control'"></icon-bg>
-                <mt-button
-                  @click.native="chooseType(items, index)"
-                  type="primary"
-                  size="small"
-                >{{ items.ts_TypeMo?items.ts_TypeMo:'点击选择类型' }}</mt-button>
-              </mt-cell>
-            </mt-index-section>
-          </mt-index-list>
-        </mt-loadmore>
+          <mt-index-section :index="'输入'" key="in_first_0">
+            <mt-loadmore
+              :top-method="loadTop"
+              :bottom-all-loaded="allLoaded"
+              ref="loadmore1"
+              :auto-fill="false"
+            >
+              <div>
+                <!-- <mt-cell class="control-title">输入</mt-cell> -->
+                <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
+                <mt-cell title="网络状态">
+                  <mt-switch v-model="netStatus" disabled></mt-switch>
+                </mt-cell>
+              </div>
+            </mt-loadmore>
+          </mt-index-section>
+          <mt-index-section v-for="(items, index) in device.in" :key="'in_'+index" :index="index">
+            <mt-cell :key="items.dp_paramname" v-if="index > 1">
+              <template slot="title">
+                <span @click="titleChange(items, index)">{{ items.dp_paramdesc }}</span>
+              </template>
+              <span style="color: green" v-if="items.bStatus">正常</span>
+              <span style="color: red" v-else>异常</span>
+            </mt-cell>
+            <mt-cell v-if="index==1">
+              <icon-bg slot="icon" :icon="items.status==1?'auto':'manual'"></icon-bg>
+              <mt-badge :type="items.status==1?'primary':'error'">{{ items.status==1?"自动":"手动" }}</mt-badge>
+            </mt-cell>
+            <mt-cell is-link v-if="index>1">
+              <icon-bg slot="icon" :icon="items.ts_Icon?items.ts_Icon:'control'"></icon-bg>
+              <mt-button
+                @click.native="chooseType(items, index)"
+                type="primary"
+                size="small"
+              >{{ items.ts_TypeMo?items.ts_TypeMo:'点击选择类型' }}</mt-button>
+            </mt-cell>
+          </mt-index-section>
+        </mt-index-list>
       </mt-swipe-item>
 
       <mt-swipe-item class="slide2" key="slide2">
-        <mt-loadmore
-          :top-method="loadTop"
-          :bottom-all-loaded="allLoaded"
-          ref="loadmore"
-          :auto-fill="false"
+        <mt-index-list
+          ref="outSlide"
+          :show-indicator="false"
+          :key="index2"
+          v-if="device"
+          class="mylist"
+          v-sindex
         >
-          <mt-index-list
-            ref="outSlide"
-            :show-indicator="false"
-            :height="500"
-            :key="index2"
-            v-if="device"
-          >
-            <mt-index-section :index="'输出'" key="out_first">
-              <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
-              <mt-cell title="网络状态">
-                <mt-switch v-model="netStatus" disabled></mt-switch>
-              </mt-cell>
-              <mt-cell title="当前状态">
-                <mt-badge
-                  :type="device.in[1].status==1?'primary':'error'"
-                >{{ device.in[1].status==1?"自动":"手动" }}</mt-badge>
-              </mt-cell>
-            </mt-index-section>
-            <mt-index-section
-              v-for="(items, index) in device.out"
-              :key="'out_'+index"
-              :index="String(index+1)"
+          <mt-index-section :index="'输出'" key="out_first">
+            <mt-loadmore
+              :top-method="loadTop"
+              :bottom-all-loaded="allLoaded"
+              ref="loadmore"
+              :auto-fill="false"
             >
-              <mt-cell :key="'out_'+index+'_'+itemIndex" v-for="(item, itemIndex) in items">
-                <icon-bg
-                  slot="title"
-                >{{ itemIndex==0?(items.length > 1 ? three[item.status] : two[item.status]): four[item.status] }}</icon-bg>
-                <template v-if="items.length==1">
-                  <mt-switch
-                    v-model="item.bStatus"
-                    @change="changeControl($event, items, item,  index)"
-                    :disabled="device.in[1].status==0"
-                  ></mt-switch>
-                </template>
-                <template v-if="items.length==2">
-                  <my-switch
-                    @switch-change="changeControl($event, items, item,  index)"
-                    :disabled="device.in[1].status==0"
-                    :sstatus.sync="item.bStatus"
-                    :true-label="itemIndex==0?'起':'落'"
-                  ></my-switch>
-                </template>
-              </mt-cell>
-              <mt-cell is-link>
-                <icon-bg slot="icon" :icon="items.length > 0?items[0].ts_Icon:'control'"></icon-bg>
-                <mt-button
-                  @click.native="chooseType(items, index)"
-                  :disabled="device.in[1].status==0"
-                  type="primary"
-                  size="small"
-                >{{ items.length > 0?items[0].ts_TypeMo:'点击选择类型' }}</mt-button>
-              </mt-cell>
-            </mt-index-section>
-          </mt-index-list>
-        </mt-loadmore>
+              <div>
+                <!-- <mt-cell class="control-title">输出</mt-cell> -->
+                <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
+                <mt-cell title="网络状态">
+                  <mt-switch v-model="netStatus" disabled></mt-switch>
+                </mt-cell>
+                <mt-cell title="当前状态">
+                  <mt-badge
+                    :type="device.in[1].status==1?'primary':'error'"
+                  >{{ device.in[1].status==1?"自动":"手动" }}</mt-badge>
+                </mt-cell>
+              </div>
+            </mt-loadmore>
+          </mt-index-section>
+
+          <mt-index-section
+            v-for="(items, outIndex) in device.out"
+            :key="'out_'+outIndex"
+            :index="String(outIndex+1)"
+          >
+            <mt-cell :key="'out_'+outIndex+'_'+itemIndex" v-for="(item, itemIndex) in items">
+              <icon-bg
+                slot="title"
+              >{{ itemIndex==0?(items.length > 1 ? three[item.status] : two[item.status]): four[item.status] }}</icon-bg>
+              <template v-if="items.length==1">
+                <mt-switch
+                  v-model="item.bStatus"
+                  @change="changeControl($event, items, item,  outIndex)"
+                ></mt-switch>
+              </template>
+              <template v-if="items.length==2">
+                <my-switch
+                  @switch-change="changeControl($event, items, item,  outIndex)"
+                  :sstatus.sync="item.bStatus"
+                  :true-label="itemIndex==0?'起':'落'"
+                ></my-switch>
+              </template>
+            </mt-cell>
+            <mt-cell is-link>
+              <icon-bg slot="icon" :icon="items.length > 0?items[0].ts_Icon:'control'"></icon-bg>
+              <mt-button
+                @click.native="chooseType(items, outIndex)"
+                type="primary"
+                size="small"
+              >{{ items.length > 0?items[0].ts_TypeMo:'点击选择类型' }}</mt-button>
+            </mt-cell>
+          </mt-index-section>
+        </mt-index-list>
       </mt-swipe-item>
     </mt-swipe>
 
@@ -168,6 +179,17 @@ export default {
       titleOpen: false
     };
   },
+  directives: {
+    sindex: {
+      // 指令的定义
+      bind: function(el, binding, vnode) {},
+      inserted: function(el, binding, vnode) {
+        console.log(el, binding, "directive....", vnode, this);
+        const { $el: pEl } = vnode.context;
+        el.style.height = `${pEl.offsetHeight}px`;
+      }
+    }
+  },
   methods: {
     openDevice(item) {
       this.popupVisible = true;
@@ -181,23 +203,29 @@ export default {
       this.pdiIndex = item;
     },
     getData(data) {
-      fetchDeviceData(data).then(res => {
-        console.log(res, "control deviceing......");
-        this.device = res.data.devicesData;
-        if (this.device) {
-          const { rd_NetCom, sub } = res.data.devicesData;
-          this.netStatus = rd_NetCom === 0 ? true : false;
-          this.sub = sub;
-          let slots = [];
-          sub.forEach(item => {
-            this.formatSub[item.ts_typeid] = item.ts_TypeMo;
-            let { ts_typeid: value, ts_TypeMo: label, ts_Icon: icon } = item;
-            slots.push({ label, value, icon });
-          });
-          this.slotsValue = slots;
-          console.log(slots, "after slots.....");
-        }
-      });
+      Indicator.open("正在加载中...");
+      fetchDeviceData(data)
+        .then(res => {
+          console.log(res, "control deviceing......");
+          this.device = res.data.devicesData;
+          if (this.device) {
+            const { rd_NetCom, sub } = res.data.devicesData;
+            this.netStatus = rd_NetCom === 0 ? true : false;
+            this.sub = sub;
+            let slots = [];
+            sub.forEach(item => {
+              this.formatSub[item.ts_typeid] = item.ts_TypeMo;
+              let { ts_typeid: value, ts_TypeMo: label, ts_Icon: icon } = item;
+              slots.push({ label, value, icon });
+            });
+            this.slotsValue = slots;
+            console.log(slots, "after slots.....");
+          }
+          Indicator.close();
+        })
+        .catch(() => {
+          Indicator.close();
+        });
     },
     doStatus(data) {},
     changeWork(item, val) {
@@ -447,13 +475,15 @@ export default {
       this.getData({ pdi_index, dpt_id });
     }
   },
+
   created() {
     console.log(this.$route.params);
     const { areaId, dapeng } = this.$route.params;
     this.dapeng = dapeng;
+    Indicator.open("正在加载中...");
     fetchAreaDevice({ areaId }).then(res => {
       this.deviceData = res.data.devices;
-
+      Indicator.close();
       if (!this.deviceData) {
         MessageBox.alert(`该大棚没有设备！`, "提示");
         return;
@@ -465,4 +495,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.layout-container {
+  height: 100%;
+}
+.mylist {
+  overflow: auto;
+}
+.control-title /deep/ .mint-cell-value {
+  width: 100%;
+  justify-content: center;
+  color: $theme-color;
+  font-weight: bolder;
+}
 </style>

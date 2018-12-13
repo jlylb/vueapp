@@ -3,7 +3,7 @@
     <slot name="icon">
       <svg-icon :icon-class="icon" :class="['item-icon', {'item-icon-small': small}]" v-if="icon"></svg-icon>
     </slot>
-    <span class="item-icon">
+    <span class="item-icon" v-if="$slots.default">
       <slot></slot>
     </span>
   </div>
@@ -11,6 +11,7 @@
 
 <script>
 export default {
+  name: "icon-bg",
   props: {
     icon: {
       type: String,
@@ -27,38 +28,4 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-$normal: 40px;
-$small: 24px;
-$normal-icon: 1.8em;
-$small-icon: 1em;
-.icon-background {
-  width: $normal;
-  height: $normal;
-  border: 1px solid $theme-color;
-  border-radius: 50%;
-  background-color: $theme-color;
-  text-align: center;
-  position: relative;
-  // display: inline-block;
-  margin-right: 5px;
-  &-small {
-    width: $small;
-    height: $small;
-  }
-  /deep/ .item-icon {
-    height: $normal-icon;
-    width: $normal-icon;
-    line-height: $normal-icon;
-    color: #fff;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    &-small {
-      width: $small-icon;
-      height: $small-icon;
-      line-height: $small-icon;
-    }
-  }
-}
 </style>

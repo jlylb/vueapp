@@ -1,7 +1,7 @@
 <template>
   <div class="layout-container">
     <top-component @top-btn="openPusher"></top-component>
-    <video-component ref="pusher"></video-component>
+    <video-component ref="pusher" :src="src"></video-component>
     <!-- <pusher-component ref='pusher'></pusher-component> -->
     <mt-popup
       v-model="isOpen"
@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     openPusher() {
+      if (this.items.length === 0) return;
       this.isOpen = true;
     },
     changeUrl(item) {
@@ -55,6 +56,9 @@ export default {
   created() {
     fetchList().then(res => {
       this.items = res.data.data;
+      if (this.items.lenght > 0) {
+        this.src = this.items[0].url;
+      }
     });
   }
 };

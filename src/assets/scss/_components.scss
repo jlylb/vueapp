@@ -1,0 +1,49 @@
+.w50 {
+  width: 50%;
+  border-radius: 0;
+  display: inline-block;
+  border: 0;
+  color: $theme-color;
+  font-size: 18px;
+  height: 41px;
+  outline: 0;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  line-height: 41px;
+  border-bottom: 1px solid rgb(245, 245, 245);
+}
+$normal: 40px;
+$small: 24px;
+$normal-icon: 1.8em;
+$small-icon: 1em;
+.icon-background {
+  width: $normal;
+  height: $normal;
+  border: 1px solid $theme-color;
+  border-radius: 50%;
+  background-color: $theme-color;
+  text-align: center;
+  position: relative;
+  // display: inline-block;
+  margin-right: 5px;
+  &-small {
+    width: $small;
+    height: $small;
+  }
+  /deep/ .item-icon {
+    height: $normal-icon;
+    width: $normal-icon;
+    line-height: $normal-icon;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    &-small {
+      width: $small-icon;
+      height: $small-icon;
+      line-height: $small-icon;
+    }
+  }
+}

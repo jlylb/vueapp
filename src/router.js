@@ -135,7 +135,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "remote" */ './views/remote/index.vue'),
         },
         {
-          path: '/remote/device',
+          path: '/remote/device/:areaId',
           name: 'remote_device',
           meta: {
             title: '远程控制设备',

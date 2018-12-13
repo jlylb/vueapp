@@ -98,20 +98,4 @@ export default {
 .toolbar {
   display: flex;
 }
-.w50 {
-  width: 50%;
-  border-radius: 0;
-  display: inline-block;
-  border: 0;
-  color: $theme-color;
-  font-size: 18px;
-  height: 41px;
-  outline: 0;
-  overflow: hidden;
-  position: relative;
-  text-align: center;
-  line-height: 41px;
-  border-bottom: 1px solid rgb(245, 245, 245);
-  // cursor: pointer;
-}
 </style>
