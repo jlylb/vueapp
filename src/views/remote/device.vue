@@ -3,59 +3,11 @@
     <top-component @top-btn="selectType"></top-component>
 
     <mt-swipe :auto="0" @change="handlerChange" :show-indicators="false">
-      <mt-swipe-item class="slide1" key="slide1" ref="index1">
-        <mt-index-list
-          :show-indicator="false"
-          v-if="device"
-          key="index-list1"
-          class="mylist"
-          v-sindex
-        >
-          <mt-index-section :index="'输入'" key="in_first_0">
-            <mt-loadmore
-              :top-method="loadTop"
-              :bottom-all-loaded="allLoaded"
-              ref="loadmore1"
-              :auto-fill="false"
-            >
-              <div>
-                <!-- <mt-cell class="control-title">输入</mt-cell> -->
-                <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
-                <mt-cell title="网络状态">
-                  <mt-switch v-model="netStatus" disabled></mt-switch>
-                </mt-cell>
-              </div>
-            </mt-loadmore>
-          </mt-index-section>
-          <mt-index-section v-for="(items, index) in device.in" :key="'in_'+index" :index="index">
-            <mt-cell :key="items.dp_paramname" v-if="index > 1">
-              <template slot="title">
-                <span @click="titleChange(items, index)">{{ items.dp_paramdesc }}</span>
-              </template>
-              <span style="color: green" v-if="items.bStatus">正常</span>
-              <span style="color: red" v-else>异常</span>
-            </mt-cell>
-            <mt-cell v-if="index==1">
-              <icon-bg slot="icon" :icon="items.status==1?'auto':'manual'"></icon-bg>
-              <mt-badge :type="items.status==1?'primary':'error'">{{ items.status==1?"自动":"手动" }}</mt-badge>
-            </mt-cell>
-            <mt-cell is-link v-if="index>1">
-              <icon-bg slot="icon" :icon="items.ts_Icon?items.ts_Icon:'control'"></icon-bg>
-              <mt-button
-                @click.native="chooseType(items, index)"
-                type="primary"
-                size="small"
-              >{{ items.ts_TypeMo?items.ts_TypeMo:'点击选择类型' }}</mt-button>
-            </mt-cell>
-          </mt-index-section>
-        </mt-index-list>
-      </mt-swipe-item>
-
       <mt-swipe-item class="slide2" key="slide2">
         <mt-index-list
           ref="outSlide"
           :show-indicator="false"
-          :key="index2"
+          key="index-list1"
           v-if="device"
           class="mylist"
           v-sindex
@@ -112,6 +64,48 @@
                 type="primary"
                 size="small"
               >{{ items.length > 0?items[0].ts_TypeMo:'点击选择类型' }}</mt-button>
+            </mt-cell>
+          </mt-index-section>
+        </mt-index-list>
+      </mt-swipe-item>
+
+      <mt-swipe-item class="slide1" key="slide1" ref="index1">
+        <mt-index-list :show-indicator="false" v-if="device" :key="index2" class="mylist" v-sindex>
+          <mt-index-section :index="'输入'" key="in_first_0">
+            <mt-loadmore
+              :top-method="loadTop"
+              :bottom-all-loaded="allLoaded"
+              ref="loadmore1"
+              :auto-fill="false"
+            >
+              <div>
+                <!-- <mt-cell class="control-title">输入</mt-cell> -->
+                <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
+                <mt-cell title="网络状态">
+                  <mt-switch v-model="netStatus" disabled></mt-switch>
+                </mt-cell>
+              </div>
+            </mt-loadmore>
+          </mt-index-section>
+          <mt-index-section v-for="(items, index) in device.in" :key="'in_'+index" :index="index">
+            <mt-cell :key="items.dp_paramname" v-if="index > 1">
+              <template slot="title">
+                <span @click="titleChange(items, index)">{{ items.dp_paramdesc }}</span>
+              </template>
+              <span style="color: green" v-if="items.bStatus">正常</span>
+              <span style="color: red" v-else>异常</span>
+            </mt-cell>
+            <mt-cell v-if="index==1">
+              <icon-bg slot="icon" :icon="items.status==1?'auto':'manual'"></icon-bg>
+              <mt-badge :type="items.status==1?'primary':'error'">{{ items.status==1?"自动":"手动" }}</mt-badge>
+            </mt-cell>
+            <mt-cell is-link v-if="index>1">
+              <icon-bg slot="icon" :icon="items.ts_Icon?items.ts_Icon:'control'"></icon-bg>
+              <mt-button
+                @click.native="chooseType(items, index)"
+                type="primary"
+                size="small"
+              >{{ items.ts_TypeMo?items.ts_TypeMo:'点击选择类型' }}</mt-button>
             </mt-cell>
           </mt-index-section>
         </mt-index-list>

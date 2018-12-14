@@ -4,7 +4,7 @@
       <mt-picker
         :slots="slots"
         ref="picker1"
-        :show-toolbar="true"
+        :show-toolbar="showToolbar"
         @change="slotsChange"
         :value-key="showKey"
       >
@@ -37,6 +37,10 @@ export default {
     showKey: {
       type: String,
       default: "label"
+    },
+    showToolbar: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -75,6 +79,14 @@ export default {
     },
     "value.0": function(newval, oldval) {
       console.log("value........value0", newval, oldval);
+      const picker = this.$refs.picker1;
+      const { value: newFirst } = newval || {};
+      const { value: oldFirst } = oldval || {};
+      if (newFirst != oldFirst) {
+        // picker.setSlotValues(0, pro);
+        // this.$emit("inputChange", [newval], picker);
+        this.$emit("inputChange", this.value, picker);
+      }
     }
   },
   methods: {
@@ -86,18 +98,8 @@ export default {
         picker.getValues()
       );
 
-      // const [first] = this.value;
-      // const [second] = values;
-      // if (first && second) {
-      //   let { value: firstValue } = first;
-      //   let { value: SecondValue } = second;
-      //   console.log(firstValue, SecondValue, "compareing ....");
-      //   if (firstValue != SecondValue) {
-      //     this.$emit("inputChange", values, picker);
-      //   }
-      // }
-      this.$emit("inputChange", values, picker);
       this.$emit("input", values);
+      this.$emit("slot-change", values, picker);
     },
     cancelButton() {
       this.popupVisible = false;

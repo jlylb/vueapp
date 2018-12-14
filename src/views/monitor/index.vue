@@ -10,7 +10,10 @@
       @click.native="openDetail(item, index)"
     >
       <span style="color: green">{{ countDevice(item.value, device) }}个设备</span>
-      <span slot="title">{{ `${index + 1}号大棚` }}</span>
+      <span slot="title">
+        <b class="dark-gray">[{{ item.label }}]</b>
+        {{ item.area_text?item.area_text:item.label }}
+      </span>
       <icon-bg icon="dapeng" slot="icon"></icon-bg>
     </mt-cell>
 
@@ -19,6 +22,7 @@
       :open.sync="areaOpen"
       :slots="areaSlots"
       @inputChange="changeCompany"
+      :show-toolbar="true"
       @confirm="confirmOk"
     ></my-popup>
   </div>
@@ -30,6 +34,7 @@ import MyPopup from "@/components/popup2";
 import { getDataValue } from "@/tools";
 import { mapGetters } from "vuex";
 import IconBg from "@/components/iconBg";
+import { Indicator } from "mint-ui";
 
 export default {
   components: { MyPopup, IconBg },
@@ -86,12 +91,13 @@ export default {
       ]);
     },
     changeCompany(values, picker) {
-      console.log(values, picker, "log.......");
-      if (values[0] && values[1]) {
-        picker.setSlotValues(
-          1,
-          getDataValue(this.company_pro, [values[0].value], [])
-        );
+      console.log(values, picker, "log.......", this.area);
+      if (values[0]) {
+        let pro = getDataValue(this.company_pro, [+values[0].value], []);
+        picker.setSlotValues(1, pro);
+        // this.area = [values[0], pro[0] ? pro[0] : undefined];
+        // picker.setSlotValue(0, values[0]);
+        picker.setSlotValue(1, pro[0] ? pro[0] : undefined);
       }
     },
     confirmOk() {
@@ -105,10 +111,12 @@ export default {
   },
   watch: {
     firstProvince(newVal) {
-      this.selectCity = getDataValue(this.city, [newVal.value], []);
+      let current = newVal ? newVal.value : undefined;
+      this.selectCity = getDataValue(this.city, [current], []);
     }
   },
   created() {
+    Indicator.open("正在加载中...");
     fetchList().then(res => {
       this.items = res.data.items;
       this.province = res.data.province;
@@ -151,7 +159,11 @@ export default {
         }
       ];
       this.area = [firstKey, this.firstProvince];
+      Indicator.close();
     });
+  },
+  beforeDestroy() {
+    Indicator.close();
   }
 };
 </script>

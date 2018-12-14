@@ -8,7 +8,6 @@
         :data="chartData"
         :data-zoom="dataZoom"
         :settings="chartSettings"
-        :loading="loading"
         :data-empty="dataEmpty"
         :extend="extend"
         :after-set-option-once="afterRoom"
@@ -70,6 +69,7 @@
       :open.sync="provinceAreaOpen"
       :slots="provinceAreaSlots"
       @inputChange="changeCompany"
+      @slot-change="confirmOk"
       @confirm="confirmOk"
     ></my-popup2>
 
@@ -195,6 +195,7 @@ export default {
   watch: {
     firstProvince(newval) {
       this.citys = newval ? this.city[newval.value] : [];
+      this.area = this.citys ? this.citys[0] : null;
       this.citySlots = [
         {
           flex: 1,
@@ -403,7 +404,7 @@ export default {
           this.curIndex = 1;
           this.loading = false;
           this.loadingSpinner = false;
-          this.filterLeft = false;
+          // this.filterLeft = false;
           // Indicator.close();
           // this.formatChartData()
         })
@@ -426,10 +427,7 @@ export default {
     filterChart() {
       this.filterLeft = true;
     },
-    openChart() {
-      this.filterLeft = false;
-      this.filterOpen = true;
-    },
+
     onProvinceChange(picker, values) {
       if (values[0] > values[1]) {
         picker.setSlotValue(1, values[0]);
@@ -484,7 +482,7 @@ export default {
         let pro = getDataValue(this.company_pro, [+values[0].value], []);
         picker.setSlotValues(1, pro);
         // this.provinceArea = [values[0], pro[0] ? pro[0] : undefined];
-        // picker.setSlotValue(1, pro[0] ? pro[0] : []);
+        picker.setSlotValue(1, pro[0] ? pro[0] : []);
       }
     },
     confirmOk() {
@@ -493,11 +491,12 @@ export default {
       this.firstProvince = currentProvince;
       this.firstCompany = currentCompay;
       // this.setProvince()
-      this.provinceAreaOpen = false;
+      // this.provinceAreaOpen = false;
     }
   },
   mounted() {},
   created() {
+    Indicator.open("正在加载中...");
     fetchList()
       .then(res => {
         let province = res.data.province;
@@ -521,8 +520,9 @@ export default {
             null
           );
         }
+
         const firstCity = getDataValue(this.city, [
-          this.firstProvince.value,
+          this.firstProvince ? this.firstProvince.value : undefined,
           0,
           "value"
         ]);
@@ -556,9 +556,13 @@ export default {
       })
       .then(res => {
         this.selectDevice(res);
+        Indicator.close();
         // this.curIndex = 1
       });
     this.chartSettings = {};
+  },
+  beforeDestroy() {
+    Indicator.close();
   }
 };
 </script>

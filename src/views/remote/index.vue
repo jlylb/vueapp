@@ -10,7 +10,10 @@
       @click.native="openDetail(item, index)"
     >
       <span style="color: green">{{ countDevice(item.value, device) }}个设备</span>
-      <span slot="title">{{ `${index + 1}号大棚` }}</span>
+      <span slot="title">
+        <b class="dark-gray">[{{ item.label }}]</b>
+        {{ item.area_text?item.area_text:item.label }}
+      </span>
       <icon-bg icon="dapeng" slot="icon"></icon-bg>
     </mt-cell>
 
@@ -18,6 +21,7 @@
       v-model="area"
       :open.sync="areaOpen"
       :slots="areaSlots"
+      :show-toolbar="true"
       @inputChange="changeCompany"
       @confirm="confirmOk"
     ></my-popup>
@@ -30,6 +34,7 @@ import { getDataValue } from "@/tools";
 import { mapGetters } from "vuex";
 import MyPopup from "@/components/popup2";
 import IconBg from "@/components/iconBg";
+import { Indicator } from "mint-ui";
 
 export default {
   components: { MyPopup, IconBg },
@@ -87,10 +92,10 @@ export default {
     changeCompany(values, picker) {
       console.log(values, picker, "log.......");
       if (values[0]) {
-        picker.setSlotValues(
-          1,
-          getDataValue(this.company_pro, [values[0].value], [])
-        );
+        let pro = getDataValue(this.company_pro, [+values[0].value], []);
+        picker.setSlotValues(1, pro);
+        // this.area = [values[0], pro[0] ? pro[0] : undefined];
+        picker.setSlotValue(1, pro[0] ? pro[0] : []);
       }
     },
     confirmOk() {
@@ -110,6 +115,7 @@ export default {
     }
   },
   created() {
+    Indicator.open("正在加载中...");
     fetchList().then(res => {
       this.items = res.data.items;
       this.province = res.data.province;
@@ -152,9 +158,12 @@ export default {
         }
       ];
       this.area = [firstKey, this.firstProvince];
-
+      Indicator.close();
       // this.setProvince()
     });
+  },
+  beforeDestroy() {
+    Indicator.close();
   }
 };
 </script>

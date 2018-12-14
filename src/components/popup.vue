@@ -71,9 +71,10 @@ export default {
       });
     },
     value(newval) {
-      console.log("value........", newval);
-
-      // this.$refs.picker1.setSlotValue(0, newval);
+      console.log("value........ popup", newval);
+      if (newval) {
+        this.$refs.picker1.setSlotValue(0, newval);
+      }
     }
   },
   methods: {
