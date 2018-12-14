@@ -397,7 +397,7 @@ export default {
       // });
       this.loading = true;
       this.loadingSpinner = true;
-      fetchHistoryDevice(this.getParams(params))
+      return fetchHistoryDevice(this.getParams(params))
         .then(res => {
           this.items = res.data.devices;
           this.formatRows();
@@ -416,7 +416,9 @@ export default {
     },
     fetchHistoryData() {
       this.curIndex = 0;
-      this.selectDevice(this.device);
+      this.selectDevice(this.device).then(() => {
+        this.filterLeft = false;
+      });
     },
     changeTimeStart() {
       this.$refs.pickerTimeStart.open();
