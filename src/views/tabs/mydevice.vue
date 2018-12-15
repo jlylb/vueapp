@@ -245,8 +245,12 @@ export default {
     console.log(this.fields, "created ....");
   },
   created() {
-    const params = this.$route.params;
-    if (params.success) {
+    const { code, success } = this.$route.params;
+    if (success) {
+      // const [ pdi, name ] = code.split('&')
+      const pdi = code,
+        name = `设备${code}`;
+      this.deviceModel = Object.assign(this.deviceModel, { pdi, name });
       this.popupVisible = true;
     } else {
       this.popupVisible = false;

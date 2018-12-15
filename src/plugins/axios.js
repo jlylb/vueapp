@@ -2,18 +2,53 @@ import Vue from 'vue';
 import axios from 'axios';
 import { getToken } from '@/tools/auth';
 import store from '@/store';
-import { MessageBox } from 'mint-ui';
+import { MessageBox, Indicator } from 'mint-ui';
 import router from '../router';
+import apiUrl from '@/tools/config';
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common.Authorization = `Bearer ${getToken()}`;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
+function startLoading() {
+  Indicator.open({
+    text: '加载中……',
+  });
+}
+
+function endLoading() {
+  Indicator.close();
+}
+
+let needLoadingRequestCount = 0;
+
+export function showFullScreenLoading() {
+  if (needLoadingRequestCount === 0) {
+    startLoading();
+  }
+  needLoadingRequestCount++;
+}
+
+// const tryCloseLoading = () => {
+//   if (needLoadingRequestCount === 0) {
+//     loading.close()
+//   }
+// }
+
+export function tryHideFullScreenLoading() {
+  if (needLoadingRequestCount <= 0) return;
+  needLoadingRequestCount--;
+  if (needLoadingRequestCount === 0) {
+    endLoading();
+  }
+}
+
 const config = {
-  baseURL: process.env.NODE_ENV === 'production' ? 'http://192.168.1.7/api' : '/api',
-  timeout: 60 * 1000, // Timeout
+  baseURL: process.env.NODE_ENV === 'production' ? apiUrl : '/api',
+  timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
+  showLoading: true,
 };
 
 const _axios = axios.create(config);
@@ -25,10 +60,14 @@ _axios.interceptors.request.use(
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       sconfig.headers.Authorization = `Bearer ${getToken()}`;
     }
+    if (sconfig.showLoading) {
+      showFullScreenLoading();
+    }
     return sconfig;
   },
   (error) => {
     console.log(error);
+    tryHideFullScreenLoading();
     Promise.reject(error);
   },
 );
@@ -44,10 +83,14 @@ _axios.interceptors.response.use(
         MessageBox.alert(data.msg, '提示');
       }
     }
+    if (response.config.showLoading) {
+      tryHideFullScreenLoading();
+    }
     return response;
   },
   (error) => {
     console.log(error, error.response, 'response');
+    tryHideFullScreenLoading();
     const res = error.response;
     let errorMsg;
     if (res.status === 401) {

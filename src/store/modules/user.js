@@ -150,6 +150,7 @@ const user = {
             commit('SET_TOKEN', '');
             commit('SET_ROLES', []);
             dispatch('app/forgetGuide', null, { root: true });
+            commit('SET_IS_GET', false);
             removeToken();
             resolve();
           })

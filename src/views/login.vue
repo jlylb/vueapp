@@ -1,41 +1,42 @@
 <template>
-
-    <div class='login-container' id='login-container'> 
-        <div class='login-cover' id='login-cover'>
-            <div class='home-content'>
-                <div class='logo'>
-                    <svg-icon icon-class="user" class='logo-icon'></svg-icon>
-                </div>
-            
-             <my-input 
-             placeholder="请输入用户名"
-             data-vv-name='username'
-             class='my-input'
-             v-validate="{ required: true}"  
-             v-model="validateForm.username">
-              <svg-icon icon-class="user" class='login-input-icon' slot='prepend'></svg-icon>
-             </my-input>
-             <div class='error' v-if='errors.has("username")'>{{ errors.first("username") }}</div>
-             <my-input 
-             placeholder="请输入密码"
-             data-vv-name='password'
-             class='my-input'
-             v-validate="{ required: true, min: 6 }" 
-             type="password"
-             autocomplete="off" 
-             v-model="validateForm.password">
-              <svg-icon icon-class="password"  class='login-input-icon' slot='prepend'></svg-icon>
-             </my-input>
-              <div class='error' v-if='errors.has("password")'>{{ errors.first("password") }}</div>
-              <mt-button size="large" type="primary" @click='handleLogin'>登  录</mt-button>
-
-                <a class='forget-password' >
-                    <span @click.stop='forgetPwd'>忘记密码?</span>
-                </a>
-            </div>
+  <div class="login-container" id="login-container">
+    <!-- <top-component></top-component> -->
+    <div class="login-cover" id="login-cover">
+      <div class="home-content">
+        <div class="logo">
+          <svg-icon icon-class="sys-power" class="logo-icon"></svg-icon>
         </div>
-    </div>
 
+        <my-input
+          placeholder="请输入用户名"
+          data-vv-name="username"
+          class="my-input"
+          v-validate="{ required: true}"
+          v-model="validateForm.username"
+        >
+          <svg-icon icon-class="user" class="login-input-icon" slot="prepend"></svg-icon>
+        </my-input>
+        <div class="error" v-if="errors.has('username')">{{ errors.first("username") }}</div>
+        <my-input
+          placeholder="请输入密码"
+          data-vv-name="password"
+          class="my-input"
+          v-validate="{ required: true, min: 6 }"
+          type="password"
+          autocomplete="off"
+          v-model="validateForm.password"
+        >
+          <svg-icon icon-class="password" class="login-input-icon" slot="prepend"></svg-icon>
+        </my-input>
+        <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
+        <mt-button size="large" type="primary" @click="handleLogin">登 录</mt-button>
+
+        <a class="forget-password">
+          <span @click.stop="forgetPwd">忘记密码?</span>
+        </a>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -54,26 +55,29 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.$validator.validate().then((valid) => {
-        console.log(valid,this.errors.all(), this.errors.collect(), this.fields)
-        if(valid) {
-          console.log(this.validateForm)
-          this.$store.dispatch('user/LoginByUsername', this.validateForm)
-          .then((res) => {
-              console.log(res, 333333333)
+      this.$validator.validate().then(valid => {
+        console.log(
+          valid,
+          this.errors.all(),
+          this.errors.collect(),
+          this.fields
+        );
+        if (valid) {
+          console.log(this.validateForm);
+          this.$store
+            .dispatch("user/LoginByUsername", this.validateForm)
+            .then(res => {
+              console.log(res, 333333333);
               this.$router.push({ path: "/tab_home" });
-          })
-          
+            });
         }
-      })
+      });
     },
     forgetPwd() {
-      this.$router.push({ name: 'auth_forget' })
+      this.$router.push({ name: "auth_forget" });
     }
   },
-  computed: {
-
-  },
+  computed: {},
   mounted() {
     // const body = document.getElementsByTagName('body')[0];
     // body.style.height=body.clientHeight+"px";
@@ -90,7 +94,7 @@ export default {
 $icon-color: #29c2ff;
 
 .login-container {
-  background-image: url('../assets/bg.png');
+  background-image: url("../assets/bg.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   height: 100%;
@@ -119,21 +123,21 @@ $icon-color: #29c2ff;
   width: 100%;
 }
 .logo {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   text-align: center;
   margin: 0 auto;
   background-color: rgba($icon-color, 0.5);
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 3px solid #fff;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .logo /deep/ .logo-icon {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   color: #fff;
 }
 .input {
