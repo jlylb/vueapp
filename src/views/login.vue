@@ -55,7 +55,7 @@ export default {
       // username: "username1",
       // password: "123456",
       validateForm: {
-        username: "Cynthia Lindgren",
+        username: "a81",
         password: "123456"
       },
       showLogo: true,
