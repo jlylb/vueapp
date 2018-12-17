@@ -249,6 +249,11 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@babel/parser@^7.2.2":
+  version "7.2.2"
+  resolved "http://registry.npm.taobao.org/@babel/parser/download/@babel/parser-7.2.2.tgz#37ebdbc88a2e1ebc6c8dd3d35ea9436e3e39e477"
+  integrity sha1-N+vbyIouHrxsjdPTXqlDbj455Hc=
+
 "@babel/plugin-proposal-async-generator-functions@7.0.0-beta.47":
   version "7.0.0-beta.47"
   resolved "http://registry.npm.taobao.org/@babel/plugin-proposal-async-generator-functions/download/@babel/plugin-proposal-async-generator-functions-7.0.0-beta.47.tgz#571142284708c5ad4ec904d9aa705461a010be53"

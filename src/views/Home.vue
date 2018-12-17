@@ -1,32 +1,26 @@
 <template>
+  <div class="app-container">
+    <div class="home-content">
+      <router-view></router-view>
+    </div>
 
-<div class='app-container'>
-
-  <div class='home-content'>
-    <router-view></router-view>
+    <mt-tabbar v-model="selected" class="home-tab" v-show="isShow">
+      <mt-tab-item id="tab_home" @click.native="tabClick('tab_home')">
+        <svg-icon icon-class="home1" slot="icon"></svg-icon>首页
+      </mt-tab-item>
+      <mt-tab-item id="tab_discover" @click.native="tabClick('tab_discover')">
+        <svg-icon icon-class="chart" slot="icon"></svg-icon>设备
+      </mt-tab-item>
+      <mt-tab-item id="tab_my" @click.native="tabClick('tab_my')">
+        <svg-icon icon-class="user" slot="icon"></svg-icon>我的
+      </mt-tab-item>
+    </mt-tabbar>
   </div>
-
-  <mt-tabbar v-model="selected" class='home-tab' v-show='isShow'>
-    <mt-tab-item id="tab_home" @click.native="tabClick('tab_home')" >
-      <svg-icon icon-class="home1" slot='icon'></svg-icon>
-      首页
-    </mt-tab-item>
-    <mt-tab-item id="tab_discover" @click.native="tabClick('tab_discover')" >
-      <svg-icon icon-class="chart" slot='icon'></svg-icon>
-      设备
-    </mt-tab-item>
-    <mt-tab-item id="tab_my" @click.native="tabClick('tab_my')">
-      <svg-icon icon-class="user" slot='icon'></svg-icon>
-      我的
-    </mt-tab-item>
-  </mt-tabbar>
-
-</div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { getGuide } from '@/tools/guide'
+import { mapGetters } from "vuex";
+import { getGuide } from "@/tools/guide";
 
 export default {
   name: "home",
@@ -34,56 +28,54 @@ export default {
   data() {
     return {
       selected: "",
-      hiddenTabs: ['add_device'],
+      hiddenTabs: ["add_device"],
       isShow: true
     };
   },
   computed: {
-    ...mapGetters('app',[
-      'barTitle'
-    ])
+    ...mapGetters("app", ["barTitle"])
   },
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.selected = to.name
-      vm.isShow = !(vm.hiddenTabs.indexOf(to.name) > -1)
-    })
+      vm.selected = to.name;
+      vm.isShow = !(vm.hiddenTabs.indexOf(to.name) > -1);
+    });
   },
   watch: {
-    '$route'(to) {
-      console.log(to.name)
-      this.selected = to.name
-      this.isShow = !(this.hiddenTabs.indexOf(to.name) > -1)
-      console.log(this.isShow)
-    },
+    $route(to) {
+      console.log(to.name);
+      this.selected = to.name;
+      this.isShow = !(this.hiddenTabs.indexOf(to.name) > -1);
+      console.log(this.isShow);
+    }
   },
   methods: {
     tabClick(name) {
-      console.log({name})
-      this.$router.push({name})
+      console.log({ name });
+      this.$router.push({ name });
     },
     goBack() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
     tabClass(tabName) {
-    let cur = this.$route.name
+      let cur = this.$route.name;
       return {
-        'is-selected': tabName===cur,
-        'clear-selected': tabName!==cur
-      }
+        "is-selected": tabName === cur,
+        "clear-selected": tabName !== cur
+      };
     },
     addEventTest() {
-    const vm = this;
-    if (window.plus) {
-      console.log(plus)
-    // function plusReady() {
-        plus.key.addEventListener('backbutton', () => {
-          console.log('listening back button');
+      const vm = this;
+      if (window.plus) {
+        console.log(plus);
+        // function plusReady() {
+        plus.key.addEventListener("backbutton", () => {
+          console.log("listening back button");
           // const path = location.path;
           // const hash = location.hash;
-          const path =vm.$route.path;
-          console.log(path,'url params')
-          if (path === '/tab_home' || path === '/login') {
+          const path = vm.$route.path;
+          console.log(path, "url params");
+          if (path === "/tab_home" || path === "/login") {
             // 入口页了，执行退出。
             plus.runtime.quit();
           } else {
@@ -92,29 +84,33 @@ export default {
             history.back();
           }
         });
-      //}
-      // document.addEventListener('plusready', plusReady, false);
-    }},
+        //}
+        // document.addEventListener('plusready', plusReady, false);
+      }
+    },
     addGuide() {
-      if(!window.plus) return;
-      if(!getGuide()){
+      if (!window.plus) return;
+      if (!getGuide()) {
         const cself = plus.webview.getLaunchWebview();
-        const csecond = plus.webview.create('guide.html','guide');
+        const csecond = plus.webview.create("guide.html", "guide");
         csecond.show();
         cself.append(csecond);
       }
-
     },
-    closeGuide() {
-
-    },
+    closeGuide() {}
   },
   mounted() {
     this.addEventTest();
+    if (!window.plus) {
+      return;
+    }
+    if (plus.navigator.hasSplashscreen()) {
+      plus.navigator.closeSplashscreen();
+    }
     // this.addGuide();
   },
   created() {
-    console.log(this.$store)
+    console.log(this.$store);
 
     // const name = 'tab_home'
     // this.$router.push({name})

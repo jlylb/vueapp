@@ -265,6 +265,13 @@ export default {
   computed: {
     avgin() {
       const { rd_InVol1, rd_InVol2, rd_InVol3 } = this.detail;
+      console.log(
+        rd_InVol1,
+        rd_InVol2,
+        rd_InVol3,
+        this.round((rd_InVol1 + rd_InVol2 + rd_InVol3) / 3),
+        "avg....."
+      );
       return this.round((rd_InVol1 + rd_InVol2 + rd_InVol3) / 3);
     },
     avgout() {
@@ -281,7 +288,7 @@ export default {
       return Number(((val * 100) / 240).toFixed(1));
     },
     round(val, surfix = 1) {
-      return val && val.toFixed(surfix);
+      return (val && val.toFixed(surfix)) || 0;
     },
     selectButton(tab) {
       this.active = tab;
