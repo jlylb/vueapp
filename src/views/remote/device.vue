@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-container">
+  <div class="layout-container" ref="topLayout">
     <top-component @top-btn="selectType"></top-component>
 
     <mt-swipe :auto="0" @change="handlerChange" :show-indicators="false">
@@ -7,9 +7,10 @@
         <mt-index-list
           ref="outSlide"
           :show-indicator="false"
-          key="index-list1"
+          :key="indexOutKey"
           v-if="device"
           class="mylist"
+          :height="indexHeight"
           v-sindex
         >
           <mt-index-section :index="'输出'" key="out_first">
@@ -35,9 +36,9 @@
           </mt-index-section>
 
           <mt-index-section
-            v-for="(items, outIndex) in device.out"
+            v-for="(items, outIndex, deviceIndex) in device.out"
             :key="'out_'+outIndex"
-            :index="String(outIndex+1)"
+            :index="String(deviceIndex+1)"
           >
             <mt-cell :key="'out_'+outIndex+'_'+itemIndex" v-for="(item, itemIndex) in items">
               <icon-bg
@@ -70,7 +71,14 @@
       </mt-swipe-item>
 
       <mt-swipe-item class="slide1" key="slide1" ref="index1">
-        <mt-index-list :show-indicator="false" v-if="device" :key="index2" class="mylist" v-sindex>
+        <mt-index-list
+          :show-indicator="false"
+          v-if="device"
+          :key="index2"
+          class="mylist"
+          :height="indexHeight"
+          v-sindex
+        >
           <mt-index-section :index="'输入'" key="in_first_0">
             <mt-loadmore
               :top-method="loadTop"
@@ -170,7 +178,9 @@ export default {
       currentIndex: null,
       index2: "index-list2",
       swipeIndex: 0,
-      titleOpen: false
+      titleOpen: false,
+      topHeight: 0,
+      indexOutKey: "index-list1"
     };
   },
   directives: {
@@ -178,9 +188,25 @@ export default {
       // 指令的定义
       bind: function(el, binding, vnode) {},
       inserted: function(el, binding, vnode) {
-        console.log(el, binding, "directive....", vnode, this);
-        const { $el: pEl } = vnode.context;
-        el.style.height = `${pEl.offsetHeight}px`;
+        console.log(el, binding, "inserted....", vnode, this);
+        const { key: currentKey } = vnode;
+        if (currentKey === "index-list2") {
+          const { content } = vnode.child.$refs;
+          content.style.marginRight = `36px`;
+        }
+      },
+      update(el, binding, vnode) {},
+      componentUpdated(el, binding, vnode) {}
+    }
+  },
+  computed: {
+    indexHeight: {
+      get() {
+        this.topHeight = this.$refs.topLayout.offsetHeight;
+        return this.topHeight;
+      },
+      set(val) {
+        this.topHeight = val;
       }
     }
   },
@@ -469,7 +495,21 @@ export default {
       this.getData({ pdi_index, dpt_id });
     }
   },
+  beforeUpdate() {},
+  mounted() {
+    console.log(
+      this.$refs.topLayout,
+      "mounted.......",
+      this.$refs.topLayout.offsetHeight
+    );
 
+    window.addEventListener("resize", () => {
+      setTimeout(() => {
+        this.indexHeight = this.$refs.topLayout.offsetHeight;
+      }, 100);
+      // this.indexOutKey = `${this.indexOutKey}${+new Date()}`;
+    });
+  },
   created() {
     console.log(this.$route.params);
     const { areaId, dapeng } = this.$route.params;
