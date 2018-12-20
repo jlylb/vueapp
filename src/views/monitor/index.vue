@@ -80,8 +80,12 @@ export default {
     },
     openDetail(item, index) {
       this.$router.push({
-        name: "monitor_device2",
-        params: { dapeng: index + 1, areaId: item.value }
+        name: "monitor_device3",
+        params: {
+          dapeng: index + 1,
+          areaId: item.value,
+          dapengName: item.area_text ? item.area_text : item.label
+        }
       });
     },
     setProvince() {

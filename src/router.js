@@ -95,10 +95,10 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device2.vue'),
         },
         {
-          path: '/monitor/device3/:dapeng/:areaId/',
+          path: '/monitor/device3/:dapeng/:areaId/:dapengName',
           name: 'monitor_device3',
           meta: {
-            title: '实时监测-选择设备3',
+            title: '实时监测',
           },
           component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device3.vue'),
         },
