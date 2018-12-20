@@ -10,7 +10,7 @@
     >
       <mt-cell
         :title="item.pdi_name"
-        :label="item.pdi_warnname"
+        :label="'[' + item.pdi_areaname + ']'+ item.pdi_warnname"
         @click.native.prevent="openRoute(item)"
         is-link
         v-for="(item, index) in device"
