@@ -22,7 +22,7 @@
         </div>
         <div class="chart-desc-item chart-desc-item-right">
           <p>
-            {{ dapeng }}号大棚
+            {{ dapengName }}
             <span
               class="item-title item-title-select"
               @click="deviceFileter"
@@ -37,24 +37,35 @@
         </div>
       </div>
       <div class="chart-desc-block">
-        <mt-swipe :auto="0" :style="{'height': '300px'}">
+        <mt-swipe :auto="0" class="swipe-param">
           <mt-swipe-item
             v-for="(itemValue, index) in item"
             :key="'swipe_'+index"
             v-if="index!=='consta'"
           >
-            <p>
-              <span>{{ itemValue[index+'_name'] }}</span>
-              <span>{{ itemValue[index+'_value'] }} {{ unit[index] }}</span>
-            </p>
-            <p>
-              <span>上限告警</span>
-              <span>{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span>
-            </p>
-            <p>
-              <span>下限告警</span>
-              <span>{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span>
-            </p>
+            <div :class="['chart-desc-block-item', itemClass[itemFields.indexOf(index)]]">
+              <div class="row">
+                <div class="row-left">
+                  <icon-bg :icon="icons[index]" slot="icon" small></icon-bg>
+                  <span>{{ itemValue[index+'_name'] }}</span>
+                </div>
+                <span class="row-right">{{ itemValue[index+'_value'] }} {{ unit[index] }}</span>
+              </div>
+              <div class="row">
+                <div class="row-left">
+                  <icon-bg icon="alarm" slot="icon" small></icon-bg>
+                  <span>上限告警</span>
+                </div>
+                <span class="row-right">{{ itemValue['hwarn_value']===0?'正常':'过高' }}</span>
+              </div>
+              <div class="row">
+                <div class="row-left">
+                  <icon-bg icon="alarm" slot="icon" small></icon-bg>
+                  <span>下限告警</span>
+                </div>
+                <span class="row-right">{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span>
+              </div>
+            </div>
           </mt-swipe-item>
         </mt-swipe>
       </div>
@@ -109,6 +120,7 @@ export default {
       itemIndex: null,
       itemClass: ["red", "yellow", "primary"],
       dapeng: null,
+      dapengName: null,
       itemSelect: "itemSelect",
       dataEmpty: false,
       chart: null,
@@ -134,7 +146,7 @@ export default {
     },
     selectType() {
       this.openMenu = true;
-      this.itemIndex = null;
+      // this.itemIndex = null;
     },
     formatChartData() {
       this.isColumn = false;
@@ -147,8 +159,6 @@ export default {
         rows = [],
         columns = [];
       let chartRow = {},
-        min = [0],
-        max = [100],
         labelMap = {};
       chartRow["name"] = this.deviceName
         ? this.deviceName + this.itemIndex
@@ -167,10 +177,13 @@ export default {
       });
       console.log(yAxisName, "yAxisName...");
       let len = yAxisName.length;
+
+      let min = ["dataMin"],
+        max = ["dataMax"];
       if (len > 1) {
         axisSite = { right: [columns[len - 1]] };
         yAxisType.push("value");
-        min.push(0), max.push(100);
+        min.push("dataMin"), max.push("dataMax");
       }
       rows.push(chartRow);
       this.chartSettings = {
@@ -230,7 +243,7 @@ export default {
         this.itemFields = getDataValue(this.device, ["fields"], []);
         this.deviceName = getDataValue(this.device, ["name"], "");
         this.unit = getDataValue(this.device, ["unit"], null);
-        this.icons = getDataValue(this.device, ["typeicons"], null);
+        this.icons = getDataValue(this.device, ["icons"], null);
         this.itemIndex = 1;
       });
     }
@@ -241,6 +254,7 @@ export default {
       this.getData({ ...newVal, device });
     },
     itemIndex(newVal) {
+      console.log(newVal, "itemIndex change......");
       // this.getData(newVal)
       this.formatChartData();
     },
@@ -253,13 +267,35 @@ export default {
   },
   created() {
     console.log(this.$route.params);
-    const { areaId, dapeng } = this.$route.params;
+    const { areaId, dapeng, dapengName } = this.$route.params;
     this.dapeng = dapeng;
+    this.dapengName = dapengName;
     this.extend = {
       grid: {
-        left: "5%",
-        right: "5%",
+        left: "8%",
+        right: "8%",
         bottom: "1%"
+      },
+      yAxis(v) {
+        console.log(v, "yaxis......");
+        v.forEach(i => {
+          i.min = value => {
+            return value.min == 0 ? 0 : value.min - 10;
+          };
+          i.max = value => {
+            return value.max + 10;
+          };
+        });
+        return v;
+      },
+      series(v) {
+        console.log(v, "series......");
+        if (v) {
+          v.forEach(i => {
+            i.barWidth = "15%";
+          });
+          return v;
+        }
       }
     };
     fetchAreaDevice({ areaId }).then(res => {
@@ -314,8 +350,7 @@ export default {
     margin-left: 3px;
   }
 }
-.item-title-select {
-}
+
 .chart {
   width: 100%;
   height: 100%;
@@ -379,25 +414,25 @@ export default {
   height: 75%;
 }
 .chart-desc-block-item {
-  width: 50%;
+  width: 100%;
   display: flex;
   height: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   flex: 1;
-  p {
+  .row {
     display: flex;
     justify-content: space-around;
-    width: 80%;
-    &.column {
-      flex-direction: column;
-      width: auto;
-      span {
-        &:first-child {
-          margin-bottom: 3px;
-        }
-      }
+    width: 90%;
+    .row-left {
+      display: flex;
+      width: 60%;
+      text-align: left;
+    }
+    .row-right {
+      width: 40%;
+      text-align: center;
     }
     span {
       &:first-child {
@@ -410,14 +445,37 @@ export default {
     }
   }
 }
+
+@mixin color-item($color) {
+  /deep/ .icon-background {
+    background-color: $color;
+    border-color: $color;
+  }
+  .row span {
+    border: none;
+  }
+  color: darken($color, 10%);
+}
+
+// $color-red: #b76cf5;
+// $color-yellow: #e6a23c;
+// $color-primary: #409eff;
+
+$color-red: $theme-color;
+$color-yellow: $theme-color;
+$color-primary: $theme-color;
+
 .red {
-  background-color: #f56c6c;
+  // background-color: rgba(lighten($color-red, 1%), 0.5);
+  @include color-item($color-red);
 }
 .yellow {
-  background-color: #e6a23c;
+  // background-color: rgba(lighten($color-yellow, 1%), 0.5);
+  @include color-item($color-yellow);
 }
 .primary {
-  background-color: #409eff;
+  // background-color: rgba(lighten($color-primary, 1%), 0.5);
+  @include color-item($color-primary);
 }
 .layout-container /deep/ .popup-device {
   height: 40%;
@@ -426,5 +484,16 @@ export default {
 .layout-container {
   height: 100%;
   overflow: hidden;
+}
+.swipe-param {
+  width: 100%;
+  color: $theme-color;
+  /deep/ .mint-swipe-indicator {
+    background-color: lighten($theme-color, 5%);
+    &.is-active {
+      background-color: darken($theme-color, 10%);
+      opacity: 1;
+    }
+  }
 }
 </style>

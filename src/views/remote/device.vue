@@ -425,11 +425,11 @@ export default {
     confirmOk() {
       this.open = false;
       // 输入
-      if (this.swipeIndex == 0) {
+      if (this.swipeIndex == 1) {
         this.inputSelect();
       }
       // 输出
-      if (this.swipeIndex == 1) {
+      if (this.swipeIndex == 0) {
         this.outSelect();
       }
     },

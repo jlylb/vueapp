@@ -350,8 +350,8 @@ export default {
       let yAxisName = [];
       fields.forEach(field => {
         yAxisType.push("value");
-        min.push(0);
-        max.push(100);
+        min.push("dataMin");
+        max.push("dataMax");
         yAxisName.push(surfix[field] + " " + unit[field]);
       });
 
@@ -376,6 +376,18 @@ export default {
       this.extend = {
         "xAxis.0.axisLabel.formatter": value => {
           return value.split(/\s/).join("\n");
+        },
+        yAxis(v) {
+          console.log(v, "yaxis......");
+          v.forEach(i => {
+            i.min = value => {
+              return value.min - 10;
+            };
+            i.max = value => {
+              return value.max + 10;
+            };
+          });
+          return v;
         }
       };
       console.log("format chart data......");

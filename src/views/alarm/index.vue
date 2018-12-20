@@ -1,51 +1,45 @@
 <template>
-  <div class='layout-container'>
+  <div class="layout-container">
     <top-component></top-component>
 
-    <div class='realwarn' 
+    <div
+      class="realwarn"
       v-infinite-scroll="getData"
       infinite-scroll-disabled="moreLoading"
-      infinite-scroll-distance="60">
-      <mt-cell 
-      :title="item.pdi_name"
-      :label="item.pdi_warnname"
-      @click.native.prevent='openRoute(item)' 
-      is-link 
-      v-for='(item, index) in device' 
-      :key='index'>
-        <mt-badge :type="wlevel[item.pdi_warnlevel]['class']" v-if="wlevel[item.pdi_warnlevel]">{{ wlevel[item.pdi_warnlevel]['name'] }}</mt-badge>
-        <svg-icon :icon-class='icons[item.pdi_type]' class='item-icon' slot='icon' v-if='icons[item.pdi_type]'></svg-icon>
+      infinite-scroll-distance="60"
+    >
+      <mt-cell
+        :title="item.pdi_name"
+        :label="item.pdi_warnname"
+        @click.native.prevent="openRoute(item)"
+        is-link
+        v-for="(item, index) in device"
+        :key="index"
+      >
+        <mt-badge
+          :type="wlevel[item.pdi_warnlevel]['class']"
+          v-if="wlevel[item.pdi_warnlevel]"
+        >{{ wlevel[item.pdi_warnlevel]['name'] }}</mt-badge>
       </mt-cell>
     </div>
     <p v-show="loading" class="page-infinite-loading">
-      <mt-spinner type="fading-circle"></mt-spinner>
-      加载中...
+      <mt-spinner type="fading-circle"></mt-spinner>加载中...
     </p>
-  <!-- <vue-qr :text="text"  qid="testid"></vue-qr> -->
-  <mt-popup
-    v-model="popupVisible"
-    class='popup-device'
-    position="bottom">
-    <mt-cell title="告警信息" :label="selectItem.pdi_updatetime">
-    </mt-cell>
-    <mt-cell title="">
-      <span>
-        {{ selectItem.pdi_warnname }}
-      </span>
-    </mt-cell>
-    <mt-cell title="">
-    </mt-cell>
-  </mt-popup>
 
+    <mt-popup v-model="popupVisible" class="popup-device" position="bottom">
+      <mt-cell title="告警信息" :label="selectItem.pdi_updatetime"></mt-cell>
+      <mt-cell title>
+        <span>{{ selectItem.pdi_warnname }}</span>
+      </mt-cell>
+      <mt-cell title></mt-cell>
+    </mt-popup>
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/alarm'
-// import VueQr from 'vue-qr'
-
+import { fetchList } from "@/api/alarm";
 export default {
-  // components: { VueQr },
+  components: {},
   data() {
     return {
       device: [],
@@ -55,31 +49,54 @@ export default {
       moreLoading: false,
       selectItem: {},
       popupVisible: false,
-      text: '83569001&qr code test1'
-    }
+      search: {
+        page: 0,
+        pageSize: 15
+      },
+      hasPage: true
+    };
   },
   methods: {
     openRoute(item) {
-      this.selectItem = item
+      this.selectItem = item;
       // this.popupVisible = true
     },
     getData() {
-      this.loading = true
-      fetchList().then((res) => {
-        this.device = res.data.data.data
-        this.icons = res.data.icons
-        this.wlevel = res.data.wlevel
-        this.loading = false
-        this.moreLoading = false
-      }).catch((res) => {
-        this.loading = false
-      })
+      this.loading = true;
+      console.log(this.search, "search data ing.......");
+      if (!this.hasPage) {
+        return;
+      }
+      this.search.page += 1;
+      this.moreLoading = true;
+      fetchList(this.search)
+        .then(res => {
+          const data = res.data.data.data;
+          if (data.length < this.search.pageSize) {
+            this.moreLoading = true;
+            this.hasPage = false;
+          } else {
+            this.hasPage = true;
+            // this.search.page += 1;
+            this.moreLoading = false;
+          }
+          this.device = this.device.concat(data || []);
+          this.icons = res.data.icons;
+          this.wlevel = res.data.wlevel;
+          this.loading = false;
+        })
+        .catch(res => {
+          this.loading = false;
+        });
     }
   },
   created() {
-
+    this.search = {
+      page: 0,
+      pageSize: 15
+    };
   }
-}
+};
 </script>
 
 <style lang='scss' scoped>
@@ -91,6 +108,18 @@ export default {
     display: inline-block;
     vertical-align: middle;
     margin-right: 5px;
+  }
+}
+.realwarn /deep/ {
+  .mint-cell-title {
+    width: 60%;
+  }
+  .mint-cell-text {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
   }
 }
 </style>
