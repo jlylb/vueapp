@@ -36,9 +36,9 @@
           </mt-index-section>
 
           <mt-index-section
-            v-for="(items, outIndex, deviceIndex) in device.out"
+            v-for="(items, outIndex) in device.out"
             :key="'out_'+outIndex"
-            :index="String(deviceIndex+1)"
+            :index="String(outIndex+1)"
           >
             <mt-cell :key="'out_'+outIndex+'_'+itemIndex" v-for="(item, itemIndex) in items">
               <icon-bg
