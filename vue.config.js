@@ -47,7 +47,10 @@ module.exports = {
   baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
   configureWebpack: {
     plugins: [],
-    externals: {},
+    externals: {
+      // vue: 'Vue',
+      // 'vue-socket.io': 'VueSocketIO',
+    },
   },
   css: {
     loaderOptions: {

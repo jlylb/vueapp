@@ -336,6 +336,9 @@ export default {
 
     if (success) {
       const [pdi, name] = code.split("&");
+      if (!name) {
+        name = `设备${pdi}`;
+      }
       this.deviceModel = Object.assign(this.deviceModel, { pdi, name });
       this.popupVisible = true;
     } else {

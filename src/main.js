@@ -7,8 +7,17 @@ import MintUI from 'mint-ui';
 import 'reset.css';
 import 'mint-ui/lib/style.css';
 import 'animate.css';
+// import VueSocketIO from 'vue-socket.io';
+// import VueNativeSock from 'vue-native-websocket';
+// import io from 'socket.io-client';
+// import VueSocketIOExt from 'vue-socket.io-extended';
+
 // import VueTouch from 'vue-touch';
 // import '@/tools/backbutton';
+
+import VueSocketIO from 'vue-socket-io';
+import { socketHost } from '@/tools/config';
+// import VueSocketIO from '@/tools/vue-sock';
 
 import App from './App.vue';
 import router from './router';
@@ -39,10 +48,18 @@ Vue.component('topComponent', TopComponent);
 Vue.component(VeLine.name, VeLine);
 Vue.component(VeHistogram.name, VeHistogram);
 
+// Vue.use(VueSocketIOExt, io('http://192.168.1.33:2021'), { debug: true });
+// Vue.use(new VueSocketIO({
+//   connection: 'http://192.168.1.33:2021',
+// }));
+
+// Vue.use(VueNativeSock, 'ws://192.168.1.33:8383', { format: 'json' });
 // devtools.connect(
 //   '192.168.1.33',
 //   8098,
 // );
+
+Vue.use(VueSocketIO, `${socketHost}`);
 
 new Vue({
   router,

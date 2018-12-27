@@ -31,8 +31,8 @@
           <p class="net-status">
             {{ item['consta']['consta_name'] }}:
             <mt-badge
-              :type="item['consta']['consta_value']===0?'success':'error'"
-            >{{ item['consta']['consta_value']===0?'正常':'断线' }}</mt-badge>
+              :type="item['consta']['consta_value']==0?'success':'error'"
+            >{{ item['consta']['consta_value']==0?'正常':'断线' }}</mt-badge>
           </p>
         </div>
       </div>
@@ -128,6 +128,127 @@ export default {
       isColumn: false
     };
   },
+  // sockets: {
+  //   connect: function() {
+  //     console.log("socket connected");
+  //     // this.$socket.removeAllListeners("chat-message");
+  //   },
+  //   "reply-msg": function(data, itemIndex1) {
+  //     console.log(
+  //       "this method was fired by the socket server.",
+  //       data,
+  //       itemIndex
+  //     );
+  //     const [devices, itemIndex] = data;
+  //     // this.device = data.devices;
+  //     this.device = devices.devices;
+  //     // this.itemIndex = null;
+  //     if (this.device.length === 0) {
+  //       MessageBox.alert(`该设备没有数据！`, "提示");
+  //       this.items = [];
+  //       this.num = 0;
+  //       this.itemFields = [];
+  //       this.deviceName = null;
+  //       this.item = null;
+  //       this.dataEmpty = true;
+  //       this.chartData = {
+  //         columns: [],
+  //         rows: []
+  //       };
+  //       this.chartSettings = {
+  //         axisSite: {},
+  //         yAxisType: [],
+  //         yAxisName: [],
+  //         min: [],
+  //         max: [],
+  //         labelMap: {}
+  //       };
+  //       console.log(this.chart, "chart instance....");
+  //       if (this.chart) {
+  //         this.chart.clear();
+  //       }
+  //       this.itemIndex = null;
+  //       return;
+  //     }
+  //     this.dataEmpty = false;
+  //     this.items = getDataValue(this.device, ["items"], []);
+  //     this.num = getDataValue(this.device, ["num"], 0);
+  //     this.itemFields = getDataValue(this.device, ["fields"], []);
+  //     this.deviceName = getDataValue(this.device, ["name"], "");
+  //     this.unit = getDataValue(this.device, ["unit"], null);
+  //     this.icons = getDataValue(this.device, ["icons"], null);
+  //     if (!this.itemIndex) {
+  //       this.itemIndex = 1;
+  //     } else {
+  //       this.itemIndex = itemIndex;
+  //     }
+  //     this.formatChartData();
+  //   }
+  // },
+  socket: {
+    // namespace: "http://192.168.1.33:2021/monitor",
+    events: {
+      connect: function() {
+        console.log("socket connected");
+        // this.$socket.removeAllListeners("chat-message");
+      },
+      disconnect: function() {
+        console.log("socket disconnect......");
+        // this.$socket.removeAllListeners("chat-message");
+      },
+      "reply-msg": function(data, itemIndex) {
+        console.log(
+          "this method was fired by the socket server.",
+          data,
+          itemIndex
+        );
+        //const [devices, itemIndex] = data;
+        this.device = data.devices;
+        // this.device = devices.devices;
+        // this.itemIndex = null;
+        if (this.device.length === 0) {
+          MessageBox.alert(`该设备没有数据！`, "提示");
+          this.items = [];
+          this.num = 0;
+          this.itemFields = [];
+          this.deviceName = null;
+          this.item = null;
+          this.dataEmpty = true;
+          this.chartData = {
+            columns: [],
+            rows: []
+          };
+          this.chartSettings = {
+            axisSite: {},
+            yAxisType: [],
+            yAxisName: [],
+            min: [],
+            max: [],
+            labelMap: {}
+          };
+          console.log(this.chart, "chart instance....");
+          if (this.chart) {
+            this.chart.clear();
+          }
+          this.itemIndex = null;
+          return;
+        }
+        this.dataEmpty = false;
+        this.items = getDataValue(this.device, ["items"], []);
+        this.num = getDataValue(this.device, ["num"], 0);
+        this.itemFields = getDataValue(this.device, ["fields"], []);
+        this.deviceName = getDataValue(this.device, ["name"], "");
+        this.unit = getDataValue(this.device, ["unit"], null);
+        this.icons = getDataValue(this.device, ["icons"], null);
+        if (!this.itemIndex) {
+          this.itemIndex = 1;
+        } else {
+          this.itemIndex = itemIndex;
+        }
+        this.formatChartData();
+      }
+    }
+  },
   methods: {
     getDataValue,
     afterSet(chart) {
@@ -178,20 +299,20 @@ export default {
       console.log(yAxisName, "yAxisName...");
       let len = yAxisName.length;
 
-      let min = ["dataMin"],
-        max = ["dataMax"];
+      // let min = ["dataMin"],
+      //   max = ["dataMax"];
       if (len > 1) {
         axisSite = { right: [columns[len - 1]] };
         yAxisType.push("value");
-        min.push("dataMin"), max.push("dataMax");
+        // min.push("dataMin"), max.push("dataMax");
       }
       rows.push(chartRow);
       this.chartSettings = {
         axisSite,
         yAxisType,
         yAxisName,
-        min,
-        max,
+        // min,
+        // max,
         labelMap
       };
       if (columns.length > 1) {
@@ -226,8 +347,8 @@ export default {
             axisSite: {},
             yAxisType: [],
             yAxisName: [],
-            min: [],
-            max: [],
+            // min: [],
+            // max: [],
             labelMap: {}
           };
           console.log(this.chart, "chart instance....");
@@ -251,11 +372,23 @@ export default {
   watch: {
     pdiIndex(newVal) {
       let { value: device } = newVal;
+      // this.$socket.removeAllListeners("chat-message");
+      this.$socket.emit("chat-message", {
+        ...newVal,
+        device,
+        itemIndex: 1
+      });
+      // this.$socket.sendObj({
+      //   ...newVal,
+      //   device,
+      //   itemIndex: 1
+      // });
       this.getData({ ...newVal, device });
     },
     itemIndex(newVal) {
       console.log(newVal, "itemIndex change......");
       // this.getData(newVal)
+      this.$socket.emit("item-index", newVal);
       this.formatChartData();
     },
     selectDevice(newVal) {
@@ -267,6 +400,7 @@ export default {
   },
   created() {
     console.log(this.$route.params);
+    // this.$socket.emit("chat-message", "hao are you !!");
     const { areaId, dapeng, dapengName } = this.$route.params;
     this.dapeng = dapeng;
     this.dapengName = dapengName;

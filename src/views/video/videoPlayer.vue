@@ -1,12 +1,14 @@
 <template>
   <div class="layout-container">
     <top-component @top-btn="openPusher"></top-component>
-    <video-component ref="pusher" :src="src"></video-component>
+    <video-component ref="pusher" :src="urlSrc"></video-component>
     <!-- <pusher-component ref='pusher'></pusher-component> -->
     <mt-popup
       v-model="isOpen"
+      :close-on-click-modal="false"
+      :modal="false"
       class="popup-device"
-      :style="{height: '240px', 'overflow': 'auto'}"
+      :style="{height: '38%', 'overflow': 'auto'}"
       position="bottom"
     >
       <mt-cell
@@ -32,8 +34,8 @@ export default {
   },
   data() {
     return {
-      src: "",
-      isOpen: false,
+      urlSrc: null,
+      isOpen: true,
       items: [
         // { label: '香港卫视', value: 'rtmp://live.hkstv.hk.lxdns.com/live/hks'},
         // { label: 'CCTV1高清', value: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8'},
@@ -45,7 +47,7 @@ export default {
   methods: {
     openPusher() {
       if (this.items.length === 0) return;
-      this.isOpen = true;
+      this.isOpen = !this.isOpen;
     },
     changeUrl(item) {
       this.$refs.pusher.updateVideoUrl(item.url);
@@ -56,8 +58,8 @@ export default {
   created() {
     fetchList().then(res => {
       this.items = res.data.data;
-      if (this.items.lenght > 0) {
-        this.src = this.items[0].url;
+      if (this.items.length > 0) {
+        this.urlSrc = this.items[0].url;
       }
     });
   }
