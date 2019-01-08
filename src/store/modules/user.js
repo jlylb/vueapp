@@ -166,7 +166,13 @@ const user = {
         resolve();
       });
     },
-
+    refreshToken({ commit }, token) {
+      return new Promise((resolve) => {
+        commit('SET_TOKEN', token);
+        setToken(token);
+        resolve();
+      });
+    },
     // 动态修改权限
     ChangeRoles({ commit }, role) {
       return new Promise((resolve) => {

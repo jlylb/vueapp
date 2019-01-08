@@ -38,7 +38,11 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   (response) => {
     console.log(response, 'ok....');
-
+    const token = response.headers.authorization;
+    if (token) {
+      // 如果 header 中存在 token，那么触发 refreshToken 方法，替换本地的 token
+      store.dispatch('user/refreshToken', token.replace('Bearer ', ''));
+    }
     if (response.status === 200) {
       const { data } = response;
       if (data && data.status !== 1 && data.msg) {
@@ -73,7 +77,9 @@ _axios.interceptors.response.use(
     } else {
       errorMsg = res.statusText;
     }
-    MessageBox.alert(errorMsg, '提示');
+    if (errorMsg) {
+      MessageBox.alert(errorMsg, '提示');
+    }
     Promise.reject(error);
   },
 );

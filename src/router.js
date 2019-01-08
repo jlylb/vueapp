@@ -294,6 +294,14 @@ const router = new Router({
       },
     },
     {
+      path: '/verify',
+      name: 'tab_verify',
+      component: () => import(/* webpackChunkName: "device" */ './views/tabs/tabVerify.vue'),
+      meta: {
+        title: '扫码登录',
+      },
+    },
+    {
       path: '/guide',
       name: 'guide',
       component: () => import(/* webpackChunkName: "guide index" */ './views/guide/index.vue'),

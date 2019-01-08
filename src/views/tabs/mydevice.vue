@@ -333,9 +333,9 @@ export default {
   },
   created() {
     const { code, success } = this.$route.params;
-
+    console.log(code, success, "mydevice......");
     if (success) {
-      const [pdi, name] = code.split("&");
+      let [pdi, name] = code.split("&");
       if (!name) {
         name = `设备${pdi}`;
       }
