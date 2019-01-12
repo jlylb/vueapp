@@ -75,9 +75,7 @@
 <script>
 import { fetchDevice } from "@/api/monitor";
 import { getDataValue } from "@/tools";
-import { mapGetters } from "vuex";
 import VCircle from "@/components/vcircle";
-
 import PopupBottom from "@/components/dropdown";
 
 export default {
@@ -284,6 +282,7 @@ export default {
     }
   },
   methods: {
+    fetchDevice,
     fixPer(val) {
       return Number(((val * 100) / 240).toFixed(1));
     },
@@ -329,18 +328,9 @@ export default {
       }
     };
     const { pdi } = this.$route.params;
-    fetchDevice({ pdi }).then(res => {
-      console.log(res.data.devices);
-      const device = res.data.devices;
-      if (device) {
-        Object.keys(device).map(item => {
-          if (this.boolFields.indexOf(item) > -1) {
-            device[item] = device[item] == 0 ? true : false;
-          }
-        });
-      }
-      this.detail = device;
-    });
+    this.pdi = pdi;
+    this.getData();
+    this.startTimer();
   }
 };
 </script>

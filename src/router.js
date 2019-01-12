@@ -79,14 +79,6 @@ const router = new Router({
         },
 
         {
-          path: '/air/device2/:dapeng/:areaId/',
-          name: 'air_device2',
-          meta: {
-            title: '精密空调',
-          },
-          component: () => import(/* webpackChunkName: "air" */ './views/air/device2.vue'),
-        },
-        {
           path: '/alarm/index',
           name: 'alarm',
           meta: {
@@ -94,22 +86,7 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/index.vue'),
         },
-        {
-          path: '/alarm/device',
-          name: 'alarm_device',
-          meta: {
-            title: '安防报警-设备报警',
-          },
-          component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/device.vue'),
-        },
-        {
-          path: '/alarm/detail',
-          name: 'alarm_detail',
-          meta: {
-            title: '安防报警-报警内容',
-          },
-          component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/detail.vue'),
-        },
+
         {
           path: '/ups/index/:pdi',
           name: 'ups',
@@ -126,14 +103,7 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "ups" */ './views/sups/index.vue'),
         },
-        {
-          path: '/ups/device',
-          name: 'ups_device',
-          meta: {
-            title: 'UPS电源',
-          },
-          component: () => import(/* webpackChunkName: "ups" */ './views/ups/device.vue'),
-        },
+
         {
           path: '/temphu/index/:pdi',
           name: 'temphu',

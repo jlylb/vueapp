@@ -71,3 +71,10 @@ body {
   opacity: 0.7;
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+.donghuang-item .mint-cell-title {
+  display: flex;
+  align-items: center;
+}
+
+@import 'mintui.scss';

@@ -128,16 +128,16 @@ export default {
   // background: #e8eaec;
   & {
     .home-tab {
-      background-color: rgba(35, 159, 254, 0.8);
+      background-color: $theme-color;
     }
     .mint-tab-item {
-      color: #fff;
+      color: #ccc;
       &.is-selected {
-        color: #26a2ff;
+        color: #fff;
       }
       &.clear-selected {
         color: #fff;
-        background-color: rgba(35, 159, 254, 0.8);
+        background-color: $theme-color;
       }
     }
   }

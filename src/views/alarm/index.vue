@@ -1,6 +1,10 @@
 <template>
   <div class="layout-container">
-    <top-component></top-component>
+    <top-component>
+      <template slot="right">
+        <mt-button @click="goFilter">筛选</mt-button>
+      </template>
+    </top-component>
 
     <div
       class="realwarn"
@@ -40,11 +44,38 @@
       </mt-cell>
       <mt-cell title></mt-cell>
     </mt-popup>
+
+    <mt-popup v-model="popupFilter" class="popup-device" position="bottom">
+      <mt-cell class="tool-button">
+        <mt-button class="btn" @click="cancalFilter">取消</mt-button>
+        <mt-button class="btn" @click="confirmFilter" type="primary">确定</mt-button>
+      </mt-cell>
+      <mt-cell title="开始时间" @click.native="changeTimeStart">{{ formatTime(searchDate.start) }}</mt-cell>
+      <mt-cell title="结束时间" @click.native="changeTimeEnd">{{ formatTime(searchDate.end) }}</mt-cell>
+    </mt-popup>
+
+    <mt-datetime-picker
+      ref="pickerTimeStart"
+      type="date"
+      @confirm="handleConfirm($event, 'start')"
+      @cancel="handleCancel('start')"
+      v-model="pickerStart"
+    ></mt-datetime-picker>
+
+    <mt-datetime-picker
+      ref="pickerTimeEnd"
+      type="date"
+      @confirm="handleConfirm($event, 'end')"
+      @cancel="handleCancel('end')"
+      v-model="pickerEnd"
+    ></mt-datetime-picker>
   </div>
 </template>
 
 <script>
 import { fetchList } from "@/api/alarm";
+import { parseTime } from "@/tools/";
+import { Toast } from "mint-ui";
 // import VueQr from 'vue-qr'
 export default {
   components: {},
@@ -61,10 +92,15 @@ export default {
         page: 0,
         pageSize: 15
       },
-      hasPage: true
+      hasPage: true,
+      popupFilter: false,
+      pickerStart: new Date(),
+      pickerEnd: new Date(),
+      searchDate: { start: null, end: null }
     };
   },
   methods: {
+    parseTime,
     openRoute(item) {
       this.selectItem = item;
       // this.popupVisible = true
@@ -77,7 +113,9 @@ export default {
       }
       this.search.page += 1;
       this.moreLoading = true;
-      fetchList(this.search)
+      // const { start, end } = this.searchDate;
+      let params = { ...this.search, searchDate: this.searchDate };
+      fetchList(params)
         .then(res => {
           const data = res.data.data.data;
           if (data.length < this.search.pageSize) {
@@ -96,6 +134,44 @@ export default {
         .catch(res => {
           this.loading = false;
         });
+    },
+    goFilter() {
+      this.popupFilter = true;
+    },
+    formatTime(str) {
+      if (!str) return;
+      return parseTime(new Date(str), "{y}-{m}-{d}");
+    },
+    handleConfirm(val, sType) {
+      this.searchDate[sType] = this.formatTime(val);
+    },
+    handleCancel(sType) {
+      this.searchDate[sType] = null;
+    },
+    changeTimeStart() {
+      this.$refs.pickerTimeStart.open();
+    },
+    changeTimeEnd() {
+      this.$refs.pickerTimeEnd.open();
+    },
+    cancalFilter() {
+      this.searchDate = { start: null, end: null };
+      // this.popupFilter = false;
+    },
+    confirmFilter() {
+      const { start, end } = this.searchDate;
+      // if (!start || !end) {
+      //   Toast("请选择筛选时间");
+      //   return;
+      // }
+      this.search = {
+        page: 0,
+        pageSize: 15
+      };
+
+      this.device = [];
+      this.hasPage = true;
+      this.getData();
     }
   },
   created() {
@@ -128,6 +204,19 @@ export default {
     overflow: hidden;
     display: inline-block;
     white-space: nowrap;
+  }
+}
+.tool-button /deep/ {
+  .mint-cell-wrapper {
+    padding: 0;
+  }
+  .mint-cell-value {
+    width: 100%;
+    .btn {
+      width: 50%;
+      padding: 0;
+      border-radius: 0;
+    }
   }
 }
 </style>

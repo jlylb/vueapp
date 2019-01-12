@@ -111,34 +111,13 @@ export default {
   justify-content: center;
   background-color: rgba(236, 236, 236, 0.3);
   color: #fff;
-
-  //   & /deep/ .item-icon {
-  //     width: 150px;
-  //     height: 150px;
-  //   }
   .item-icon {
     width: 190px;
     height: 190px;
     border-radius: 60%;
   }
 }
-.device-item {
-  // display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  width: 50%;
-  padding: 10px 0;
-}
-.device-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-.device-num {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #26a2ff;
-}
+
 .sign-out {
   background-color: #fff;
   height: 3.25rem;
@@ -149,6 +128,7 @@ export default {
   cursor: pointer;
   margin-top: 0.625rem;
   font-size: 24px;
+  color: $theme-color;
 }
 
 .layout-container /deep/ .mint-cell-title {

@@ -8,6 +8,7 @@ import 'mint-ui/lib/style.css';
 import 'animate.css';
 // import VueTouch from 'vue-touch';
 // import '@/tools/backbutton';
+import myMixin from '@/tools/devicetimer';
 
 import App from './App.vue';
 import router from './router';
@@ -22,6 +23,7 @@ import './plugins/axios';
 import './assets/scss/index.scss';
 
 import TopComponent from './components/top.vue';
+import IconBg from './components/iconBg.vue';
 
 Validator.localize('zh_CN', messages);
 const config = {
@@ -35,10 +37,13 @@ Vue.use(MintUI);
 Vue.config.productionTip = false;
 
 Vue.component('topComponent', TopComponent);
+Vue.component('iconBg', IconBg);
 
 Vue.component(VeLine.name, VeLine);
 Vue.component(VeHistogram.name, VeHistogram);
 Vue.component(VeGauge.name, VeGauge);
+
+Vue.use(myMixin);
 
 new Vue({
   router,

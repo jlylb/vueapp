@@ -11,22 +11,34 @@
       :auto-fill="false"
       ref="loadmore"
     >
-      <mt-cell
+      <mt-cell-swipe
         :title="String(item.pdi_index)"
         :label="item.pdi_name"
         @click.native="openDevice(item)"
         is-link
         v-for="(item, index) in device"
         :key="index"
-      ></mt-cell>
+        :right="[
+        {
+          content: '修改',
+          style: { background: '#06509c', color: '#fff' },
+          handler: () => { handlerUpdate(item, index) }
+        },
+        {
+          content: '删除',
+          style: { background: '#e21414', color: '#fff' },
+          handler: () => { handlerDelete(item, index) }
+        }
+      ]"
+      ></mt-cell-swipe>
     </mt-loadmore>
 
     <mt-popup v-model="popupDetail" class="popup-device" position="bottom">
       <mt-cell title="设备索引">{{ item.pdi_index }}</mt-cell>
       <mt-cell title="设备名称">{{ item.pdi_name }}</mt-cell>
-      <mt-cell title="设备类型">{{ item.dpt_id }}</mt-cell>
+      <mt-cell title="设备类型">{{ item.types && item.types.dt_typename }}</mt-cell>
 
-      <mt-cell title="公司">{{ item.company && item.company.Co_Name }}</mt-cell>
+      <mt-cell title="所在区域">{{ item.area && item.area.AreaName }}</mt-cell>
     </mt-popup>
 
     <mt-popup
@@ -62,6 +74,30 @@
       </mt-cell>
     </mt-popup>
 
+    <!-- <mt-popup
+      v-model="popupUpdate"
+      ref="updateDevice"
+      class="popup-device add-device"
+      :close-on-click-modal="false"
+      popup-transition="popup-fade"
+    >
+      <div class="update-device-title">修改设备</div>
+      <mt-field
+        label
+        placeholder="请输入设备名称"
+        data-vv-scope="scope"
+        v-model="updateDeviceModel.name"
+        data-vv-name="name"
+        :state="states['name']"
+        v-validate="{ required: true}"
+      ></mt-field>
+      <p class="field-error" v-if="states['name']=='error'">{{ errors.first('scope.name') }}</p>
+
+      <mt-cell title>
+        <mt-button type="primary" @click="saveUpdate">保存</mt-button>
+        <mt-button type="danger" @click="cancelUpdate">取消</mt-button>
+      </mt-cell>
+    </mt-popup>-->
     <mt-popup v-model="popupDetailType" class="popup-device" position="bottom">
       <mt-picker :slots="typeSlots" @change="onTypeChange" ref="pickType" :value-key="'label'"></mt-picker>
     </mt-popup>
@@ -75,7 +111,13 @@
 
 <script>
 import { MessageBox, Toast } from "mint-ui";
-import { fetchAllDevice, fetchDeviceType, postDevice } from "@/api/monitor";
+import {
+  fetchAllDevice,
+  fetchDeviceType,
+  postDevice,
+  updateDevice,
+  deleteDevice
+} from "@/api/monitor";
 
 export default {
   data() {
@@ -99,7 +141,12 @@ export default {
       selectType: {},
       allLoaded: false,
       typeLabel: "",
-      states: {}
+      states: {},
+      popupUpdate: false,
+      updateDeviceModel: {
+        name: "",
+        pdi_index: ""
+      }
     };
   },
   computed: {
@@ -207,6 +254,32 @@ export default {
         });
       });
     },
+    saveUpdate() {
+      this.$validator.validateAll("scope").then(valid => {
+        console.log(this.fields, "save updating.......");
+        let states = {};
+        Object.keys(this.fields).map(field => {
+          if (this.errors.has(field)) {
+            states[field] = "error";
+          } else {
+            states[field] = "success";
+          }
+        });
+        this.states = states;
+        if (!valid) return;
+        this.popupUpdate = false;
+        const { name: pdi_name, pdi_index } = this.updateDeviceModel;
+        updateDevice({ pdi_name, pdi_index }).then(res => {
+          Toast(res.data.msg);
+        });
+      });
+    },
+    cancelUpdate() {
+      this.updateDeviceModel = {
+        name: ""
+      };
+      this.popupUpdate = false;
+    },
     loadTop() {
       this.search = {
         page: 1,
@@ -239,6 +312,52 @@ export default {
       fetchDeviceType().then(res => {
         this.types = res.data.data;
       });
+    },
+    handlerUpdate(item, index) {
+      console.log(item, "updating.....");
+      // this.popupUpdate = true;
+      // this.updateDeviceModel = {
+      //   name: item.pdi_name,
+      //   pdi_index: item.pdi_index
+      // };
+      MessageBox.prompt("修改设备名称", "", {
+        inputValue: item.pdi_name,
+        closeOnClickModal: false,
+        inputValidator: this.inputValidator
+      })
+        .then(({ value, action }) => {
+          const data = {
+            pdi_name: value,
+            pdi_index: item.pdi_index
+          };
+          updateDevice(data).then(res => {
+            item.pdi_name = value;
+            Toast(res.data.msg);
+          });
+        })
+        .catch(() => {
+          Toast("已取消修改");
+        });
+    },
+    inputValidator(value) {
+      let sStr = value.replace(/(^\s*)|(\s*$)/g, "");
+      if (!sStr) {
+        return "设备名称不能为空";
+      }
+      return true;
+    },
+    handlerDelete(item, index) {
+      console.log(item, index, "deleting.....");
+      MessageBox.confirm(`确定删除${item.pdi_name}吗?`)
+        .then(action => {
+          deleteDevice(item.pdi_index).then(res => {
+            this.device.splice(index, 1);
+            Toast(res.data.msg);
+          });
+        })
+        .catch(() => {
+          Toast("已取消删除");
+        });
     }
   },
   mounted() {
@@ -287,4 +406,10 @@ export default {
   padding-left: 10px;
   color: $red;
 }
+.update-device-title {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px 0;
+}
 </style>
+

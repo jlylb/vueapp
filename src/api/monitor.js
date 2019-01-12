@@ -6,12 +6,14 @@ export function fetchList(query) {
   });
 }
 
-export function fetchDevice(data) {
-  return axios({
+export function fetchDevice(data, loading = true) {
+  const config = {
     url: '/donghuang/realdata',
     method: 'post',
     data,
-  });
+    showLoading: loading,
+  };
+  return axios(config);
 }
 
 export function fetchAllDevice(data) {
@@ -43,5 +45,20 @@ export function fetchAreaDevice(data) {
     url: '/monitor/areadevice',
     method: 'post',
     data,
+  });
+}
+
+export function updateDevice(data) {
+  return axios({
+    url: `/donghuang/${data.pdi_index}/update`,
+    method: 'put',
+    data,
+  });
+}
+
+export function deleteDevice(pdi) {
+  return axios({
+    url: `/donghuang/${pdi}`,
+    method: 'delete',
   });
 }

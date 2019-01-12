@@ -29,7 +29,7 @@
           <svg-icon icon-class="password" class="login-input-icon" slot="prepend"></svg-icon>
         </my-input>
         <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
-        <mt-button size="large" type="primary" @click="handleLogin">登 录</mt-button>
+        <mt-button size="large" type="primary" @click="handleLogin" class="login-btn">登 录</mt-button>
 
         <a class="forget-password">
           <span @click.stop="forgetPwd">忘记密码?</span>
@@ -156,5 +156,8 @@ $icon-color: #29c2ff;
 }
 .my-input /deep/ .mint-field-clear {
   color: $icon-color;
+}
+.login-btn {
+  background-color: #1082b5;
 }
 </style>

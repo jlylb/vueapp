@@ -119,7 +119,6 @@
 <script>
 import { fetchDevice } from "@/api/monitor";
 import { getDataValue } from "@/tools";
-import { mapGetters } from "vuex";
 
 export default {
   components: {},
@@ -228,11 +227,13 @@ export default {
         "rd_air_addshistate"
       ],
       chartData: {},
-      chartSettings: {}
+      chartSettings: {},
+      pdi: null
     };
   },
   computed: {},
   methods: {
+    fetchDevice,
     selectButton(tab) {
       this.active = tab;
       if (tab === "tab-temp") {
@@ -260,7 +261,7 @@ export default {
       ];
       const columns = ["name", "temp", "wet"];
       let yAxisName = ["温度: °C", "湿度: %"],
-        yAxisType = ["value", "value"],
+        yAxisType = ["normal", "normal"],
         axisSite = { right: ["wet"] };
       let min = [0, 0],
         max = [100, 100],
@@ -270,7 +271,6 @@ export default {
         axisSite,
         yAxisType,
         yAxisName,
-        min,
         max,
         labelMap
       };
@@ -299,19 +299,9 @@ export default {
       }
     };
     const { pdi } = this.$route.params;
-    fetchDevice({ pdi }).then(res => {
-      console.log(res.data.devices);
-      const device = res.data.devices;
-      if (device) {
-        Object.keys(device).map(item => {
-          if (this.boolFields.indexOf(item) > -1) {
-            device[item] = device[item] == 0 ? true : false;
-          }
-        });
-      }
-      this.detail = device;
-      this.formatChartData();
-    });
+    this.pdi = pdi;
+    this.getData();
+    this.startTimer();
   }
 };
 </script>

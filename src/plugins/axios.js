@@ -40,7 +40,7 @@ export function tryHideFullScreenLoading() {
   if (needLoadingRequestCount <= 0) return;
   needLoadingRequestCount--;
   if (needLoadingRequestCount === 0) {
-    endLoading();
+    setTimeout(endLoading, 300);
   }
 }
 
