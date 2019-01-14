@@ -6,17 +6,19 @@
     :class="[{
       'is-textarea': inputType === 'textarea',
       'is-nolabel': !label
-    }]">
-    <template slot='left'>
-        <slot name='prepend'></slot>
+    }]"
+  >
+    <template slot="left">
+      <slot name="prepend"></slot>
     </template>
-    <template slot='right'>
-        <svg-icon 
-        :icon-class="eyeIcon" 
-        class='login-input-icon'
-        @click.native='showPass' 
-        v-if="type === 'password'"></svg-icon>
-        <slot name='append'></slot>
+    <template slot="right">
+      <svg-icon
+        :icon-class="eyeIcon"
+        class="login-input-icon"
+        @click.native="showPass"
+        v-if="type === 'password'"
+      ></svg-icon>
+      <slot name="append"></slot>
     </template>
     <textarea
       @change="$emit('change', currentValue)"
@@ -27,13 +29,13 @@
       :rows="rows"
       :disabled="disabled"
       :readonly="readonly"
-      v-model="currentValue">
-    </textarea>
+      v-model="currentValue"
+    ></textarea>
     <input
       @change="$emit('change', currentValue)"
       ref="input"
       class="mint-field-core"
-      :class='activeClass'
+      :class="activeClass"
       :placeholder="placeholder"
       :number="inputType === 'number'"
       v-else
@@ -42,16 +44,18 @@
       :disabled="disabled"
       :readonly="readonly"
       :value="currentValue"
-      @input="handleInput">
+      @input="handleInput"
+    >
     <div
       @click="handleClear"
       class="mint-field-clear"
       v-if="!disableClear"
-      v-show="currentValue && inputType !== 'textarea' && active">
+      v-show="currentValue && inputType !== 'textarea' && active"
+    >
       <i class="mintui mintui-field-error"></i>
-        <!-- <svg-icon 
+      <!-- <svg-icon 
         icon-class="clear" 
-        class='clear-input-icon'></svg-icon> -->
+      class='clear-input-icon'></svg-icon>-->
     </div>
     <span class="mint-field-state" v-if="state" :class="['is-' + state]">
       <i class="mintui" :class="['mintui-field-' + state]"></i>
@@ -63,11 +67,11 @@
 </template>
 
 <script>
-import { Cell as XCell } from 'mint-ui';
-import Clickoutside from '@/tools/clickoutside';
+import { Cell as XCell } from "mint-ui";
+import Clickoutside from "@/tools/clickoutside";
 
 export default {
-  name: 'mt-field-input',
+  name: "mt-field-input",
   data() {
     return {
       active: false,
@@ -82,7 +86,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'text'
+      default: "text"
     },
     rows: String,
     label: String,
@@ -91,24 +95,24 @@ export default {
     disabled: Boolean,
     disableClear: Boolean,
     showEye: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false
     },
     state: {
       type: String,
-      default: 'default'
+      default: "default"
     },
     value: {},
     attr: Object
   },
   components: { XCell },
   computed: {
-      activeClass() {
-          return {'active-field-input': this.active}
-      },
-      eyeIcon() {
-          return this.isShowPass?'eye':'eye-close'
-      }
+    activeClass() {
+      return { "active-field-input": this.active };
+    },
+    eyeIcon() {
+      return this.isShowPass ? "eye" : "eye-close";
+    }
   },
   methods: {
     doCloseActive() {
@@ -119,11 +123,11 @@ export default {
     },
     handleClear() {
       if (this.disabled || this.readonly) return;
-      this.currentValue = '';
+      this.currentValue = "";
     },
     showPass() {
-        this.isShowPass = !this.isShowPass
-        this.inputType = this.isShowPass?'text':'password'
+      this.isShowPass = !this.isShowPass;
+      this.inputType = this.isShowPass ? "text" : "password";
     }
   },
   watch: {
@@ -131,7 +135,7 @@ export default {
       this.currentValue = val;
     },
     currentValue(val) {
-      this.$emit('input', val);
+      this.$emit("input", val);
     },
     attr: {
       immediate: true,
@@ -149,40 +153,40 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .mint-field-clear {
-    opacity: 1;
+  opacity: 1;
 }
 .mint-field-core {
-    background-color: transparent;
-    color: #fff;
+  background-color: transparent;
+  color: #fff;
 }
 .active-field-input {
-    /* border: 1px solid #ff00ff; */
+  /* border: 1px solid #ff00ff; */
 }
 .mint-field {
-    background-color: transparent;
-    align-items: center;
-    border: 1px solid #fff;
-    margin: 10px auto;
-    /* margin: 10px auto; */
+  background-color: transparent;
+  align-items: center;
+  border: 1px solid #fff;
+  margin: 10px auto;
+  /* margin: 10px auto; */
 }
-.mint-field >>> .mint-cell-wrapper {
-    background-image: none;
-}
-
-.mint-field >>> .mint-cell-left {
-    transform: none;
-    position: inherit;
-    padding-left: 10px;
-}
-.mint-field >>> .mint-cell-right {
-    transform: none;
-    position: inherit;
-    padding-right: 10px;
-}
-.mint-field:active, .mint-field:hover {
-    border-color: #26a2ff
+.mint-field /deep/ .mint-cell-wrapper {
+  background-image: none;
 }
 
+.mint-field /deep/ .mint-cell-left {
+  transform: none;
+  position: inherit;
+  padding-left: 10px;
+}
+.mint-field /deep/ .mint-cell-right {
+  transform: none;
+  position: inherit;
+  padding-right: 10px;
+}
+.mint-field:active,
+.mint-field:hover {
+  border-color: darken($theme-color, 10%);
+}
 </style>

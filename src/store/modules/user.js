@@ -164,6 +164,7 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '');
+        commit('SET_IS_GET', false);
         removeToken();
         resolve();
       });

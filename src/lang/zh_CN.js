@@ -18,5 +18,10 @@ export default {
       required: () => '验证码不能为空',
       digits: () => '验证码6个数字',
     },
+    phone: {
+      required: () => '手机号不能为空',
+      digits: () => '手机号11位数字',
+      regex: () => '手机号格式不正确',
+    },
   },
 };

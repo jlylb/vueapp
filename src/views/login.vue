@@ -48,8 +48,8 @@ export default {
       // username: "username1",
       // password: "123456",
       validateForm: {
-        username: "Cynthia Lindgren",
-        password: "123456"
+        username: "",
+        password: ""
       }
     };
   },
@@ -91,7 +91,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-$icon-color: #29c2ff;
+$icon-color: #ccc;
+$placeholder-color: #ccc;
 
 .login-container {
   background-image: url("../assets/bg.png");
@@ -103,7 +104,7 @@ $icon-color: #29c2ff;
   justify-content: center;
 }
 .login-cover {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba($theme-color, 0.8);
   height: 100%;
   width: 98%;
   padding: 0 1%;
@@ -127,7 +128,7 @@ $icon-color: #29c2ff;
   height: 150px;
   text-align: center;
   margin: 0 auto;
-  background-color: rgba($icon-color, 0.5);
+  background-color: rgba($theme-color, 0.5);
   border-radius: 50%;
   border: 3px solid #fff;
   margin-bottom: 20px;
@@ -140,11 +141,7 @@ $icon-color: #29c2ff;
   height: 120px;
   color: #fff;
 }
-.input {
-  margin: 10px 0;
-  background-color: transparent;
-  color: #fff;
-}
+
 .home-content /deep/ .login-input-icon {
   width: 1.5em;
   height: 1.5em;
@@ -157,7 +154,15 @@ $icon-color: #29c2ff;
 .my-input /deep/ .mint-field-clear {
   color: $icon-color;
 }
+.my-input /deep/ .mint-field-core {
+  &::-webkit-input-placeholder {
+    color: $placeholder-color;
+  }
+  &::-moz-placeholder {
+    color: $placeholder-color;
+  }
+}
 .login-btn {
-  background-color: #1082b5;
+  background-color: darken($theme-color, 10%);
 }
 </style>

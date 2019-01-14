@@ -19,7 +19,7 @@ export default {
         startTimer() {
           this.clearTimerId();
           this.timerId = setInterval(() => {
-            this.callback();
+            this.remoteCb();
           }, this.freshTime);
         },
         getData(loading = true) {
@@ -45,7 +45,7 @@ export default {
               this.clearTimerId();
             });
         },
-        callback() {
+        remoteCb() {
           this.getData(false);
         },
       },

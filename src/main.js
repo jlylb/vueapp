@@ -9,6 +9,7 @@ import 'animate.css';
 // import VueTouch from 'vue-touch';
 // import '@/tools/backbutton';
 import myMixin from '@/tools/devicetimer';
+import updateApp from '@/plugins/updateapp';
 
 import App from './App.vue';
 import router from './router';
@@ -44,6 +45,7 @@ Vue.component(VeHistogram.name, VeHistogram);
 Vue.component(VeGauge.name, VeGauge);
 
 Vue.use(myMixin);
+Vue.use(updateApp);
 
 new Vue({
   router,

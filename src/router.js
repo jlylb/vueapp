@@ -200,14 +200,7 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "auth" */ './views/auth/password.vue'),
         },
-        {
-          path: '/auth/forget',
-          name: 'auth_forget',
-          meta: {
-            title: '忘记密码',
-          },
-          component: () => import(/* webpackChunkName: "auth" */ './views/auth/forget.vue'),
-        },
+
       ],
     },
     {
@@ -216,14 +209,12 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "login" */ './views/login.vue'),
     },
     {
-      path: '/login3',
-      name: 'login3',
-      component: () => import(/* webpackChunkName: "login" */ './views/login3.vue'),
-    },
-    {
-      path: '/login4',
-      name: 'login4',
-      component: () => import(/* webpackChunkName: "login" */ './views/login4.vue'),
+      path: '/auth/forget',
+      name: 'auth_forget',
+      meta: {
+        title: '忘记密码',
+      },
+      component: () => import(/* webpackChunkName: "auth" */ './views/auth/forget.vue'),
     },
     {
       path: '/addDevice2',

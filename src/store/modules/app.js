@@ -1,4 +1,5 @@
 import { removeGuide, setGuide } from '@/tools/guide';
+import checkUpdate from '@/api/home';
 
 const app = {
   namespaced: true,
@@ -6,6 +7,7 @@ const app = {
     barTitle: '首页',
     isGuide: false,
     province: null,
+    isUpdateApp: false,
   },
   mutations: {
     BAR_TITLE: (state, title) => {
@@ -17,10 +19,14 @@ const app = {
     PROVINCE: (state, nVal) => {
       state.province = nVal;
     },
+    IS_UPDATE_APP: (state, nVal) => {
+      state.isUpdateApp = nVal;
+    },
   },
   getters: {
     barTitle: state => state.barTitle,
     currentProvince: state => state.province,
+    isUpdateApp: state => state.isUpdateApp,
   },
   actions: {
     giveGuide({ commit }, bVal) {
@@ -33,6 +39,33 @@ const app = {
     },
     setProvince({ commit }, nVal) {
       commit('PROVINCE', nVal);
+    },
+    updateApp({ commit }) {
+      console.log('update app......');
+      // if (!window.plus) return;
+      // const { version } = plus.runtime;
+      // const data = {
+      //   appid: plus.runtime.appid,
+      //   appname: 'dh',
+      //   version,
+      // };
+      const version = '1.0.0';
+      const data = {
+        appid: 'dh',
+        appname: 'dh',
+        version,
+      };
+      /* eslint-disable */
+      return new Promise((resolve, reject) => {
+        checkUpdate(data)
+          .then(res => {
+            commit('IS_UPDATE_APP', true);
+            resolve(res.data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
   },
 };

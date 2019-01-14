@@ -1,111 +1,136 @@
 <template>
+  <div class="tab-container">
+    <top-component></top-component>
 
-    <div class='tab-container'>
-
-    <top-component></top-component> 
-        
-    <mt-swipe :show-indicators="true" class='slide-image'>
-        <mt-swipe-item v-for='(item, index) in items' :key='index'>
-            <img :src='item.image' />
-        </mt-swipe-item>
-        <!-- <mt-swipe-item >
+    <mt-swipe :show-indicators="true" class="slide-image">
+      <mt-swipe-item v-for="(item, index) in items" :key="index">
+        <img :src="item.image">
+      </mt-swipe-item>
+      <!-- <mt-swipe-item >
             <img :src='testJpg' />
-        </mt-swipe-item> -->
+      </mt-swipe-item>-->
     </mt-swipe>
-      
 
-    <div class='fluid-content'>
-        <div class="fluid-content-item">
-            <div class='item-power item item-right' @click="openRouter('sysmenu', 'power')">
-                <div class='wrap-item'>
-                    <div class='icon'>
-                    <svg-icon icon-class='sys-power' class='item-icon'></svg-icon>
-                    </div>
-                    <div class='icon-desc'>动力系统</div>
-                </div>
+    <div class="fluid-content">
+      <div class="fluid-content-item">
+        <div class="item-power item item-right" @click="openRouter('sysmenu', 'power')">
+          <div class="wrap-item">
+            <div class="icon">
+              <svg-icon icon-class="sys-power" class="item-icon"></svg-icon>
             </div>
-            <div class='item-alarm item item-right'  @click="openRouter('alarm')">
-                <div class='wrap-item'>
-                    <div class='icon'>
-                        <svg-icon icon-class='afbj'   :class='["animation2","item-icon", {"animation2-pause": notification == 0 }]'></svg-icon>
-                    </div>
-                    <div class='icon-desc'>实时告警<mt-badge size="small" type='error' v-if='notification > 0'>{{ notification }}</mt-badge></div>
-                </div>
-            </div>
-            <div class='item-statistic item item-right'   @click="openRouter('sysmenu', 'fire')">
-                <div class='wrap-item'>
-                    <div class='icon'>
-                        <svg-icon icon-class='sys-xf'  class='item-icon'></svg-icon>
-                    </div>
-                    <div class='icon-desc'>消防系统</div>
-                </div>
-            </div>
+            <div class="icon-desc">动力系统</div>
+          </div>
         </div>
-        <div class="fluid-content-item">
-            <div class='item-remote item'   @click="openRouter('sysmenu', 'env')">
-                <div class='wrap-item'>
-                    <div class='icon'>
-                        <svg-icon icon-class='sys-env'  class='item-icon'></svg-icon>
-                    </div>
-                    <div class='icon-desc'>环境系统</div>
-                </div>
+        <div class="item-alarm item item-right" @click="openRouter('alarm')">
+          <div class="wrap-item">
+            <div class="icon">
+              <svg-icon
+                icon-class="afbj"
+                :class="['animation2','item-icon', {'animation2-pause': notification == 0 }]"
+              ></svg-icon>
             </div>
-            <div class='item-video item'   @click="openRouter('sysmenu', 'protect')">
-                <div class='wrap-item'>
-                    <div class='icon'>
-                        <svg-icon icon-class='sys-protect'  class='item-icon'></svg-icon>
-                    </div>
-                    <div class='icon-desc'>安保系统</div>
-                </div>
+            <div class="icon-desc">实时告警
+              <mt-badge size="small" type="error" v-if="notification > 0">{{ notification }}</mt-badge>
             </div>
-
+          </div>
         </div>
+        <div class="item-statistic item item-right" @click="openRouter('sysmenu', 'fire')">
+          <div class="wrap-item">
+            <div class="icon">
+              <svg-icon icon-class="sys-xf" class="item-icon"></svg-icon>
+            </div>
+            <div class="icon-desc">消防系统</div>
+          </div>
+        </div>
+      </div>
+      <div class="fluid-content-item">
+        <div class="item-remote item" @click="openRouter('sysmenu', 'env')">
+          <div class="wrap-item">
+            <div class="icon">
+              <svg-icon icon-class="sys-env" class="item-icon"></svg-icon>
+            </div>
+            <div class="icon-desc">环境系统</div>
+          </div>
+        </div>
+        <div class="item-video item" @click="openRouter('sysmenu', 'protect')">
+          <div class="wrap-item">
+            <div class="icon">
+              <svg-icon icon-class="sys-protect" class="item-icon"></svg-icon>
+            </div>
+            <div class="icon-desc">安保系统</div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    </div>
+  </div>
 </template>
 
 <script>
 // import testJpg from '@/assets/test.jpg'
-import testJpg1 from '@/assets/s1.jpg'
-import testJpg2 from '@/assets/s2.jpg'
-import testJpg3 from '@/assets/s3.jpg'
-import { mapGetters } from 'vuex'
+import testJpg1 from "@/assets/s1.jpg";
+import testJpg2 from "@/assets/s2.jpg";
+import testJpg3 from "@/assets/s3.jpg";
+import { mapGetters } from "vuex";
+import { MessageBox } from "mint-ui";
 
 export default {
-    data() {
-        return {
-            items : [
-                {
-                    url: 'http://www.baidu.com',
-                    image: testJpg1,
-                },
-                {
-                    url: 'http://www.baidu.com',
-                    image: testJpg2,
-                },
-                {
-                    url: 'http://www.baidu.com',
-                    image: testJpg3,
-                },
-            ],
+  data() {
+    return {
+      items: [
+        {
+          url: "http://www.baidu.com",
+          image: testJpg1
+        },
+        {
+          url: "http://www.baidu.com",
+          image: testJpg2
+        },
+        {
+          url: "http://www.baidu.com",
+          image: testJpg3
         }
-    },
-    computed: {
-        ...mapGetters('user',[
-        'notification'
-        ]), 
-    },
-    methods: {
-        openRouter(name, type) {
-            let params = type ? { type } : {}
-            this.$router.push({name, params: params})
-        }
-    },
-    created() {
-        this.$store.commit('app/BAR_TITLE', '首页')
+      ]
+    };
+  },
+  computed: {
+    ...mapGetters("user", ["notification"]),
+    ...mapGetters("app", ["isUpdateApp"])
+  },
+  methods: {
+    openRouter(name, type) {
+      let params = type ? { type } : {};
+      this.$router.push({ name, params: params });
     }
-}
+  },
+  mounted() {
+    console.log("mounted ing ...before", this.isUpdateApp);
+    if (this.isUpdateApp) return;
+    this.$store
+      .dispatch("app/updateApp")
+      .then(res => {
+        const { apk } = res;
+        if (apk) {
+          MessageBox.confirm("检测到更新,是否更新?", "更新提示", {
+            confirmButtonText: "立即更新",
+            cancelButtonText: "稍后更新",
+            closeOnClickModal: false
+          })
+            .then(() => {
+              // this.$store.commit("app/IS_UPDATE_APP", true);
+              const AutoUpdateApp = this.$AutoUpdateApp();
+              AutoUpdateApp.downWgt(apk);
+            })
+            .catch(() => {
+              console.log("取消更新");
+            });
+        }
+      })
+      .catch(() => {});
+  },
+  created() {
+    this.$store.commit("app/BAR_TITLE", "首页");
+  }
+};
 </script>
 
 <style lang='scss' scoped>
