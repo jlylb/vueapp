@@ -99,7 +99,16 @@
       </mt-cell>
     </mt-popup>-->
     <mt-popup v-model="popupDetailType" class="popup-device" position="bottom">
-      <mt-picker :slots="typeSlots" @change="onTypeChange" ref="pickType" :value-key="'label'"></mt-picker>
+      <mt-picker
+        :slots="typeSlots"
+        class="device-type"
+        @change="onTypeChange"
+        ref="pickType"
+        :value-key="'label'"
+        :show-toolbar="true"
+      >
+        <span class="close-type" @click="popupDetailType=false">&times;</span>
+      </mt-picker>
     </mt-popup>
 
     <mt-popup v-model="isAdd" class="popup-menu" popup-transition="popup-fade">
@@ -410,6 +419,18 @@ export default {
   text-align: center;
   font-weight: bold;
   padding: 10px 0;
+}
+.close-type {
+  display: inline-block;
+  font-size: 30px;
+  width: 40px;
+  margin: 0;
+  color: $theme-color;
+  text-align: center;
+}
+.device-type /deep/ .picker-toolbar {
+  text-align: right;
+  line-height: 40px;
 }
 </style>
 

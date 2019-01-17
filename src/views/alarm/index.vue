@@ -155,15 +155,26 @@ export default {
       this.$refs.pickerTimeEnd.open();
     },
     cancalFilter() {
+      const { start, end } = this.searchDate;
+      if (start && end) {
+        this.search = {
+          page: 0,
+          pageSize: 15
+        };
+
+        this.device = [];
+        this.hasPage = true;
+        this.getData();
+      }
       this.searchDate = { start: null, end: null };
-      // this.popupFilter = false;
+      this.popupFilter = false;
     },
     confirmFilter() {
       const { start, end } = this.searchDate;
-      // if (!start || !end) {
-      //   Toast("请选择筛选时间");
-      //   return;
-      // }
+      if (!start || !end) {
+        // Toast("请选择筛选时间");
+        return;
+      }
       this.search = {
         page: 0,
         pageSize: 15
