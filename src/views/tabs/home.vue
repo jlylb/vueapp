@@ -72,6 +72,7 @@ import testJpg2 from "@/assets/s2.jpg";
 import testJpg3 from "@/assets/s3.jpg";
 import { mapGetters } from "vuex";
 import { MessageBox } from "mint-ui";
+import { getImageUrl } from "@/tools";
 
 export default {
   data() {
@@ -105,8 +106,11 @@ export default {
   mounted() {
     console.log("mounted ing ...before", this.isUpdateApp);
     if (this.isUpdateApp) return;
-    this.$store
-      .dispatch("app/updateApp")
+    const AutoUpdateApp = this.$AutoUpdateApp();
+    AutoUpdateApp.getVersion((version)=>{
+      console.log(version, 'version......')
+      this.$store
+      .dispatch("app/updateApp", {version})
       .then(res => {
         const { apk } = res;
         if (apk) {
@@ -116,16 +120,21 @@ export default {
             closeOnClickModal: false
           })
             .then(() => {
-              // this.$store.commit("app/IS_UPDATE_APP", true);
-              const AutoUpdateApp = this.$AutoUpdateApp();
-              AutoUpdateApp.downWgt(apk);
+              
+              let url = apk;
+              if (!/http[s]?:\/\//.test(apk)) {
+                url = getImageUrl(apk);
+              }
+              AutoUpdateApp.downWgt(url);
             })
-            .catch(() => {
-              console.log("取消更新");
+            .catch(err => {
+              console.log("取消更新", err);
             });
         }
       })
       .catch(() => {});
+    })
+
   },
   created() {
     this.$store.commit("app/BAR_TITLE", "首页");

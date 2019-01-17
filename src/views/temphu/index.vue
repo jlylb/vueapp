@@ -163,9 +163,7 @@ export default {
       console.log();
     },
     getData(data, loading = true) {
-      this.loading = true;
       fetchDevice(data, loading).then(res => {
-        this.loading = false;
         console.log(res);
         this.device = res.data.devices;
         if (this.device.length === 0) {
@@ -204,7 +202,7 @@ export default {
         this.formatChartData();
       });
     },
-    callback() {
+    remoteCb() {
       const { pdi } = this;
       this.getData({ pdi }, false);
     }

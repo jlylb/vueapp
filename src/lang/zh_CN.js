@@ -23,5 +23,13 @@ export default {
       digits: () => '手机号11位数字',
       regex: () => '手机号格式不正确',
     },
+    new_password: {
+      required: () => '新密码不能为空',
+      min: () => '新密码最少长度6位',
+    },
+    new_password_confirmation: {
+      required: () => '确认密码不能为空',
+      min: () => '确认密码最少长度6位',
+    },
   },
 };

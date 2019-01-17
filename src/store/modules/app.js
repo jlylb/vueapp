@@ -40,20 +40,19 @@ const app = {
     setProvince({ commit }, nVal) {
       commit('PROVINCE', nVal);
     },
-    updateApp({ commit }) {
+    updateApp({ commit }, appdata) {
       console.log('update app......');
-      // if (!window.plus) return;
+      if (!window.plus) return;
       // const { version } = plus.runtime;
-      // const data = {
-      //   appid: plus.runtime.appid,
-      //   appname: 'dh',
-      //   version,
-      // };
-      const version = '1.0.0';
+      const { name = 'Android' } = plus.os;
+      const { version } = appdata;
+      
+      // const version = '1.0.0';
+      // const name = 'Android';
       const data = {
-        appid: 'dh',
-        appname: 'dh',
         version,
+        app_type: 1,
+        app_phone: name,
       };
       /* eslint-disable */
       return new Promise((resolve, reject) => {
