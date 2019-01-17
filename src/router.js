@@ -259,16 +259,7 @@ const router = new Router({
       name: 'login',
       component: () => import(/* webpackChunkName: "login" */ './views/login.vue'),
     },
-    {
-      path: '/login3',
-      name: 'login3',
-      component: () => import(/* webpackChunkName: "login" */ './views/login3.vue'),
-    },
-    {
-      path: '/login4',
-      name: 'login4',
-      component: () => import(/* webpackChunkName: "login" */ './views/login4.vue'),
-    },
+
     {
       path: '/addDevice2',
       name: 'add_device2',

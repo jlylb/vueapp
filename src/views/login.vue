@@ -9,7 +9,7 @@
 
       <my-input
         placeholder="请输入用户名"
-        class="input-active"
+        class="my-input input-active"
         data-vv-name="username"
         key="username"
         @click.native="smallLogo"
@@ -23,7 +23,7 @@
       <my-input
         placeholder="请输入密码"
         data-vv-name="password"
-        class="input-active"
+        class="my-input input-active"
         v-validate="{ required: true, min: 6 }"
         type="password"
         autocomplete="off"
@@ -52,11 +52,9 @@ export default {
   components: { MyInput },
   data() {
     return {
-      // username: "username1",
-      // password: "123456",
       validateForm: {
-        username: "a81",
-        password: "123456"
+        username: "",
+        password: ""
       },
       showLogo: true,
       keyboard: null
@@ -135,6 +133,7 @@ export default {
 $cover-color: #4a9026;
 $input-color: darken($cover-color, 10%);
 $logo-color: #c4e1ff;
+$placeholder-color: #ccc;
 .login-container {
   // background-image: url('../assets/bg.png');
   background-repeat: no-repeat;
@@ -237,6 +236,14 @@ $logo-color: #c4e1ff;
   }
   100% {
     transform: scale(1);
+  }
+}
+.my-input /deep/ .mint-field-core {
+  &::-webkit-input-placeholder {
+    color: $placeholder-color;
+  }
+  &::-moz-placeholder {
+    color: $placeholder-color;
   }
 }
 </style>

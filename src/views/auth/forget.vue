@@ -25,7 +25,7 @@
       v-model.trim="validateForm.code"
     >
       <svg-icon icon-class="code" class="login-input-icon" slot="prepend"></svg-icon>
-      <sms-btn :time="60" :is-disabled="isDisabled" @sentAjax="getCode"></sms-btn>
+      <sms-btn :time="60" :is-disabled="isDisabled" @sentAjax="getCode" ref="sms"></sms-btn>
     </my-input>
     <div class="error" v-if="errors.has('code')">{{ errors.first("code") }}</div>
 
@@ -65,9 +65,9 @@ export default {
   data() {
     return {
       validateForm: {
-        phone: "13627217450",
-        code: "123456",
-        password: "123456"
+        phone: "",
+        code: "",
+        password: ""
       }
     };
   },
@@ -107,9 +107,15 @@ export default {
       this.$validator.validate("phone").then(valid => {
         if (valid) {
           const { phone } = this.validateForm;
-          sendcode({ phone }).then(res => {
-            Toast(res.data.msg);
-          });
+          sendcode({ phone })
+            .then(res => {
+              Toast(res.data.msg);
+            })
+            .catch(() => {
+              this.$refs.sms.reset();
+            });
+        } else {
+          this.$refs.sms.reset();
         }
       });
     }
