@@ -2,55 +2,57 @@
   <div class="layout-container single-page">
     <top-component></top-component>
 
-    <my-input
-      disable-clear
-      class="input-active"
-      placeholder="请输入手机号"
-      data-vv-name="phone"
-      key="phone"
-      v-validate="{ required: true, digits: 11, regex: /^1[3578]\d{9}$/}"
-      v-model.trim="validateForm.phone"
-    >
-      <svg-icon icon-class="phone" class="login-input-icon" slot="prepend"></svg-icon>
-    </my-input>
-    <div class="error" v-if="errors.has('phone')">{{ errors.first("phone") }}</div>
+    <div class="single-content">
+      <my-input
+        disable-clear
+        class="input-active"
+        placeholder="请输入手机号"
+        data-vv-name="phone"
+        key="phone"
+        v-validate="{ required: true, digits: 11, regex: /^1[3578]\d{9}$/}"
+        v-model.trim="validateForm.phone"
+      >
+        <svg-icon icon-class="phone" class="login-input-icon" slot="prepend"></svg-icon>
+      </my-input>
+      <div class="error" v-if="errors.has('phone')">{{ errors.first("phone") }}</div>
 
-    <my-input
-      disable-clear
-      class="input-active"
-      placeholder="请输入验证码"
-      data-vv-name="code"
-      key="code"
-      v-validate="{ required: true, digits: 6 }"
-      v-model.trim="validateForm.code"
-    >
-      <svg-icon icon-class="code" class="login-input-icon" slot="prepend"></svg-icon>
-      <sms-btn :time="60" :is-disabled="isDisabled" @sentAjax="getCode" ref="sms"></sms-btn>
-    </my-input>
-    <div class="error" v-if="errors.has('code')">{{ errors.first("code") }}</div>
+      <my-input
+        disable-clear
+        class="input-active"
+        placeholder="请输入验证码"
+        data-vv-name="code"
+        key="code"
+        v-validate="{ required: true, digits: 6 }"
+        v-model.trim="validateForm.code"
+      >
+        <svg-icon icon-class="code" class="login-input-icon" slot="prepend"></svg-icon>
+        <sms-btn :time="60" :is-disabled="isDisabled" @sentAjax="getCode" ref="sms"></sms-btn>
+      </my-input>
+      <div class="error" v-if="errors.has('code')">{{ errors.first("code") }}</div>
 
-    <my-input
-      disable-clear
-      placeholder="请输入新密码"
-      data-vv-name="password"
-      class="input-active"
-      v-validate="{ required: true, min: 6 }"
-      type="password"
-      autocomplete="off"
-      key="password"
-      v-model="validateForm.password"
-    >
-      <svg-icon icon-class="fpassword" class="login-input-icon" slot="prepend"></svg-icon>
-    </my-input>
-    <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
+      <my-input
+        disable-clear
+        placeholder="请输入新密码"
+        data-vv-name="password"
+        class="input-active"
+        v-validate="{ required: true, min: 6 }"
+        type="password"
+        autocomplete="off"
+        key="password"
+        v-model="validateForm.password"
+      >
+        <svg-icon icon-class="fpassword" class="login-input-icon" slot="prepend"></svg-icon>
+      </my-input>
+      <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
 
-    <mt-button
-      size="large"
-      type="primary"
-      class="btn-top"
-      @click.native="confirmPassword"
-      :disabled="btnDisabled"
-    >确定</mt-button>
+      <mt-button
+        size="large"
+        type="primary"
+        class="btn-top"
+        @click.native="confirmPassword"
+        :disabled="btnDisabled"
+      >确定</mt-button>
+    </div>
   </div>
 </template>
 
