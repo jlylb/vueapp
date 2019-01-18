@@ -105,36 +105,35 @@ export default {
   },
   mounted() {
     console.log("mounted ing ...before", this.isUpdateApp);
+
     if (this.isUpdateApp) return;
     const AutoUpdateApp = this.$AutoUpdateApp();
-    AutoUpdateApp.getVersion((version)=>{
-      console.log(version, 'version......')
+    AutoUpdateApp.getVersion(version => {
+      console.log(version, "version......");
       this.$store
-      .dispatch("app/updateApp", {version})
-      .then(res => {
-        const { apk } = res;
-        if (apk) {
-          MessageBox.confirm("检测到更新,是否更新?", "更新提示", {
-            confirmButtonText: "立即更新",
-            cancelButtonText: "稍后更新",
-            closeOnClickModal: false
-          })
-            .then(() => {
-              
-              let url = apk;
-              if (!/http[s]?:\/\//.test(apk)) {
-                url = getImageUrl(apk);
-              }
-              AutoUpdateApp.downWgt(url);
+        .dispatch("app/updateApp", { version })
+        .then(res => {
+          const { apk } = res;
+          if (apk) {
+            MessageBox.confirm("检测到更新,是否更新?", "更新提示", {
+              confirmButtonText: "立即更新",
+              cancelButtonText: "稍后更新",
+              closeOnClickModal: false
             })
-            .catch(err => {
-              console.log("取消更新", err);
-            });
-        }
-      })
-      .catch(() => {});
-    })
-
+              .then(() => {
+                let url = apk;
+                if (!/http[s]?:\/\//.test(apk)) {
+                  url = getImageUrl(apk);
+                }
+                AutoUpdateApp.downWgt(url);
+              })
+              .catch(err => {
+                console.log("取消更新", err);
+              });
+          }
+        })
+        .catch(() => {});
+    });
   },
   created() {
     this.$store.commit("app/BAR_TITLE", "首页");
