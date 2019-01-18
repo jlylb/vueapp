@@ -8,6 +8,7 @@ export default {
           detail: null,
           pdi: null,
           boolFields: [],
+          subFields: [],
         };
       },
       methods: {
@@ -37,6 +38,8 @@ export default {
                 });
               }
               this.detail = device;
+              const { subFields } = res.data;
+              this.subFields = subFields || [];
               if (typeof this.formatChartData === 'function') {
                 this.formatChartData();
               }

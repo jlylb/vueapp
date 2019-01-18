@@ -148,7 +148,7 @@ export default {
         axisSite,
         yAxisType,
         yAxisName,
-        max,
+        //  max,
         labelMap,
         digit: 2
       };

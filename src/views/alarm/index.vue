@@ -96,7 +96,8 @@ export default {
       popupFilter: false,
       pickerStart: new Date(),
       pickerEnd: new Date(),
-      searchDate: { start: null, end: null }
+      searchDate: { start: null, end: null },
+      isConfirm: false
     };
   },
   methods: {
@@ -136,11 +137,15 @@ export default {
         });
     },
     goFilter() {
+      this.searchDate = { start: null, end: null };
       this.popupFilter = true;
     },
-    formatTime(str) {
-      if (!str) return;
-      return parseTime(new Date(str), "{y}-{m}-{d}");
+    formatTime(sstr) {
+      if (!sstr) return;
+      if (!(sstr instanceof Date)) {
+        sstr = new Date(sstr);
+      }
+      return parseTime(sstr, "{y}-{m}-{d}");
     },
     handleConfirm(val, sType) {
       this.searchDate[sType] = this.formatTime(val);
@@ -155,8 +160,7 @@ export default {
       this.$refs.pickerTimeEnd.open();
     },
     cancalFilter() {
-      const { start, end } = this.searchDate;
-      if (start && end) {
+      if (this.isConfirm) {
         this.search = {
           page: 0,
           pageSize: 15
@@ -166,6 +170,7 @@ export default {
         this.hasPage = true;
         this.getData();
       }
+      this.isConfirm = false;
       this.searchDate = { start: null, end: null };
       this.popupFilter = false;
     },
@@ -175,6 +180,7 @@ export default {
         // Toast("请选择筛选时间");
         return;
       }
+      this.isConfirm = true;
       this.search = {
         page: 0,
         pageSize: 15
