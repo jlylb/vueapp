@@ -68,6 +68,7 @@ export default {
       const vm = this;
       if (window.plus) {
         console.log(plus);
+        plus.screen.lockOrientation("portrait-primary");
         // function plusReady() {
         plus.key.addEventListener("backbutton", () => {
           console.log("listening back button");
