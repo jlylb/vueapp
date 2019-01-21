@@ -17,6 +17,7 @@ import 'animate.css';
 
 import VueSocketIO from 'vue-socket-io';
 import { socketHost } from '@/tools/config';
+import updateApp from '@/plugins/updateapp';
 // import VueSocketIO from '@/tools/vue-sock';
 
 import App from './App.vue';
@@ -60,6 +61,8 @@ Vue.component(VeHistogram.name, VeHistogram);
 // );
 
 Vue.use(VueSocketIO, `${socketHost}`);
+
+Vue.use(updateApp);
 
 new Vue({
   router,
