@@ -71,9 +71,9 @@ export default {
   data() {
     return {
       validateForm: {
-        password: "123456",
-        new_password: "123456",
-        new_password_confirmation: "123456"
+        password: "",
+        new_password: "",
+        new_password_confirmation: ""
       }
     };
   },
