@@ -10,9 +10,9 @@ import router from '../router';
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common.Authorization = `Bearer ${getToken()}`;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
+console.log(JSON.stringify(process.env), 'node env ......');
 const config = {
-  baseURL: process.env.NODE_ENV === 'production' ? apiUrl : '/api',
+  baseURL: apiUrl,
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };

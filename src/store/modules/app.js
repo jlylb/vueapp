@@ -1,5 +1,5 @@
 import { removeGuide, setGuide } from '@/tools/guide';
-import checkUpdate from '@/api/home';
+import { checkUpdate } from '@/api/home';
 
 const app = {
   namespaced: true,

@@ -44,7 +44,7 @@ module.exports = {
     // 输出文件名会被推导为 `subpage.html`。
     // guide: 'src/guide.js',
   },
-  baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
+  baseUrl: process.env.NODE_ENV === 'production' ? './' : './',
   configureWebpack: {
     plugins: [],
     externals: {
