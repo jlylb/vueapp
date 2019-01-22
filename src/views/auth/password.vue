@@ -1,63 +1,64 @@
 <template>
-  <div class="layout-container">
+  <div class="layout-container single-page">
     <top-component></top-component>
+    <div class="single-content">
+      <my-input
+        disable-clear
+        placeholder="请输入原密码"
+        data-vv-name="password"
+        class="input-active"
+        v-validate="{ required: true, min: 6 }"
+        type="password"
+        autocomplete="off"
+        key="password"
+        v-model="validateForm.password"
+      >
+        <svg-icon icon-class="new-password" class="login-input-icon" slot="prepend"></svg-icon>
+      </my-input>
+      <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
 
-    <my-input
-      disable-clear
-      placeholder="请输入原密码"
-      data-vv-name="password"
-      class="input-active"
-      v-validate="{ required: true, min: 6 }"
-      type="password"
-      autocomplete="off"
-      key="password"
-      v-model="validateForm.password"
-    >
-      <svg-icon icon-class="new-password" class="login-input-icon" slot="prepend"></svg-icon>
-    </my-input>
-    <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
+      <my-input
+        disable-clear
+        placeholder="请输入新密码"
+        data-vv-name="new_password"
+        class="input-active"
+        v-validate="{ required: true, min: 6 }"
+        type="password"
+        autocomplete="off"
+        key="new_password"
+        ref="newpassword"
+        v-model="validateForm.new_password"
+      >
+        <svg-icon icon-class="new-password" class="login-input-icon" slot="prepend"></svg-icon>
+      </my-input>
+      <div class="error" v-if="errors.has('new_password')">{{ errors.first("new_password") }}</div>
 
-    <my-input
-      disable-clear
-      placeholder="请输入新密码"
-      data-vv-name="new_password"
-      class="input-active"
-      v-validate="{ required: true, min: 6 }"
-      type="password"
-      autocomplete="off"
-      key="new_password"
-      ref="newpassword"
-      v-model="validateForm.new_password"
-    >
-      <svg-icon icon-class="new-password" class="login-input-icon" slot="prepend"></svg-icon>
-    </my-input>
-    <div class="error" v-if="errors.has('new_password')">{{ errors.first("new_password") }}</div>
+      <my-input
+        disable-clear
+        placeholder="确认新密码"
+        data-vv-name="new_password_confirmation"
+        class="input-active"
+        v-validate="{ required: true, min: 6, confirmed:'newpassword' }"
+        type="password"
+        autocomplete="off"
+        key="new_password_confirmation"
+        v-model="validateForm.new_password_confirmation"
+      >
+        <svg-icon icon-class="confirm-password" class="login-input-icon" slot="prepend"></svg-icon>
+      </my-input>
+      <div
+        class="error"
+        v-if="errors.has('new_password_confirmation')"
+      >{{ errors.first("new_password_confirmation") }}</div>
 
-    <my-input
-      disable-clear
-      placeholder="确认新密码"
-      data-vv-name="new_password_confirmation"
-      class="input-active"
-      v-validate="{ required: true, min: 6, confirmed:'newpassword' }"
-      type="password"
-      autocomplete="off"
-      key="new_password_confirmation"
-      v-model="validateForm.new_password_confirmation"
-    >
-      <svg-icon icon-class="confirm-password" class="login-input-icon" slot="prepend"></svg-icon>
-    </my-input>
-    <div
-      class="error"
-      v-if="errors.has('new_password_confirmation')"
-    >{{ errors.first("new_password_confirmation") }}</div>
-
-    <mt-button
-      size="large"
-      type="primary"
-      class="btn-top"
-      @click.native="confirmPassword"
-      :disabled="btnDisabled"
-    >确定</mt-button>
+      <mt-button
+        size="large"
+        type="primary"
+        class="btn-top"
+        @click.native="confirmPassword"
+        :disabled="btnDisabled"
+      >确定</mt-button>
+    </div>
   </div>
 </template>
 
@@ -101,6 +102,7 @@ export default {
       });
     }
   },
+  mounted() {},
   created() {}
 };
 </script>
@@ -135,5 +137,6 @@ $border-color: #e5e5e5;
 .error {
   color: #ef4f4f;
   text-align: left;
+  padding-left: 15px;
 }
 </style>

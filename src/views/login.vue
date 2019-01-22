@@ -9,7 +9,7 @@
 
       <my-input
         placeholder="请输入用户名"
-        class="my-input input-active"
+        class="login-input input-active"
         data-vv-name="username"
         key="username"
         @click.native="smallLogo"
@@ -23,7 +23,7 @@
       <my-input
         placeholder="请输入密码"
         data-vv-name="password"
-        class="my-input input-active"
+        class="login-input input-active"
         v-validate="{ required: true, min: 6 }"
         type="password"
         autocomplete="off"
@@ -238,7 +238,7 @@ $placeholder-color: #ccc;
     transform: scale(1);
   }
 }
-.my-input /deep/ .mint-field-core {
+.login-input /deep/ .mint-field-core {
   &::-webkit-input-placeholder {
     color: $placeholder-color;
   }

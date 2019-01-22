@@ -226,6 +226,7 @@ export default {
     },
     cancel() {
       this.popupVisible = false;
+      this.$validator.reset();
       this.errors.clear();
       this.states = {};
       this.deviceModel = {
