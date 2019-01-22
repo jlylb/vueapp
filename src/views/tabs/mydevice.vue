@@ -24,9 +24,9 @@
     <mt-popup v-model="popupDetail" class="popup-device" position="bottom">
       <mt-cell title="设备索引">{{ item.pdi_index }}</mt-cell>
       <mt-cell title="设备名称">{{ item.pdi_name }}</mt-cell>
-      <mt-cell title="设备类型">{{ item.dpt_id }}</mt-cell>
-
-      <mt-cell title="公司">{{ item.company && item.company.Co_Name }}</mt-cell>
+      <mt-cell title="设备类型">{{ item.types && item.types.dt_typename || "无" }}</mt-cell>
+      <mt-cell title="区域">{{ item.area && item.area.AreaName || "无" }}</mt-cell>
+      <mt-cell title="公司">{{ item.company && item.company.Co_Name || "无" }}</mt-cell>
     </mt-popup>
 
     <mt-popup

@@ -26,6 +26,7 @@
       type="password"
       autocomplete="off"
       key="new_password"
+      ref="newpassword"
       v-model="validateForm.new_password"
     >
       <svg-icon icon-class="new-password" class="login-input-icon" slot="prepend"></svg-icon>
@@ -37,7 +38,7 @@
       placeholder="确认新密码"
       data-vv-name="new_password_confirmation"
       class="input-active"
-      v-validate="{ required: true, min: 6 }"
+      v-validate="{ required: true, min: 6, confirmed:'newpassword' }"
       type="password"
       autocomplete="off"
       key="new_password_confirmation"

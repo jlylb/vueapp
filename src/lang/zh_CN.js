@@ -23,5 +23,14 @@ export default {
       required: () => '验证码不能为空',
       digits: () => '验证码由6位数字组成',
     },
+    new_password: {
+      required: () => '新密码不能为空',
+      min: () => '新密码最少长度6位',
+    },
+    new_password_confirmation: {
+      required: () => '确认密码不能为空',
+      min: () => '确认密码最少长度6位',
+      confirmed: () => '两次密码输入不一致',
+    },
   },
 };
