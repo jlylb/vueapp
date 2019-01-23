@@ -103,8 +103,9 @@ const user = {
         getUserInfo()
           .then((response) => {
             console.log(response);
-            if (!response.data) {
-              reject('error');
+            if (!response) {
+              reject(new Error(`当前数据是${response}`));
+              return;
             }
             const data = response.data.user;
 

@@ -42,6 +42,7 @@
         v-model="deviceModel.pdi"
         data-vv-name="pdi"
         :state="states['pdi']"
+        @input="changeState($event, 'pdi')"
         v-validate="{ required: true}"
       ></mt-field>
       <p class="field-error" v-if="states['pdi']=='error'">{{ errors.first('pdi') }}</p>
@@ -51,6 +52,7 @@
         v-model="deviceModel.name"
         data-vv-name="name"
         :state="states['name']"
+        @input="changeState($event, 'name')"
         v-validate="{ required: true}"
       ></mt-field>
       <p class="field-error" v-if="states['name']=='error'">{{ errors.first('name') }}</p>
@@ -173,13 +175,14 @@ export default {
       const { value, label } = newval;
       this.deviceModel.area = value;
       this.areaLabel = label;
-    },
-    fields: {
-      handler(newval) {
-        this.getStates();
-      },
-      deep: true
     }
+    // fields: {
+    //   handler(newval) {
+    //     console.log(newval, "watching fields.....");
+    //     this.getStates();
+    //   },
+    //   deep: true
+    // }
   },
   methods: {
     getStates() {
@@ -200,6 +203,17 @@ export default {
       this.states = states;
       console.log(this.states, "states....", this.fields);
     },
+    changeState(val, field) {
+      setTimeout(() => {
+        this.$validator.validate(field).then(() => {
+          this.$set(
+            this.states,
+            field,
+            this.errors.has(field) ? "error" : "success"
+          );
+        });
+      }, 200);
+    },
     openDevice(item) {
       this.popupDetail = true;
       this.item = item;
@@ -214,12 +228,13 @@ export default {
     handAdd() {
       this.isAdd = false;
       this.popupVisible = true;
-      this.errors.clear();
+      this.deviceModel = {
+        pdi: "",
+        name: ""
+      };
+      this.$validator.reset();
       this.states = {};
-      // this.deviceModel = {
-      //   pdi: '',
-      //   name: '',
-      // };
+      this.$validator.resume();
     },
     handtest() {
       this.$router.push({ name: "addDevice_page" });
@@ -257,12 +272,6 @@ export default {
         this.states = states;
         if (!valid) return;
         MessageBox.confirm("确定保存?").then(action => {
-          console.log(
-            this.deviceModel,
-            "confirm ........",
-            this.selectType,
-            this.selectArea
-          );
           const { pdi: pdi_code, name: pdi_name } = this.deviceModel;
           const { value: dpt_id } = this.selectType;
           const { value: AreaId } = this.selectArea;
@@ -273,6 +282,12 @@ export default {
               this.$refs.pickArea.setSlotValue(0, first);
               this.$refs.pickArea.setSlotValue(1, this.cities[first.value][0]);
               this.$refs.pickType.setSlotValue(0, this.types[0]);
+              this.$validator.pause();
+              this.deviceModel = {
+                pdi: "",
+                name: ""
+              };
+              this.$validator.reset();
             }
             res && Toast(res.data.msg);
           });

@@ -21,8 +21,9 @@ router.beforeEach((to, from, next) => {
           next();
         })
         .catch((err) => {
+          console.log(err, 'permission......');
           store.dispatch('user/FedLogOut').then(() => {
-            MessageBox.alert(err || '验证失败, 请重新登录!!');
+            // MessageBox.alert(err || '验证失败, 请重新登录!!');
             next({ path: '/' });
           });
         });

@@ -100,8 +100,7 @@ export default {
     }
   },
   created() {
-    console.log(this.$store);
-
+    // console.log(this.$store);
     // const name = 'tab_home'
     // this.$router.push({name})
   }

@@ -79,22 +79,6 @@ const router = new Router({
         },
 
         {
-          path: '/monitor/device',
-          name: 'monitor_device',
-          meta: {
-            title: '实时监测-选择设备',
-          },
-          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device.vue'),
-        },
-        {
-          path: '/monitor/device2/:dapeng/:areaId/',
-          name: 'monitor_device2',
-          meta: {
-            title: '实时监测-选择设备',
-          },
-          component: () => import(/* webpackChunkName: "monitor" */ './views/monitor/device2.vue'),
-        },
-        {
           path: '/monitor/device3/:dapeng/:areaId/:dapengName',
           name: 'monitor_device3',
           meta: {

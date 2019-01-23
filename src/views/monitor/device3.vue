@@ -8,7 +8,6 @@
         :settings="chartSettings"
         :extend="extend"
         :data-empty="dataEmpty"
-        :loading="loading"
         :after-set-option="afterSet"
         height="100%"
       ></ve-histogram>
@@ -38,11 +37,7 @@
       </div>
       <div class="chart-desc-block">
         <mt-swipe :auto="0" class="swipe-param">
-          <mt-swipe-item
-            v-for="(itemValue, index) in item"
-            :key="'swipe_'+index"
-            v-if="index!=='consta'"
-          >
+          <mt-swipe-item v-for="(itemValue, index) in currentItem" :key="'swipe_'+index">
             <div :class="['chart-desc-block-item', itemClass[itemFields.indexOf(index)]]">
               <div class="row">
                 <div class="row-left">
@@ -85,7 +80,7 @@
         v-for="item in num"
         :key="item"
       >
-        <icon-bg :icon="pdiIndex.icon" slot="icon" small></icon-bg>
+        <icon-bg :icon="pdiIndex.icon" slot="icon" small v-if="pdiIndex"></icon-bg>
       </mt-cell>
     </mt-popup>
 
@@ -99,8 +94,12 @@ import { fetchDevice, fetchAreaDevice } from "@/api/monitor";
 import DropMenu from "@/components/dropdown";
 import { getDataValue } from "@/tools";
 import IconBg from "@/components/iconBg";
+import freshData from "@/tools/freshdata";
+import MyLoading from "@/tools/reloading";
+
 export default {
   components: { DropMenu, IconBg },
+  mixins: [freshData],
   data() {
     return {
       selectDevice: false,
@@ -117,7 +116,7 @@ export default {
       itemFields: null,
       unit: null,
       icons: null,
-      itemIndex: null,
+      itemIndex: 1,
       itemClass: ["red", "yellow", "primary"],
       dapeng: null,
       dapengName: null,
@@ -125,128 +124,19 @@ export default {
       dataEmpty: false,
       chart: null,
       loading: false,
-      isColumn: false
+      isColumn: false,
+      deviceParams: {}
     };
   },
-  // sockets: {
-  //   connect: function() {
-  //     console.log("socket connected");
-  //     // this.$socket.removeAllListeners("chat-message");
-  //   },
-  //   "reply-msg": function(data, itemIndex1) {
-  //     console.log(
-  //       "this method was fired by the socket server.",
-  //       data,
-  //       itemIndex
-  //     );
-  //     const [devices, itemIndex] = data;
-  //     // this.device = data.devices;
-  //     this.device = devices.devices;
-  //     // this.itemIndex = null;
-  //     if (this.device.length === 0) {
-  //       MessageBox.alert(`该设备没有数据！`, "提示");
-  //       this.items = [];
-  //       this.num = 0;
-  //       this.itemFields = [];
-  //       this.deviceName = null;
-  //       this.item = null;
-  //       this.dataEmpty = true;
-  //       this.chartData = {
-  //         columns: [],
-  //         rows: []
-  //       };
-  //       this.chartSettings = {
-  //         axisSite: {},
-  //         yAxisType: [],
-  //         yAxisName: [],
-  //         min: [],
-  //         max: [],
-  //         labelMap: {}
-  //       };
-  //       console.log(this.chart, "chart instance....");
-  //       if (this.chart) {
-  //         this.chart.clear();
-  //       }
-  //       this.itemIndex = null;
-  //       return;
-  //     }
-  //     this.dataEmpty = false;
-  //     this.items = getDataValue(this.device, ["items"], []);
-  //     this.num = getDataValue(this.device, ["num"], 0);
-  //     this.itemFields = getDataValue(this.device, ["fields"], []);
-  //     this.deviceName = getDataValue(this.device, ["name"], "");
-  //     this.unit = getDataValue(this.device, ["unit"], null);
-  //     this.icons = getDataValue(this.device, ["icons"], null);
-  //     if (!this.itemIndex) {
-  //       this.itemIndex = 1;
-  //     } else {
-  //       this.itemIndex = itemIndex;
-  //     }
-  //     this.formatChartData();
-  //   }
-  // },
-  socket: {
-    // namespace: "http://192.168.1.33:2021/monitor",
-    events: {
-      connect: function() {
-        console.log("socket connected");
-        // this.$socket.removeAllListeners("chat-message");
-      },
-      disconnect: function() {
-        console.log("socket disconnect......");
-        // this.$socket.removeAllListeners("chat-message");
-      },
-      "reply-msg": function(data, itemIndex) {
-        console.log(
-          "this method was fired by the socket server.",
-          data,
-          itemIndex
-        );
-        //const [devices, itemIndex] = data;
-        this.device = data.devices;
-        // this.device = devices.devices;
-        // this.itemIndex = null;
-        if (this.device.length === 0) {
-          MessageBox.alert(`该设备没有数据！`, "提示");
-          this.items = [];
-          this.num = 0;
-          this.itemFields = [];
-          this.deviceName = null;
-          this.item = null;
-          this.dataEmpty = true;
-          this.chartData = {
-            columns: [],
-            rows: []
-          };
-          this.chartSettings = {
-            axisSite: {},
-            yAxisType: [],
-            yAxisName: [],
-            min: [],
-            max: [],
-            labelMap: {}
-          };
-          console.log(this.chart, "chart instance....");
-          if (this.chart) {
-            this.chart.clear();
-          }
-          this.itemIndex = null;
-          return;
+  computed: {
+    currentItem() {
+      let items = {};
+      for (let itemKey in this.item) {
+        if (itemKey != "consta") {
+          items[itemKey] = this.item[itemKey];
         }
-        this.dataEmpty = false;
-        this.items = getDataValue(this.device, ["items"], []);
-        this.num = getDataValue(this.device, ["num"], 0);
-        this.itemFields = getDataValue(this.device, ["fields"], []);
-        this.deviceName = getDataValue(this.device, ["name"], "");
-        this.unit = getDataValue(this.device, ["unit"], null);
-        this.icons = getDataValue(this.device, ["icons"], null);
-        if (!this.itemIndex) {
-          this.itemIndex = 1;
-        } else {
-          this.itemIndex = itemIndex;
-        }
-        this.formatChartData();
       }
+      return items;
     }
   },
   methods: {
@@ -266,12 +156,12 @@ export default {
       this.pdiIndex = item;
     },
     selectType() {
+      if (!this.deviceData) return;
       this.openMenu = true;
-      // this.itemIndex = null;
     },
     formatChartData() {
       this.isColumn = false;
-      if (!this.itemIndex) return;
+      if (this.items.length === 0) return;
       const item = this.items[this.itemIndex - 1];
       this.item = item;
       let yAxisName = [],
@@ -284,7 +174,6 @@ export default {
       chartRow["name"] = this.deviceName
         ? this.deviceName + this.itemIndex
         : "";
-      console.log(this.itemFields, "format chartdata");
       this.itemFields.map(temp => {
         let cur = item[temp];
         let itemKey = temp + "_name",
@@ -296,7 +185,6 @@ export default {
         chartRow[temp] = curValueVal;
         labelMap[temp] = curKeyVal;
       });
-      console.log(yAxisName, "yAxisName...");
       let len = yAxisName.length;
 
       // let min = ["dataMin"],
@@ -323,84 +211,68 @@ export default {
         columns,
         rows
       };
-      console.log();
     },
-    getData(data) {
-      this.loading = true;
-      fetchDevice(data).then(res => {
-        this.loading = false;
-        console.log(res);
-        this.device = res.data.devices;
-        if (this.device.length === 0) {
-          MessageBox.alert(`该设备没有数据！`, "提示");
-          this.items = [];
-          this.num = 0;
-          this.itemFields = [];
-          this.deviceName = null;
-          this.item = null;
-          this.dataEmpty = true;
-          this.chartData = {
-            columns: [],
-            rows: []
-          };
-          this.chartSettings = {
-            axisSite: {},
-            yAxisType: [],
-            yAxisName: [],
-            // min: [],
-            // max: [],
-            labelMap: {}
-          };
-          console.log(this.chart, "chart instance....");
-          if (this.chart) {
-            this.chart.clear();
+    getData(isLoading = true) {
+      MyLoading.isShow = isLoading;
+      MyLoading.start();
+      fetchDevice(this.deviceParams)
+        .then(res => {
+          MyLoading.close();
+          this.device = res.data.devices;
+          if (this.device.length === 0) {
+            // MessageBox.alert(`该设备没有数据！`, "提示");
+            this.items = [];
+            this.num = 0;
+            this.itemFields = [];
+            this.deviceName = null;
+            this.item = null;
+            this.dataEmpty = true;
+            this.chartData = {
+              columns: [],
+              rows: []
+            };
+            this.chartSettings = {
+              axisSite: {},
+              yAxisType: [],
+              yAxisName: [],
+              // min: [],
+              // max: [],
+              labelMap: {}
+            };
+            if (this.chart) {
+              this.chart.clear();
+            }
+            return;
           }
-          this.itemIndex = null;
-          return;
-        }
-        this.dataEmpty = false;
-        this.items = getDataValue(this.device, ["items"], []);
-        this.num = getDataValue(this.device, ["num"], 0);
-        this.itemFields = getDataValue(this.device, ["fields"], []);
-        this.deviceName = getDataValue(this.device, ["name"], "");
-        this.unit = getDataValue(this.device, ["unit"], null);
-        this.icons = getDataValue(this.device, ["icons"], null);
-        this.itemIndex = 1;
-      });
+          this.dataEmpty = false;
+          this.items = getDataValue(this.device, ["items"], []);
+          this.num = getDataValue(this.device, ["num"], 0);
+          this.itemFields = getDataValue(this.device, ["fields"], []);
+          this.deviceName = getDataValue(this.device, ["name"], "");
+          this.unit = getDataValue(this.device, ["unit"], null);
+          this.icons = getDataValue(this.device, ["icons"], null);
+          this.formatChartData();
+        })
+        .catch(() => {
+          MyLoading.close();
+        });
     }
   },
   watch: {
     pdiIndex(newVal) {
-      let { value: device } = newVal;
-      // this.$socket.removeAllListeners("chat-message");
-      this.$socket.emit("chat-message", {
-        ...newVal,
-        device,
-        itemIndex: 1
-      });
-      // this.$socket.sendObj({
-      //   ...newVal,
-      //   device,
-      //   itemIndex: 1
-      // });
-      this.getData({ ...newVal, device });
+      const { value: device, device_type } = newVal;
+      this.itemIndex = 1;
+      this.deviceParams = { device, device_type };
+      this.getData();
     },
     itemIndex(newVal) {
-      console.log(newVal, "itemIndex change......");
-      // this.getData(newVal)
-      this.$socket.emit("item-index", newVal);
       this.formatChartData();
     },
     selectDevice(newVal) {
       if (newVal === false) this.openMenu = false;
-    },
-    $route: function(to) {
-      console.log(to, "device to .....");
     }
   },
   created() {
-    console.log(this.$route.params);
-    // this.$socket.emit("chat-message", "hao are you !!");
     const { areaId, dapeng, dapengName } = this.$route.params;
     this.dapeng = dapeng;
     this.dapengName = dapengName;
@@ -411,7 +283,6 @@ export default {
         bottom: "1%"
       },
       yAxis(v) {
-        console.log(v, "yaxis......");
         v.forEach(i => {
           i.min = value => {
             return value.min == 0 ? 0 : value.min - 10;
@@ -423,7 +294,6 @@ export default {
         return v;
       },
       series(v) {
-        console.log(v, "series......");
         if (v) {
           v.forEach(i => {
             i.barWidth = "15%";
@@ -432,14 +302,21 @@ export default {
         }
       }
     };
-    fetchAreaDevice({ areaId }).then(res => {
-      this.deviceData = res.data.devices;
-      this.pdiIndex = getDataValue(this.deviceData, [0], null);
-      if (!this.deviceData) {
-        MessageBox.alert(`该大棚没有设备！`, "提示");
-        return;
-      }
-    });
+    MyLoading.enable().start();
+    fetchAreaDevice({ areaId })
+      .then(res => {
+        this.deviceData = res.data.devices;
+        MyLoading.close();
+        if (!this.deviceData) {
+          MessageBox.alert(`该大棚没有设备！`, "提示");
+          return;
+        }
+        this.pdiIndex = getDataValue(this.deviceData, [0], null);
+        this.startTimer();
+      })
+      .catch(() => {
+        MyLoading.close();
+      });
   }
 };
 </script>

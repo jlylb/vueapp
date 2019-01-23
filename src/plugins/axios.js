@@ -10,7 +10,7 @@ import router from '../router';
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common.Authorization = `Bearer ${getToken()}`;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-console.log(JSON.stringify(process.env), 'node env ......');
+
 const config = {
   baseURL: apiUrl,
   timeout: 5000, // Timeout
@@ -21,7 +21,6 @@ const _axios = axios.create(config);
 
 _axios.interceptors.request.use(
   (sconfig) => {
-    console.log(store.getters.token);
     if (store.getters.token) {
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       sconfig.headers.Authorization = `Bearer ${getToken()}`;
@@ -37,7 +36,7 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   (response) => {
-    console.log(response, 'ok....');
+    // console.log(response, 'ok....');
     const token = response.headers.authorization;
     if (token) {
       // 如果 header 中存在 token，那么触发 refreshToken 方法，替换本地的 token

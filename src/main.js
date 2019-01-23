@@ -15,8 +15,8 @@ import 'animate.css';
 // import VueTouch from 'vue-touch';
 // import '@/tools/backbutton';
 
-import VueSocketIO from 'vue-socket-io';
-import { socketHost } from '@/tools/config';
+// import VueSocketIO from 'vue-socket-io';
+// import { socketHost } from '@/tools/config';
 import updateApp from '@/plugins/updateapp';
 // import VueSocketIO from '@/tools/vue-sock';
 
@@ -60,7 +60,7 @@ Vue.component(VeHistogram.name, VeHistogram);
 //   8098,
 // );
 
-Vue.use(VueSocketIO, `${socketHost}`);
+// Vue.use(VueSocketIO, `${socketHost}`);
 
 Vue.use(updateApp);
 
