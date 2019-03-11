@@ -1,15 +1,13 @@
 <template>
   <div class="layout-container">
     <top-component></top-component>
-    <div class="user">
+    <!-- <div class="user">
       <div class="user-info">
         <div class="user-avatr" @click="openAvatar">
-          <!-- <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon> -->
           <img :src="showAvatar()" class="item-icon">
         </div>
       </div>
-    </div>
-
+    </div>-->
     <mt-cell title="个人信息" is-link to="/auth/userinfo">
       <svg-icon icon-class="user-circle" class="item-icon" slot="icon"></svg-icon>
       您好, {{ name }}
