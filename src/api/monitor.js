@@ -62,3 +62,11 @@ export function deleteDevice(pdi) {
     method: 'delete',
   });
 }
+
+export function fetchAreas(data) {
+  return axios({
+    url: '/monitor/index',
+    method: 'get',
+    params: { ...data, isArea: false },
+  });
+}

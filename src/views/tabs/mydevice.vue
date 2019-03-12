@@ -68,6 +68,8 @@
       <p class="field-error" v-if="states['name']=='error'">{{ errors.first('name') }}</p>
       <mt-cell title="设备分类" class="type-device" @click.native="openType">{{ typeLabel }}</mt-cell>
 
+      <mt-cell title="区域" class="type-device" @click.native="openArea">{{ areaLabel }}</mt-cell>
+
       <mt-cell title>
         <mt-button type="primary" @click="save">保存</mt-button>
         <mt-button type="danger" @click="cancel">取消</mt-button>
@@ -111,6 +113,10 @@
       </mt-picker>
     </mt-popup>
 
+    <mt-popup v-model="popupArea" class="popup-device" position="bottom">
+      <mt-picker :slots="areaSlots" @change="onAreaChange" ref="pickArea" :value-key="'label'"></mt-picker>
+    </mt-popup>
+
     <mt-popup v-model="isAdd" class="popup-menu" popup-transition="popup-fade">
       <mt-cell title="扫码添加" @click.native="scanAdd"></mt-cell>
       <mt-cell title="手动添加" @click.native="handAdd"></mt-cell>
@@ -125,7 +131,8 @@ import {
   fetchDeviceType,
   postDevice,
   updateDevice,
-  deleteDevice
+  deleteDevice,
+  fetchAreas
 } from "@/api/monitor";
 
 export default {
@@ -155,7 +162,12 @@ export default {
       updateDeviceModel: {
         name: "",
         pdi_index: ""
-      }
+      },
+      popupArea: false,
+      areaLabel: "",
+      selectArea: {},
+      provinces: [],
+      cities: {}
     };
   },
   computed: {
@@ -165,6 +177,32 @@ export default {
           flex: 1,
           values: this.types,
           className: "type-slot",
+          textAlign: "center"
+        }
+      ];
+    },
+    areaSlots() {
+      let city = [];
+      if (this.provinces.length > 0) {
+        let first = this.provinces[0].value;
+        city = this.cities[first];
+      }
+      return [
+        {
+          flex: 1,
+          values: this.provinces,
+          className: "slot1",
+          textAlign: "center"
+        },
+        {
+          divider: true,
+          content: "-",
+          className: "slot2"
+        },
+        {
+          flex: 1,
+          values: city,
+          className: "slot3",
           textAlign: "center"
         }
       ];
@@ -181,9 +219,30 @@ export default {
         this.getStates();
       },
       deep: true
+    },
+    selectArea(newval) {
+      const { value, label } = newval;
+      this.deviceModel.area = value;
+      this.areaLabel = label;
     }
   },
   methods: {
+    getAreas() {
+      fetchAreas().then(res => {
+        const { province, city } = res.data;
+        this.provinces = province;
+        this.cities = city;
+      });
+    },
+    onAreaChange(picker, values) {
+      console.log(values, "on area change ..........");
+      if (!values[0]) return;
+      picker.setSlotValues(1, this.cities[values[0].value]);
+      this.selectArea = values[1];
+    },
+    openArea() {
+      this.popupArea = true;
+    },
     getStates() {
       let states = {};
       Object.keys(this.fields).map(field => {
@@ -218,11 +277,13 @@ export default {
       this.popupVisible = true;
       this.errors.clear();
       this.states = {};
+      this.$validator.resume();
     },
     handtest() {
       this.$router.push({ name: "addDevice_page" });
     },
     cancel() {
+      this.$validator.reset();
       this.deviceModel = {
         pdi: "",
         type: "",
@@ -257,8 +318,19 @@ export default {
             name: pdi_name,
             type: dpt_id
           } = this.deviceModel;
-          postDevice({ pdi_code, pdi_name, dpt_id }).then(res => {
+          const { value: AreaId } = this.selectArea;
+          postDevice({ pdi_code, pdi_name, dpt_id, AreaId }).then(res => {
+            let first = this.provinces[0];
+            this.$refs.pickArea.setSlotValue(0, first);
+            this.$refs.pickArea.setSlotValue(1, this.cities[first.value][0]);
+            this.$refs.pickType.setSlotValue(0, this.types[0]);
+            this.$validator.pause();
+            this.deviceModel = {
+              pdi: "",
+              name: ""
+            };
             Toast(res.data.msg);
+            this.loadTop();
           });
         });
       });
@@ -385,6 +457,7 @@ export default {
     }
     this.getData();
     this.getAllType();
+    this.getAreas();
   }
 };
 </script>
