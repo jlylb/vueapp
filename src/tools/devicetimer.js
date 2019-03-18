@@ -9,6 +9,7 @@ export default {
           pdi: null,
           boolFields: [],
           subFields: [],
+          toptitle: null,
         };
       },
       methods: {
@@ -43,6 +44,7 @@ export default {
               if (typeof this.formatChartData === 'function') {
                 this.formatChartData();
               }
+              this.toptitle = res.data.title;
             })
             .catch(() => {
               this.clearTimerId();

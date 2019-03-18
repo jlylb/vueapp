@@ -38,6 +38,7 @@ export default {
     fetchDevice({ type }).then(res => {
       console.log(res.data.devices);
       this.devices = res.data.devices;
+      this.$store.commit("app/BAR_TITLE", res.data.title);
     });
   }
 };

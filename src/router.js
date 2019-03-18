@@ -120,21 +120,29 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "peidian" */ './views/peidian/index.vue'),
         },
+        // {
+        //   path: '/red/index/:pdi/:type',
+        //   name: 'red',
+        //   meta: {
+        //     title: '红外',
+        //   },
+        //   component: () => import(/* webpackChunkName: "red" */ './views/red/index.vue'),
+        // },
+        // {
+        //   path: '/yangan/index/:pdi/:type',
+        //   name: 'yangan',
+        //   meta: {
+        //     title: '烟感',
+        //   },
+        //   component: () => import(/* webpackChunkName: "yangan" */ './views/yangan/index.vue'),
+        // },
         {
-          path: '/red/index/:pdi/:type',
-          name: 'red',
+          path: '/switch/index/:pdi/:type',
+          name: 'switch',
           meta: {
-            title: '红外',
+            title: '',
           },
-          component: () => import(/* webpackChunkName: "red" */ './views/red/index.vue'),
-        },
-        {
-          path: '/yangan/index/:pdi/:type',
-          name: 'yangan',
-          meta: {
-            title: '烟感',
-          },
-          component: () => import(/* webpackChunkName: "yangan" */ './views/yangan/index.vue'),
+          component: () => import(/* webpackChunkName: "switch" */ './views/switch/index.vue'),
         },
         {
           path: '/sysmenu/index/:type',
@@ -200,7 +208,6 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "auth" */ './views/auth/password.vue'),
         },
-
       ],
     },
     {
