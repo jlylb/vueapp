@@ -120,6 +120,22 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "peidian" */ './views/peidian/index.vue'),
         },
+        {
+          path: '/battery/index/:pdi',
+          name: 'battery',
+          meta: {
+            title: '电池电量',
+          },
+          component: () => import(/* webpackChunkName: "battery" */ './views/battery/index.vue'),
+        },
+        {
+          path: '/batterygroup/index/:pdi',
+          name: 'batterygroup',
+          meta: {
+            title: '电池组',
+          },
+          component: () => import(/* webpackChunkName: "batterygroup" */ './views/batterygroup/index.vue'),
+        },
         // {
         //   path: '/red/index/:pdi/:type',
         //   name: 'red',

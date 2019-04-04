@@ -87,5 +87,19 @@ body {
   display: flex;
   align-items: center;
 }
+.params-btn {
+  width: 25%;
+}
+.active-cell {
+  background-color: $theme-color;
+  .mint-cell-text {
+    color: #fff;
+    vertical-align: inherit;
+  }
+  .item-icon,
+  span {
+    color: #fff;
+  }
+}
 
 @import 'mintui.scss';

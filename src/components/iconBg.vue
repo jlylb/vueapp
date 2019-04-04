@@ -26,7 +26,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 $normal: 40px;
 $small: 24px;
 $normal-icon: 1.8em;

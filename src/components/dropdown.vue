@@ -1,19 +1,15 @@
 <template>
-  <mt-popup
-    v-model="isDrop"
-    class='popup-menu'
-    v-bind="popProp"
-    popup-transition="popup-fade">
-      <mt-cell 
-        :title="item.label" 
-        v-for='(item, index) in data' 
-        :key='"dropdown" + index' 
-        :class='{ "active-menu": isActive && (active?active===item.value:menuIndex==index) }'
-        @click.native='openPop(item, $event, index)'>
-
-        <svg-icon :icon-class='item.icon' class='item-icon' slot='icon' v-if='item.icon'></svg-icon>
-        <span v-if='showLabel' style='color: green'> {{ item.value }} </span>
-      </mt-cell>
+  <mt-popup v-model="isDrop" class="popup-menu" v-bind="popProp" popup-transition="popup-fade">
+    <mt-cell
+      :title="item.label"
+      v-for="(item, index) in data"
+      :key="'dropdown' + index"
+      :class="{ 'active-menu': isActive && (active? active===item.value : menuIndex==index ) }"
+      @click.native="openPop(item, $event, index)"
+    >
+      <svg-icon :icon-class="item.icon" class="item-icon" slot="icon" v-if="item.icon"></svg-icon>
+      <span v-if="showLabel" style="color: green">{{ item.value }}</span>
+    </mt-cell>
   </mt-popup>
 </template>
 
@@ -23,13 +19,13 @@ export default {
     return {
       isDrop: this.open,
       menuIndex: 0
-    }
+    };
   },
   props: {
     data: {
       type: Array,
       default() {
-        return []
+        return [];
       }
     },
     open: {
@@ -51,25 +47,25 @@ export default {
     popProp: {
       type: Object,
       default() {
-        return {}
+        return {};
       }
     }
   },
   watch: {
     open(newVal) {
-      this.isDrop = newVal
+      this.isDrop = newVal;
     },
     isDrop(newVal) {
-      this.$emit('update:open', newVal)
-    },
+      this.$emit("update:open", newVal);
+    }
   },
   methods: {
     openPop(data, e, index) {
-      this.menuIndex = index
-      this.$emit('menuItem', data, e)
+      this.menuIndex = index;
+      this.$emit("menuItem", data, e);
     }
-  },
-}
+  }
+};
 </script>
 
 <style lang='scss' scoped>
