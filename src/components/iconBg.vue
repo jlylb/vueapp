@@ -27,10 +27,10 @@ export default {
 </script>
 
 <style lang='scss'>
-$normal: 40px;
-$small: 24px;
+$normal: 1.2rem;
+$small: 1rem;
 $normal-icon: 1.8em;
-$small-icon: 1em;
+$small-icon: 1.5em;
 .icon-background {
   width: $normal;
   height: $normal;
@@ -45,7 +45,7 @@ $small-icon: 1em;
     width: $small;
     height: $small;
   }
-  /deep/ .item-icon {
+  .item-icon {
     height: $normal-icon;
     width: $normal-icon;
     line-height: $normal-icon;

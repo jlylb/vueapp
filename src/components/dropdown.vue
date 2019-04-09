@@ -68,21 +68,19 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .active-menu {
   background-color: $blue;
-  /deep/ {
-    .mint-cell-text {
-      color: #fff;
-      vertical-align: inherit;
-    }
-    .item-icon,
-    span {
-      color: #fff;
-    }
+  .mint-cell-text {
+    color: #fff;
+    vertical-align: inherit;
+  }
+  .item-icon,
+  span {
+    color: #fff;
   }
 }
-.popup-menu /deep/ {
+.popup-menu {
   .mint-cell-text {
     vertical-align: inherit;
   }

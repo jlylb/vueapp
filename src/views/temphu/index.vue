@@ -254,7 +254,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .chart-block {
   display: inline-block;
   position: relative;
@@ -264,7 +264,6 @@ export default {
 }
 .itemSelect {
   background-color: $blue;
-  /deep/ {
     .mint-cell-text {
       color: #fff;
       vertical-align: inherit;
@@ -272,7 +271,6 @@ export default {
     .item-icon {
       color: #fff;
     }
-  }
 }
 
 .chart {
@@ -283,7 +281,7 @@ export default {
   transform: translate3d(-50%, 0, 0);
 }
 
-.layout-container /deep/ .popup-device {
+.layout-container .popup-device {
   height: 40%;
   overflow-y: auto;
 }

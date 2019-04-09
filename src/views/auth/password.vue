@@ -104,9 +104,9 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 $border-color: #e5e5e5;
-.input-active /deep/ .mint-field-core {
+.input-active .mint-field-core {
   background-color: inherit;
   color: #000;
 }
@@ -119,11 +119,11 @@ $border-color: #e5e5e5;
   border-color: transparent;
   border-bottom-color: $border-color;
 }
-.input-active /deep/ .mint-cell-wrapper {
+.input-active .mint-cell-wrapper {
   background-image: inherit;
   padding: 0 0 0 10px;
 }
-.input-active /deep/ .login-input-icon {
+.input-active .login-input-icon {
   color: $theme-color;
   width: 1.5em;
   height: 1.5em;

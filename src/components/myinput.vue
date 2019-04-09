@@ -153,7 +153,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .mint-field-clear {
   opacity: 1;
 }
@@ -171,16 +171,16 @@ export default {
   margin: 10px auto;
   /* margin: 10px auto; */
 }
-.mint-field /deep/ .mint-cell-wrapper {
+.mint-field .mint-cell-wrapper {
   background-image: none;
 }
 
-.mint-field /deep/ .mint-cell-left {
+.mint-field .mint-cell-left {
   transform: none;
   position: inherit;
   padding-left: 10px;
 }
-.mint-field /deep/ .mint-cell-right {
+.mint-field .mint-cell-right {
   transform: none;
   position: inherit;
   padding-right: 10px;

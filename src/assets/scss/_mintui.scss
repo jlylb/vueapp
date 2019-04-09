@@ -1,5 +1,6 @@
 .mint-header {
   background-color: $theme-color;
+  font-size: inherit;
 }
 .mint-tabbar {
   background-color: $theme-color;
@@ -85,4 +86,28 @@
 .mint-msgbox-input input {
   padding: 4px 0;
   height: 30px;
+  font-size: inherit;
+}
+
+.mint-cell-wrapper {
+  font-size: inherit;
+}
+[data-dpr='1'] .mint-cell-wrapper {
+  font-size: 16px;
+}
+[data-dpr='2'] .mint-cell-wrapper {
+  font-size: 24px;
+}
+[data-dpr='3'] .mint-cell-wrapper {
+  font-size: 36px;
+}
+
+.mint-cell {
+  min-height: 1.4rem;
+}
+.picker-slot {
+  font-size: inherit;
+}
+.mint-msgbox-btn {
+  font-size: inherit;
 }

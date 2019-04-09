@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'svg-icon',
+  name: "svg-icon",
   props: {
     iconClass: {
       type: String,
@@ -18,24 +18,24 @@ export default {
   },
   computed: {
     iconName() {
-      return `#icon-${this.iconClass}`
+      return `#icon-${this.iconClass}`;
     },
     svgClass() {
       if (this.className) {
-        return 'svg-icon ' + this.className
+        return "svg-icon " + this.className;
       } else {
-        return 'svg-icon'
+        return "svg-icon";
       }
     }
   }
-}
+};
 </script>
 
-<style scoped>
+<style>
 .svg-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
   fill: currentColor;
   overflow: hidden;
   display: inline-block;

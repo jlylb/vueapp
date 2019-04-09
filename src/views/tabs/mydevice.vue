@@ -462,8 +462,8 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
-.add-device /deep/ {
+<style lang='scss'>
+.add-device {
   .mint-cell-value {
     width: 100%;
     justify-content: space-between;
@@ -473,7 +473,7 @@ export default {
     // margin-right: 10px;
   }
 }
-.type-device /deep/ {
+.type-device {
   .mint-cell-title {
     width: 105px;
     flex: none;
@@ -501,7 +501,7 @@ export default {
   color: $theme-color;
   text-align: center;
 }
-.device-type /deep/ .picker-toolbar {
+.device-type .picker-toolbar {
   text-align: right;
   line-height: 40px;
 }

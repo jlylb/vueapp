@@ -90,7 +90,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 $icon-color: #ccc;
 $placeholder-color: #ccc;
 
@@ -136,13 +136,13 @@ $placeholder-color: #ccc;
   align-items: center;
   justify-content: center;
 }
-.logo /deep/ .logo-icon {
+.logo .logo-icon {
   width: 120px;
   height: 120px;
   color: #fff;
 }
 
-.home-content /deep/ .login-input-icon {
+.home-content .login-input-icon {
   width: 1.5em;
   height: 1.5em;
   color: $icon-color;
@@ -151,10 +151,10 @@ $placeholder-color: #ccc;
   color: #ef4f4f;
   text-align: left;
 }
-.my-input /deep/ .mint-field-clear {
+.my-input .mint-field-clear {
   color: $icon-color;
 }
-.my-input /deep/ .mint-field-core {
+.my-input .mint-field-core {
   &::-webkit-input-placeholder {
     color: $placeholder-color;
   }

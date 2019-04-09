@@ -3,6 +3,7 @@
     <top-component></top-component>
 
     <mt-button
+      class="params-btn"
       size="small"
       :type="active===item.value?'primary':'default'"
       @click.native.prevent="selectButton(item.value)"
@@ -329,13 +330,13 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss' >
 .sheet .mu-item-action {
   justify-content: center;
   color: inherit;
 }
 .real {
-  /deep/ .mint-cell-value {
+  .mint-cell-value {
     position: relative;
     flex: 2.5;
   }

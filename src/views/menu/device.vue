@@ -44,20 +44,18 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .cell-icon {
-  /deep/ {
-    .mint-cell-text {
-      vertical-align: middle;
-      display: inline-block;
-      height: 26px;
-      line-height: 26px;
-    }
-    .icon-background-small {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 0;
-    }
+  .mint-cell-text {
+    vertical-align: middle;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+  }
+  .icon-background-small {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0;
   }
 }
 </style>

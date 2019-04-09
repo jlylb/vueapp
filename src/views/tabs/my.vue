@@ -79,7 +79,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .layout-container {
   width: 100%;
   padding: 5px;
@@ -118,18 +118,17 @@ export default {
 
 .sign-out {
   background-color: #fff;
-  height: 3.25rem;
-  line-height: 3.25rem;
+  height: 1rem;
+  line-height: 1rem;
   text-align: center;
   border-top: 1px solid #dfdfdf;
   border-bottom: 1px solid #dfdfdf;
   cursor: pointer;
   margin-top: 0.625rem;
-  font-size: 24px;
   color: $theme-color;
 }
 
-.layout-container /deep/ .mint-cell-title {
+.layout-container .mint-cell-title {
   text-align: left;
 }
 </style>

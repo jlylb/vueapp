@@ -134,24 +134,9 @@ const router = new Router({
           meta: {
             title: '电池组',
           },
-          component: () => import(/* webpackChunkName: "batterygroup" */ './views/batterygroup/index.vue'),
+          component: () =>
+            import(/* webpackChunkName: "batterygroup" */ './views/batterygroup/index.vue'),
         },
-        // {
-        //   path: '/red/index/:pdi/:type',
-        //   name: 'red',
-        //   meta: {
-        //     title: '红外',
-        //   },
-        //   component: () => import(/* webpackChunkName: "red" */ './views/red/index.vue'),
-        // },
-        // {
-        //   path: '/yangan/index/:pdi/:type',
-        //   name: 'yangan',
-        //   meta: {
-        //     title: '烟感',
-        //   },
-        //   component: () => import(/* webpackChunkName: "yangan" */ './views/yangan/index.vue'),
-        // },
         {
           path: '/switch/index/:pdi/:type',
           name: 'switch',
@@ -262,22 +247,6 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "device" */ './views/tabs/addtest.vue'),
       meta: {
         title: '扫码添加设备',
-      },
-    },
-    {
-      path: '/guide',
-      name: 'guide',
-      component: () => import(/* webpackChunkName: "guide index" */ './views/guide/index.vue'),
-      meta: {
-        title: '引导页',
-      },
-    },
-    {
-      path: '/guide1',
-      name: 'guide1',
-      component: () => import(/* webpackChunkName: "guide index" */ './views/guide/guide1.vue'),
-      meta: {
-        title: '引导页',
       },
     },
   ],

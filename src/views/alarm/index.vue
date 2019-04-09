@@ -200,18 +200,18 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .page-infinite-loading {
   text-align: center;
   height: 50px;
   line-height: 50px;
-  /deep/ div {
+  div {
     display: inline-block;
     vertical-align: middle;
     margin-right: 5px;
   }
 }
-.realwarn /deep/ {
+.realwarn {
   .mint-cell-title {
     width: 60%;
   }
@@ -223,7 +223,7 @@ export default {
     white-space: nowrap;
   }
 }
-.tool-button /deep/ {
+.tool-button {
   .mint-cell-wrapper {
     padding: 0;
   }

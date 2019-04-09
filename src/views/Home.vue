@@ -119,7 +119,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .app-container {
   overflow-y: auto;
   height: 100%;
@@ -143,7 +143,7 @@ export default {
     }
   }
 }
-.home-tab /deep/ .mint-tab-item-icon {
+.home-tab .mint-tab-item-icon {
   margin: 0 auto;
   display: flex;
   justify-content: center;

@@ -6,9 +6,6 @@
       <mt-swipe-item v-for="(item, index) in items" :key="index">
         <img :src="item.image">
       </mt-swipe-item>
-      <!-- <mt-swipe-item >
-            <img :src='testJpg' />
-      </mt-swipe-item>-->
     </mt-swipe>
 
     <div class="fluid-content">
@@ -29,7 +26,8 @@
                 :class="['animation2','item-icon', {'animation2-pause': notification == 0 }]"
               ></svg-icon>
             </div>
-            <div class="icon-desc">实时告警
+            <div class="icon-desc">
+              实时告警
               <mt-badge size="small" type="error" v-if="notification > 0">{{ notification }}</mt-badge>
             </div>
           </div>
@@ -141,7 +139,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .slide-image {
   height: 150px;
   padding: 0 10px;
@@ -188,12 +186,13 @@ export default {
     flex-direction: column;
   }
   .icon-desc {
-    padding: 5px;
+    padding: 0.3rem;
     padding-bottom: 0;
+    font-size: 1.3em;
   }
   .item-icon {
-    width: 2.6em;
-    height: 2.6em;
+    width: 1.3rem;
+    height: 1.3rem;
     color: #fff;
   }
   .item-right {
@@ -225,20 +224,14 @@ export default {
   }
 }
 .icon {
-  width: 65px;
-  height: 65px;
-  line-height: 65px;
+  width: 1.8rem;
+  height: 1.8rem;
+  line-height: 1.8rem;
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  .item-icon {
-    // position: absolute;
-    // top: 50%;
-    // left: 50%;
-    // transform: translate3d(-50%, -50%, 0);
-  }
 }
 </style>

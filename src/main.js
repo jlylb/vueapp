@@ -11,6 +11,8 @@ import 'animate.css';
 import myMixin from '@/tools/devicetimer';
 import updateApp from '@/plugins/updateapp';
 
+// import 'amfe-flexible';
+
 import App from './App.vue';
 import router from './router';
 import store from './store';
