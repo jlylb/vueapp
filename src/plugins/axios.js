@@ -2,7 +2,8 @@ import Vue from 'vue';
 import axios from 'axios';
 import { getToken } from '@/tools/auth';
 import store from '@/store';
-import { MessageBox, Indicator } from 'mint-ui';
+import { MessageBox } from 'mint-ui';
+import Indicator from '@/plugins/loading';
 import router from '../router';
 import apiUrl from '@/tools/config';
 
