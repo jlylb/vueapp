@@ -110,6 +110,13 @@
       >
         <span class="close-type" @click="popupDetailType=false">&times;</span>
       </mt-picker>-->
+      <!-- <my-picker
+        :slots="typeSlots1"
+        class="device-type"
+        @change="onTypeChange"
+        ref="pickType"
+        :value-key="'label'"
+      ></my-picker>-->
       <vue-pickers
         :show="typeshow"
         :columns="1"
@@ -213,6 +220,16 @@ export default {
       return {
         data1: types
       };
+    },
+    typeSlots1() {
+      return [
+        {
+          flex: 1,
+          values: this.types,
+          className: "type-slot",
+          textAlign: "center"
+        }
+      ];
     },
     areaSlots() {
       let city = [];
