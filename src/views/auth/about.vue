@@ -1,7 +1,7 @@
 <template>
-  <div class="layout-container">
+  <div class="about">
     <top-component></top-component>
-    <div>{{ companyName }}</div>
+    <mt-cell :title="companyName"></mt-cell>
   </div>
 </template>
 
@@ -14,5 +14,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.about {
+  width: 100%;
+  padding: 0 5px;
+  overflow-y: auto;
+  overflow-x: auto;
+  .mint-cell-title {
+    text-align: center;
+  }
+}
 </style>

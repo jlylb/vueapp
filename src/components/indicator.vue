@@ -2,7 +2,7 @@
   <transition name="mint-indicator">
     <div class="mint-indicator" v-show="visible">
       <div class="mint-indicator-wrapper">
-        <spinner class="mint-indicator-spin" :type="convertedSpinnerType" :size="32"></spinner>
+        <spinner class="mint-indicator-spin" :type="convertedSpinnerType" :size="1"></spinner>
         <span class="mint-indicator-text" v-show="text">{{ text }}</span>
       </div>
       <div class="mint-indicator-mask" @touchmove.stop.prevent></div>
@@ -12,7 +12,7 @@
 
 
 <script>
-import { Spinner } from "mint-ui";
+import Spinner from "@/components/spinner/spinner.vue";
 export default {
   data() {
     return {

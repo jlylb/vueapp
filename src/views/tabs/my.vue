@@ -118,14 +118,15 @@ export default {
 
 .sign-out {
   background-color: #fff;
-  height: 1rem;
-  line-height: 1rem;
+  height: 1.4rem;
+  line-height: 1.4rem;
   text-align: center;
   border-top: 1px solid #dfdfdf;
   border-bottom: 1px solid #dfdfdf;
   cursor: pointer;
   margin-top: 0.625rem;
   color: $theme-color;
+  font-size: 0.7rem;
 }
 
 .layout-container .mint-cell-title {

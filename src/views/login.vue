@@ -2,7 +2,7 @@
   <div class="login-container" id="login-container">
     <!-- <top-component></top-component> -->
     <div class="login-cover" id="login-cover">
-      <div class="home-content">
+      <div class="home-content login-content">
         <div class="logo">
           <svg-icon icon-class="sys-power" class="logo-icon"></svg-icon>
         </div>
@@ -48,8 +48,8 @@ export default {
       // username: "username1",
       // password: "123456",
       validateForm: {
-        username: "",
-        password: ""
+        username: "a88",
+        password: "123456"
       }
     };
   },
@@ -78,14 +78,7 @@ export default {
     }
   },
   computed: {},
-  mounted() {
-    // const body = document.getElementsByTagName('body')[0];
-    // body.style.height=body.clientHeight+"px";
-    // const html = document.getElementById('login-container');
-    // html.style.height = '100%';
-    // const cover = document.getElementById('login-cover');
-    // cover.style.height = '100%';
-  },
+  mounted() {},
   created() {}
 };
 </script>
@@ -120,8 +113,37 @@ $placeholder-color: #ccc;
   display: block;
   text-decoration: underline;
 }
-.home-content {
+.login-content {
   width: 100%;
+  flex-direction: column;
+  .mint-field {
+    width: 100%;
+  }
+  .mint-cell-left,
+  .mint-cell-right {
+    display: flex;
+    align-items: center;
+  }
+  .login-input-icon {
+    width: 2em;
+    height: 2em;
+    color: $icon-color;
+  }
+  .error {
+    color: #ef4f4f;
+    text-align: left;
+  }
+  .my-input .mint-field-clear {
+    color: $icon-color;
+  }
+  .my-input .mint-field-core {
+    &::-webkit-input-placeholder {
+      color: $placeholder-color;
+    }
+    &::-moz-placeholder {
+      color: $placeholder-color;
+    }
+  }
 }
 .logo {
   width: 150px;
@@ -142,26 +164,6 @@ $placeholder-color: #ccc;
   color: #fff;
 }
 
-.home-content .login-input-icon {
-  width: 1.5em;
-  height: 1.5em;
-  color: $icon-color;
-}
-.error {
-  color: #ef4f4f;
-  text-align: left;
-}
-.my-input .mint-field-clear {
-  color: $icon-color;
-}
-.my-input .mint-field-core {
-  &::-webkit-input-placeholder {
-    color: $placeholder-color;
-  }
-  &::-moz-placeholder {
-    color: $placeholder-color;
-  }
-}
 .login-btn {
   background-color: darken($theme-color, 10%);
 }

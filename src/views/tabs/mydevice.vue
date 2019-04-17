@@ -75,69 +75,18 @@
       </mt-cell>
     </mt-popup>
 
-    <!-- <mt-popup
-      v-model="popupUpdate"
-      ref="updateDevice"
-      class="popup-device add-device"
-      :close-on-click-modal="false"
-      popup-transition="popup-fade"
-    >
-      <div class="update-device-title">修改设备</div>
-      <mt-field
-        label
-        placeholder="请输入设备名称"
-        data-vv-scope="scope"
-        v-model="updateDeviceModel.name"
-        data-vv-name="name"
-        :state="states['name']"
-        v-validate="{ required: true}"
-      ></mt-field>
-      <p class="field-error" v-if="states['name']=='error'">{{ errors.first('scope.name') }}</p>
-
-      <mt-cell title>
-        <mt-button type="primary" @click="saveUpdate">保存</mt-button>
-        <mt-button type="danger" @click="cancelUpdate">取消</mt-button>
-      </mt-cell>
-    </mt-popup>-->
     <mt-popup v-model="popupDetailType" class="popup-device" position="bottom">
-      <!-- <mt-picker
+      <my-picker
         :slots="typeSlots"
         class="device-type"
         @change="onTypeChange"
         ref="pickType"
         :value-key="'label'"
-        :show-toolbar="true"
-      >
-        <span class="close-type" @click="popupDetailType=false">&times;</span>
-      </mt-picker>-->
-      <!-- <my-picker
-        :slots="typeSlots1"
-        class="device-type"
-        @change="onTypeChange"
-        ref="pickType"
-        :value-key="'label'"
-      ></my-picker>-->
-      <vue-pickers
-        :show="typeshow"
-        :columns="1"
-        :selectData="typeSlots"
-        :defaultData="typeDefaultSlots"
-        @cancel="closeType"
-        @confirm="confirmType"
-      ></vue-pickers>
+      ></my-picker>
     </mt-popup>
 
     <mt-popup v-model="popupArea" class="popup-device" position="bottom">
-      <!-- <mt-picker :slots="areaSlots" @change="onAreaChange" ref="pickArea" :value-key="'label'"></mt-picker> -->
-      <vue-pickers
-        :show="areashow"
-        :columns="2"
-        :selectData="areaSlots"
-        :link="true"
-        :defaultData="areaDefaultSlots"
-        @cancel="closeArea"
-        @confirm="confirmArea"
-      ></vue-pickers>
+      <my-picker :slots="areaSlots" @change="onAreaChange" ref="pickArea" :value-key="'label'"></my-picker>
     </mt-popup>
 
     <mt-popup v-model="isAdd" class="popup-menu" popup-transition="popup-fade">
@@ -148,7 +97,7 @@
 </template>
 
 <script>
-import { MessageBox, Toast } from "mint-ui";
+import { MessageBox } from "mint-ui";
 import {
   fetchAllDevice,
   fetchDeviceType,
@@ -158,11 +107,16 @@ import {
   fetchAreas
 } from "@/api/monitor";
 
+import Toast from "@/components/toast/toast.js";
+
+import MyPicker from "@/components/picker/picker";
+
 import vuePickers from "vue-pickers";
 
 export default {
   components: {
-    vuePickers
+    vuePickers,
+    MyPicker
   },
   data() {
     return {
@@ -195,33 +149,11 @@ export default {
       areaLabel: "",
       selectArea: {},
       provinces: [],
-      cities: {},
-      typeshow: false,
-      typeDefaultSlots: [],
-      areashow: false,
-      areaDefaultSlots: []
+      cities: {}
     };
   },
   computed: {
     typeSlots() {
-      // return [
-      //   {
-      //     flex: 1,
-      //     values: this.types,
-      //     className: "type-slot",
-      //     textAlign: "center"
-      //   }
-      // ];
-      const types = this.types.map(item => {
-        item.text = item.label;
-        return item;
-      });
-      this.selectType = types[0];
-      return {
-        data1: types
-      };
-    },
-    typeSlots1() {
       return [
         {
           flex: 1,
@@ -231,58 +163,40 @@ export default {
         }
       ];
     },
+
     areaSlots() {
       let city = [];
-      // if (this.provinces.length > 0) {
-      //   let first = this.provinces[0].value;
-      //   city = this.cities[first];
-      // }
-      // return [
-      //   {
-      //     flex: 1,
-      //     values: this.provinces,
-      //     className: "slot1",
-      //     textAlign: "center"
-      //   },
-      //   {
-      //     divider: true,
-      //     content: "-",
-      //     className: "slot2"
-      //   },
-      //   {
-      //     flex: 1,
-      //     values: city,
-      //     className: "slot3",
-      //     textAlign: "center"
-      //   }
-      // ];
-      const province = this.provinces.map(item => {
-        item.text = item.label;
-        return item;
-      });
-      Object.keys(this.cities).forEach(item => {
-        this.cities[item] = this.cities[item].map(ss => {
-          ss.text = ss.label;
-          return ss;
-        });
-      });
-      console.log(this.cities, "cities.......");
       if (this.provinces.length > 0) {
         let first = this.provinces[0].value;
-        this.selectArea = this.cities[first][0];
+        city = this.cities[first];
       }
-      return {
-        data1: province,
-        data2: this.cities
-      };
+      return [
+        {
+          flex: 1,
+          values: this.provinces,
+          className: "slot1",
+          textAlign: "center"
+        },
+        {
+          divider: true,
+          content: "-",
+          className: "slot2"
+        },
+        {
+          flex: 1,
+          values: city,
+          className: "slot3",
+          textAlign: "center"
+        }
+      ];
     }
   },
   watch: {
     selectType(newval) {
       if (!newval) return;
-      const { value, text } = newval;
+      const { value, label } = newval;
       this.deviceModel.type = value;
-      this.typeLabel = text;
+      this.typeLabel = label;
     },
     fields: {
       handler(newval) {
@@ -292,35 +206,12 @@ export default {
     },
     selectArea(newval) {
       if (!newval) return;
-      const { value, text } = newval;
+      const { value, label } = newval;
       this.deviceModel.area = value;
-      this.areaLabel = text;
+      this.areaLabel = label;
     }
   },
   methods: {
-    closeArea() {
-      this.popupArea = false;
-      this.areashow = false;
-    },
-    confirmArea(values) {
-      if (!values.select2) return;
-      this.selectArea = values.select2;
-      this.closeArea();
-      // let { text } = this.selectArea;
-      // this.areaLabel = text;
-    },
-    closeType() {
-      this.popupDetailType = false;
-      this.typeshow = false;
-    },
-    confirmType(values) {
-      console.log(values, "confirm type......");
-      if (!values.select1) return;
-      this.selectType = values.select1;
-      this.closeType();
-      // let { text } = this.selectType;
-      // this.typeLabel = text;
-    },
     getAreas() {
       fetchAreas().then(res => {
         const { province, city } = res.data;
@@ -336,7 +227,6 @@ export default {
     },
     openArea() {
       this.popupArea = true;
-      this.areashow = true;
     },
     getStates() {
       let states = {};
@@ -389,7 +279,6 @@ export default {
 
     openType() {
       this.popupDetailType = true;
-      this.typeshow = true;
     },
     onTypeChange(picker, values) {
       if (!values[0]) return;

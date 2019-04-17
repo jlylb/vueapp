@@ -1,6 +1,6 @@
 <template>
   <x-cell
-    class="mint-field my-input"
+    class="mint-field custom-input"
     :title="label"
     v-clickoutside="doCloseActive"
     :class="[{
@@ -154,39 +154,36 @@ export default {
 </script>
 
 <style lang="scss">
-.mint-field-clear {
-  opacity: 1;
-}
-.mint-field-core {
-  background-color: transparent;
-  color: #fff;
-}
-.active-field-input {
-  /* border: 1px solid #ff00ff; */
-}
-.mint-field {
+.custom-input {
   background-color: transparent;
   align-items: center;
   border: 1px solid #fff;
   margin: 10px auto;
-  /* margin: 10px auto; */
-}
-.mint-field .mint-cell-wrapper {
-  background-image: none;
-}
+  .mint-field-clear {
+    opacity: 1;
+  }
+  .mint-field-core {
+    background-color: transparent;
+    color: #fff;
+  }
 
-.mint-field .mint-cell-left {
-  transform: none;
-  position: inherit;
-  padding-left: 10px;
-}
-.mint-field .mint-cell-right {
-  transform: none;
-  position: inherit;
-  padding-right: 10px;
-}
-.mint-field:active,
-.mint-field:hover {
-  border-color: darken($theme-color, 10%);
+  .mint-cell-wrapper {
+    background-image: none;
+  }
+
+  .mint-cell-left {
+    transform: none;
+    position: inherit;
+    padding-left: 10px;
+  }
+  .mint-cell-right {
+    transform: none;
+    position: inherit;
+    padding-right: 10px;
+  }
+  &:active,
+  &:hover {
+    border-color: darken($theme-color, 10%);
+  }
 }
 </style>

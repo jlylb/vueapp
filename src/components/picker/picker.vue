@@ -22,7 +22,7 @@
       ></picker-slot>
       <div
         class="picker-center-highlight"
-        :style="{ height: itemHeight + 'em', marginTop: -itemHeight / 2 + 'em' }"
+        :style="{ height: itemHeight + 'rem', marginTop: -itemHeight / 2 + 'rem' }"
       ></div>
     </div>
   </div>
@@ -39,7 +39,7 @@ export default {
   props: {
     itemHeight: {
       type: Number,
-      default: 2
+      default: 1
     }
   }
 };
