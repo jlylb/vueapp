@@ -80,6 +80,9 @@ export default {
           if (path === "/tab_home" || path === "/login") {
             // 入口页了，执行退出。
             plus.runtime.quit();
+          } else if (path === "/addtest") {
+            const ws = plus.webview.currentWebview();
+            console.log(ws.canback(), ws.opened());
           } else {
             // 根据实际需求选择相应的方法
             vm.$router.go(-1);
