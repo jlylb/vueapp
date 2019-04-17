@@ -3,6 +3,22 @@ const path = require('path');
 module.exports = {
   chainWebpack: (config) => {
     config.resolve.alias.set('@', path.resolve(__dirname, './src'));
+    config.module
+      .rule('images')
+      .exclude.add([path.resolve(__dirname, './src/assets/res')])
+      .end();
+
+    config.module
+      .rule('resicon')
+      .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
+      .include.add([path.resolve(__dirname, './src/assets/res')])
+      .end()
+      .use('file-loader')
+      .loader('file-loader')
+      .options({
+        name: 'static/img/[name].[hash:8].[ext]',
+      })
+      .end();
 
     config.module
       .rule('svg')

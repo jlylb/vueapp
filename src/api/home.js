@@ -6,3 +6,12 @@ export default function checkUpdate(data) {
     data,
   });
 }
+
+export function addDevice(data) {
+  /* eslint-disable */
+  return axios({
+    url: '/registerApp',
+    method: 'post',
+    data,
+  });
+}

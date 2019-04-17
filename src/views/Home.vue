@@ -21,6 +21,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { getGuide } from "@/tools/guide";
+import { addDevice } from "@/api/home";
 
 export default {
   name: "home",
@@ -89,16 +90,48 @@ export default {
         // document.addEventListener('plusready', plusReady, false);
       }
     },
-    addGuide() {
-      if (!window.plus) return;
-      if (!getGuide()) {
-        const cself = plus.webview.getLaunchWebview();
-        const csecond = plus.webview.create("guide.html", "guide");
-        csecond.show();
-        cself.append(csecond);
-      }
+    addPush() {
+      //监听系统通知栏消息点击事件
+      plus.push.addEventListener(
+        "click",
+        msg => {
+          //处理点击消息的业务逻辑代码
+          // this.$message(msg.content)
+          console.log(msg, "notice click........");
+          plus.nativeUI.toast(msg.content);
+          this.addMessage(msg.payload);
+        },
+        false
+      );
+      //监听接收透传消息事件
+      plus.push.addEventListener(
+        "receive",
+        msg => {
+          //处理透传消息的业务逻辑代码
+          console.log(msg, "notice receive........");
+          plus.nativeUI.toast(msg.content);
+          this.addMessage(msg.payload);
+        },
+        false
+      );
     },
-    closeGuide() {}
+    getClientId() {
+      setTimeout(() => {
+        const pinf = plus.push.getClientInfo();
+        const { id, appid, clientid, appkey } = pinf;
+        console.log(id, appid, clientid, appkey, "clientid..........");
+        addDevice({ appid, clientid, Co_ID: this.companyId });
+      }, 200);
+    },
+    addMessage(payload) {
+      if (!payload) return;
+      if (typeof payload === "string") {
+        payload = JSON.parse(payload);
+      }
+      const options = { cover: false, title: "告警数量" };
+      let str = `告警信息${payload.num}条`;
+      plus.push.createMessage(str, null, options);
+    }
   },
   mounted() {
     this.addEventTest();
@@ -109,6 +142,8 @@ export default {
       plus.navigator.closeSplashscreen();
     }
     // this.addGuide();
+    // this.getClientId();
+    // this.addPush();
   },
   created() {
     console.log(this.$store);

@@ -45,14 +45,7 @@ const router = new Router({
             title: '我的设备',
           },
         },
-        {
-          path: '/tab_my/addDevice',
-          name: 'add_device',
-          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/addDevice.vue'),
-          meta: {
-            title: '我的-添加设备',
-          },
-        },
+
         {
           path: '/upload',
           name: 'uploadAvatar',
@@ -224,23 +217,7 @@ const router = new Router({
       },
       component: () => import(/* webpackChunkName: "auth" */ './views/auth/forget.vue'),
     },
-    {
-      path: '/addDevice2',
-      name: 'add_device2',
-      component: () => import(/* webpackChunkName: "device" */ './views/tabs/addDevice2.vue'),
-      meta: {
-        title: '我的-添加设备2',
-      },
-    },
 
-    {
-      path: '/addDevice_page',
-      name: 'addDevice_page',
-      component: () => import(/* webpackChunkName: "device" */ './views/tabs/addDevice_page.vue'),
-      meta: {
-        title: '我的-添加设备2',
-      },
-    },
     {
       path: '/addtest',
       name: 'addtest',
