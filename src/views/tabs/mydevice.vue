@@ -111,11 +111,8 @@ import Toast from "@/components/toast/toast.js";
 
 import MyPicker from "@/components/picker/picker";
 
-import vuePickers from "vue-pickers";
-
 export default {
   components: {
-    vuePickers,
     MyPicker
   },
   data() {
