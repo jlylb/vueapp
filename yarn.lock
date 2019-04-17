@@ -7662,11 +7662,6 @@ vue-loader@^15.3.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-pickers@^1.1.5:
-  version "1.1.5"
-  resolved "http://registry.npm.taobao.org/vue-pickers/download/vue-pickers-1.1.5.tgz#cc3d1a5b560977188ba51a8aae9ee020831710d8"
-  integrity sha1-zD0aW1YJdxiLpRqKrp7gIIMXENg=
-
 vue-qr@^1.5.2:
   version "1.5.2"
   resolved "http://registry.npm.taobao.org/vue-qr/download/vue-qr-1.5.2.tgz#a10614ea97f9f2bd55892bbebcd09b708bda1686"
@@ -7695,10 +7690,6 @@ vue-template-compiler@^2.5.17:
 vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
-
-vue-waterfall@^1.0.6:
-  version "1.0.6"
-  resolved "http://registry.npm.taobao.org/vue-waterfall/download/vue-waterfall-1.0.6.tgz#00324a8f97f449bf6f8cdebb4974b60cffac9eed"
 
 vue@^2.5.16, vue@^2.5.17:
   version "2.5.17"
