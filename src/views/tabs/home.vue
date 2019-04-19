@@ -142,8 +142,8 @@ export default {
 <style lang='scss'>
 .slide-image {
   height: 150px;
-  padding: 0 10px;
-  flex: 1.2;
+  padding: 0 0.15rem;
+  // flex: 0.9;
   & img {
     display: inline-block;
     height: 100%;
@@ -172,7 +172,7 @@ export default {
   }
   .item {
     // padding: 20px;
-    margin: 10px;
+    margin: 0.15rem;
     color: #ffff;
     display: flex;
     align-items: center;

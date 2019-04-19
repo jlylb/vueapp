@@ -69,24 +69,18 @@ export default {
       const vm = this;
       if (window.plus) {
         plus.screen.lockOrientation("portrait-primary");
-        console.log(plus);
         // function plusReady() {
         plus.key.addEventListener("backbutton", () => {
           console.log("listening back button");
-          // const path = location.path;
-          // const hash = location.hash;
           const path = vm.$route.path;
           console.log(path, "url params");
           if (path === "/tab_home" || path === "/login") {
             // 入口页了，执行退出。
             plus.runtime.quit();
-          } else if (path === "/addtest") {
-            const ws = plus.webview.currentWebview();
-            console.log(ws.canback(), ws.opened());
           } else {
             // 根据实际需求选择相应的方法
             vm.$router.go(-1);
-            history.back();
+            // history.back();
           }
         });
         //}

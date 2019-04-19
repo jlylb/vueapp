@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-container">
+  <div class="layout-container my">
     <top-component></top-component>
     <!-- <div class="user">
       <div class="user-info">
@@ -12,34 +12,15 @@
       <svg-icon icon-class="user-circle" class="item-icon" slot="icon"></svg-icon>
       您好, {{ name }}
     </mt-cell>
-    <!-- <mt-cell title="添加设备" is-link  to='tab_my/addDevice'>
-            <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
-        </mt-cell>
-        <mt-cell title="添加设备2" is-link  to='addDevice2'>
-            <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
-        </mt-cell>
-        <mt-cell title="我的设备" is-link  to='mydevice'>
-            <svg-icon icon-class='add-circle' class='item-icon' slot='icon'></svg-icon> 
-    </mt-cell>-->
-    <!-- <mt-cell title="定位" is-link to='/geo'>
-            <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
-    </mt-cell>-->
+
     <mt-cell title="修改密码" is-link to="/auth/password">
       <svg-icon icon-class="password-circle" class="item-icon" slot="icon"></svg-icon>
     </mt-cell>
 
-    <!-- <mt-cell title="帮助中心" is-link to='/auth/help'>
-            <svg-icon icon-class='help-circle' class='item-icon' slot='icon'></svg-icon>
-    </mt-cell>-->
-    <!-- <mt-cell title="意见反馈" is-link to='/auth/feedback'>
-            <svg-icon icon-class='adviser-circle' class='item-icon' slot='icon'></svg-icon>
-    </mt-cell>-->
     <mt-cell title="关于我们" is-link to="/auth/about">
       <svg-icon icon-class="us-circle" class="item-icon" slot="icon"></svg-icon>
     </mt-cell>
-    <!-- <mt-cell title="login" is-link to='/login4'>
-            <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
-    </mt-cell>-->
+
     <mt-cell></mt-cell>
     <div class="sign-out" @click="logout('login')">退出登录</div>
   </div>
@@ -80,7 +61,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.layout-container {
+.my {
   width: 100%;
   padding: 5px;
   font-weight: bolder;
@@ -123,13 +104,12 @@ export default {
   text-align: center;
   border-top: 1px solid #dfdfdf;
   border-bottom: 1px solid #dfdfdf;
-  cursor: pointer;
   margin-top: 0.625rem;
   color: $theme-color;
   font-size: 0.7rem;
 }
 
-.layout-container .mint-cell-title {
+.my .mint-cell-title {
   text-align: left;
 }
 </style>

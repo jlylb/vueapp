@@ -1,14 +1,11 @@
 <template>
-  <div class="scan">
-    <div id="bcid">
-      <div style="height:40%"></div>
-      <p class="tip">...载入中...</p>
-    </div>
+  <div id="bcid">
+    <div style="height:40%"></div>
+    <p class="tip">...载入中...</p>
   </div>
 </template>
 
 <script>
-import BackPng from "@/assets/res/back24.png";
 import LightPng from "@/assets/res/light_open.png";
 
 export default {
@@ -18,27 +15,12 @@ export default {
       domready: null,
       wo: null,
       scan: null,
-      bCancel: true,
       code: "",
       lightView: null,
-      titleView: null,
-      backView: null,
-      backViewImg: BackPng,
-      lightViewImg: LightPng,
       isOpenFlash: false
     };
   },
   methods: {
-    scanSwitch() {
-      if (!window.plus) return;
-      if (this.bCancel) {
-        this.scan.cancel();
-      } else {
-        this.scan.start();
-      }
-      this.bCancel = !this.bCancel;
-      console.log(this.bCancel);
-    },
     plusReady() {
       if (this.ws || !window.plus) {
         return;
@@ -47,20 +29,17 @@ export default {
       try {
         this.ws = plus.webview.currentWebview();
         this.createImg();
-        this.createView();
-        this.createBack();
         vm.scan = new plus.barcode.Barcode(
           "bcid",
           [plus.barcode.QR, plus.barcode.EAN8, plus.barcode.EAN13],
           {
-            frameColor: "#06509c",
-            scanbarColor: "#06509c",
-            top: "0",
-            position: "absolute"
+            frameColor: "#00FF00",
+            scanbarColor: "#00FF00"
           }
         );
         vm.scan.onmarked = vm.onmarked;
         vm.scan.start();
+        vm.ws.show("pop-in");
       } catch (e) {
         console.log(this.ws, "catch ws");
       }
@@ -80,65 +59,44 @@ export default {
           type = "其它" + type;
           break;
       }
+      //this.lightView.close();
+
       result = result.replace(/\n/g, "");
-
-      this.code = result;
-      history.back();
-      this.$router.replace({
-        name: "tab_discover",
-        params: { code: this.code, success: 1 }
-      });
-    },
-    back() {
-      if (window.plus) {
-        console.log(this, "back");
-        history.back();
-        this.$router.replace({ name: "mydevice" });
-      }
-    },
-    createView() {
-      if (!window.plus) return;
-      this.titleView = new plus.nativeObj.View("titleview", {
-        top: "0",
-        height: "40px",
-        width: "100%",
-        backgroundColor: "rgba(0,0,0,0.7)"
-      });
-
-      this.titleView.draw([
-        {
-          tag: "font",
-          id: "font",
-          text: "扫一扫",
-          textStyles: { size: "18px", color: "#ffffff" }
-        }
-      ]);
-      this.titleView.show();
-    },
-    createBack() {
-      if (!window.plus) return;
-      this.backView = new plus.nativeObj.View("backview", {
-        top: "0",
-        height: "40px",
-        width: "32px"
-      });
-      this.backView.addEventListener("click", () => {
-        this.closeScan();
-      });
-      this.backView.draw([
+      const wo = this.ws.opener();
+      // wo.evalJS("scaned('" + result + "');");
+      plus.storage.setItem("result", result);
+      wo &&
+        wo.evalJS(
+          "var result = plus.storage.getItem('result');plus.storage.removeItem('result');"
+        );
+      this.lightView.draw([
         {
           tag: "img",
-          id: "backimg",
-          src: this.backViewImg,
-          position: { top: "auto", left: "auto", width: "24px", height: "24px" }
+          id: "img",
+          src: "",
+          position: { top: "0", left: "0", width: "32px", height: "32px" }
         }
       ]);
-      this.backView.show();
+      this.back();
     },
+
+    back(hide) {
+      const w = window;
+      let ws = this.ws;
+      if (w.plus) {
+        ws || (ws = plus.webview.currentWebview());
+        hide || ws.preate ? ws.hide("auto") : ws.close("auto");
+      } else if (history.length > 1) {
+        history.back();
+      } else {
+        w.close();
+      }
+    },
+
     createImg() {
       if (!window.plus) return;
       this.lightView = new plus.nativeObj.View("lightview", {
-        top: "60%",
+        top: "58%",
         left: "45%",
         height: "32px",
         width: "32px"
@@ -150,7 +108,7 @@ export default {
         {
           tag: "img",
           id: "img",
-          src: this.lightViewImg,
+          src: LightPng,
           position: { top: "0", left: "0", width: "32px", height: "32px" }
         }
       ]);
@@ -165,23 +123,12 @@ export default {
       if (this.lightView) {
         this.lightView.close();
       }
-      if (this.titleView) {
-        this.titleView.close();
-      }
-      if (this.backView) {
-        this.backView.close();
-      }
       if (this.scan) {
         this.scan.close();
       }
-      history.back();
     }
   },
-  computed: {
-    btnText() {
-      return this.bCancel ? "暂停" : "开始";
-    }
-  },
+  computed: {},
   mounted() {
     if (window.plus) {
       this.plusReady();
@@ -189,33 +136,30 @@ export default {
       document.addEventListener("plusready", this.plusReady, false);
     }
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+    if (this.lightView) {
+      this.lightView.close();
+    }
+  },
   destroyed() {
     this.ws = null;
     this.domready = null;
     this.wo = null;
     this.closeScan();
     this.scan = null;
-    this.bCancel = false;
   },
   created() {},
   beforeCreate() {}
 };
 </script>
 <style lang="scss" scoped>
-$height: 40px;
-.scan {
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
 #bcid {
   width: 100%;
-  position: absolute;
-  top: 0px;
+  position: fixed;
+  top: 0;
   bottom: 0;
   text-align: center;
+  // transform: translateY(40px);
   background-color: rgba(0, 0, 0, 1);
 }
 .tip {

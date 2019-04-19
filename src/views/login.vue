@@ -2,7 +2,7 @@
   <div class="login-container" id="login-container">
     <!-- <top-component></top-component> -->
     <div class="login-cover" id="login-cover">
-      <div class="home-content login-content">
+      <div class="login-content">
         <div class="logo">
           <svg-icon icon-class="sys-power" class="logo-icon"></svg-icon>
         </div>

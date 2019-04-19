@@ -111,6 +111,10 @@ import Toast from "@/components/toast/toast.js";
 
 import MyPicker from "@/components/picker/picker";
 
+// 处理点击事件
+var openw = null;
+var w = window;
+
 export default {
   components: {
     MyPicker
@@ -251,8 +255,56 @@ export default {
       this.isAdd = true;
     },
     scanAdd() {
-      this.isAdd = false;
-      this.$router.push({ name: "addtest" });
+      this.openBarcode();
+    },
+    openBarcode() {
+      this.createWithoutTitle("barcode.html", {
+        titleNView: {
+          type: "float",
+          backgroundColor: "rgba(215,75,40,0.3)",
+          titleText: "扫一扫",
+          titleColor: "#FFFFFF",
+          autoBackButton: true
+        }
+      });
+    },
+    createWithoutTitle(id, ws) {
+      if (openw) {
+        //避免多次打开同一个页面
+        return null;
+      }
+      const vm = this;
+      if (w.plus) {
+        ws = ws || {};
+        ws.scrollIndicator || (ws.scrollIndicator = "none");
+        ws.scalable || (ws.scalable = false);
+        ws.backButtonAutoControl || (ws.backButtonAutoControl = "close");
+        openw = plus.webview.create(id, id, ws);
+        openw.addEventListener(
+          "close",
+          () => {
+            this.isAdd = false;
+            const img = plus.nativeObj.View.getViewById("lightview");
+            img && img.close();
+            console.log(img);
+            openw = null;
+            let code = window.result;
+            if (!code) return;
+            const pdi = code,
+              name = `设备${code}`;
+            vm.deviceModel = Object.assign(vm.deviceModel, { pdi, name });
+            vm.popupVisible = true;
+          },
+          false
+        );
+        return openw;
+      } else {
+        w.open(id);
+      }
+      return null;
+    },
+    clearBarcode() {
+      window.result = null;
     },
     handAdd() {
       this.isAdd = false;
@@ -272,6 +324,7 @@ export default {
         name: ""
       };
       this.popupVisible = false;
+      this.clearBarcode();
     },
 
     openType() {
@@ -283,6 +336,7 @@ export default {
     },
     save() {
       this.$validator.validate().then(valid => {
+        this.clearBarcode();
         let states = {};
         Object.keys(this.fields).map(field => {
           if (this.errors.has(field)) {
@@ -426,17 +480,10 @@ export default {
   mounted() {
     console.log(this.fields, "created ....");
   },
+  beforeDestroy() {
+    this.clearBarcode();
+  },
   created() {
-    const { code, success } = this.$route.params;
-    if (success) {
-      // const [ pdi, name ] = code.split('&')
-      const pdi = code,
-        name = `设备${code}`;
-      this.deviceModel = Object.assign(this.deviceModel, { pdi, name });
-      this.popupVisible = true;
-    } else {
-      this.popupVisible = false;
-    }
     this.getData();
     this.getAllType();
     this.getAreas();
