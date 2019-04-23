@@ -22,7 +22,7 @@
       ></picker-slot>
       <div
         class="picker-center-highlight"
-        :style="{ height: itemHeight + 'rem', marginTop: -itemHeight / 2 + 'rem' }"
+        :style="{ height: itemHeight + 'rem', marginTop: -(itemHeight+0.04) / 2 + 'rem' }"
       ></div>
     </div>
   </div>

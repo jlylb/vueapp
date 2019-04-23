@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     rem2px(d) {
-      return Math.ceil(window.lib.flexible.rem2px(d));
+      return Math.round(window.lib.flexible.rem2px(d));
     },
     value2Translate(value) {
       var values = this.mutatingValues;

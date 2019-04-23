@@ -122,6 +122,15 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "battery" */ './views/battery/index.vue'),
         },
         {
+          path: '/batterygroup2/index/:pdi',
+          name: 'batterygroup2',
+          meta: {
+            title: '电池组',
+          },
+          component: () =>
+            import(/* webpackChunkName: "batterygroup2" */ './views/batterygroup/index2.vue'),
+        },
+        {
           path: '/batterygroup/index/:pdi',
           name: 'batterygroup',
           meta: {

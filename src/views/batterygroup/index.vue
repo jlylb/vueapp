@@ -1,65 +1,51 @@
 <template>
   <div class="layout-container air">
     <top-component></top-component>
-    <div v-if="detail">
-      <mt-cell title="电巡工作状态">{{ detail.rd_Batstatus }}</mt-cell>
-      <mt-cell title="电巡总电流">{{ detail.rd_Batscurrent }}</mt-cell>
-      <mt-cell title="网络通讯">
-        <mt-badge :type="detail.rd_NetCom==0?'success':'error'">{{ detail.rd_NetCom==0?"正常":"断线" }}</mt-badge>
-      </mt-cell>
-      <mt-cell title="当前电池组" @click.native="openGroup">{{ currentGroup }}</mt-cell>
-    </div>
-    <mt-button
-      class="params-btn"
-      size="small"
-      :type="active===item.value?'primary':'default'"
-      @click.native.prevent="selectButton(item.value)"
-      v-for="item in buttons"
-      :key="item.value"
-    >{{ item.label }}</mt-button>
-
-    <mt-tab-container v-model="active" v-if="detail">
-      <mt-tab-container-item id="tab-params">
-        <mt-cell
-          :title="item.label"
-          v-for="(item, index) in paramsFields"
-          :key="index"
-        >{{ detail[item.field] }}</mt-cell>
-      </mt-tab-container-item>
-      <mt-tab-container-item id="tab-dc">
-        <mt-cell
-          :title="item.label"
-          v-for="(item, index) in dyFields"
-          :key="index"
-        >{{ detail[item.field] }}</mt-cell>
-      </mt-tab-container-item>
-
-      <mt-tab-container-item id="tab-alarm">
-        <mt-cell :title="item.label" v-for="(item, index) in alarmFields" :key="index">
+    <div v-if="detail" class="battery-total">
+      <mt-cell :title="item.label" v-for="(item, index) in totalFields" :key="index">
+        <template v-if="!item.isBool">{{ detail[item.field] }}</template>
+        <template v-if="item.isBool">
           <mt-badge
             :type="detail[item.field]==0?'success':'error'"
-          >{{ detail[item.field]==0?"正常":"异常" }}</mt-badge>
-        </mt-cell>
-      </mt-tab-container-item>
+          >{{ detail[item.field]==0?"正常":"断线" }}</mt-badge>
+        </template>
+      </mt-cell>
 
-      <mt-tab-container-item id="tab-net">
-        <mt-cell :title="item.label" v-for="(item, index) in netFields" :key="index">
-          <mt-badge
-            :type="detail[item.field]==1?'success':'error'"
-          >{{ detail[item.field]==1?"正常":"异常" }}</mt-badge>
-        </mt-cell>
-      </mt-tab-container-item>
-    </mt-tab-container>
+      <!-- <mt-cell title="当前电池" @click.native="openBattery">{{ currentBattery }}</mt-cell> -->
+    </div>
+    <div class="battery" v-if="detail">
+      <svg-icon icon-class="battery-bg" :class="['bg-item-icon', {'battery-error': batteryClass}]"></svg-icon>
+      <ul class="battery-result">
+        <li class="battery-title" @click="openBattery">{{ currentBattery }}</li>
+        <li
+          v-for="item in batterySingle"
+          :key="item.field"
+        >{{ item.label }}: {{ item.value }} {{ item.unit }}</li>
+      </ul>
+    </div>
 
-    <mt-popup v-model="groupPopup" class="popup-device" position="bottom">
+    <mt-popup v-model="groupStatusPopup" class="popup-device" position="bottom">
       <mt-cell
-        :title="getCurrentGroup(item)"
-        v-for="item in groups"
-        :key="item"
-        @click.native="changeGroup(item)"
-        :class="['donghuang-item', {'active-cell': groupIndex == item}]"
+        :title="item.label"
+        v-for="(item, index) in groupStatusText"
+        :key="index"
+        @click.native="changeGroupStatus(index)"
+        :class="['donghuang-item', {'active-cell': groupStatusIndex == index}]"
       >
-        <icon-bg slot="icon" class="battery-group" icon="battery-group" small></icon-bg>
+        <!-- <icon-bg slot="icon" class="battery-group" icon="battery-group" small></icon-bg> -->
+      </mt-cell>
+    </mt-popup>
+    <mt-popup v-model="batteryPopup" class="popup-device battery-popup" position="bottom">
+      <mt-cell title="电池状态" @click.native="openStatus">{{ currentGroupText }}</mt-cell>
+      <mt-field label="电池节数" placeholder="请输入电池节数" type="number" v-model="batteryFilterIndex"></mt-field>
+      <mt-cell
+        :title="getBattery(item)"
+        v-for="item in batteryPopupData"
+        :key="item"
+        @click.native="changeBattery(item)"
+        :class="['donghuang-item', {'active-cell': batteryIndex == item}]"
+      >
+        <icon-bg slot="icon" class="battery-group" icon="battery" small></icon-bg>
       </mt-cell>
     </mt-popup>
   </div>
@@ -71,119 +57,129 @@ import { fetchDevice } from "@/api/monitor";
 export default {
   data() {
     return {
-      active: "tab-params",
-      buttons: [
-        { value: "tab-params", label: "电池参数" },
-        { value: "tab-dc", label: "电池电压" },
-        { value: "tab-alarm", label: "告警状态" },
-        { value: "tab-net", label: "连线状态" }
-      ],
       detail: null,
-      paramsFields: [],
-      dyFields: [],
-      alarmFields: [],
-      netFields: [],
       pdi: null,
       prefix: "rd_Bat",
-      group: ["一", "二", "三", "四", "五"],
-      groupName: "电池组",
-      groupIndex: 1,
-      groupPopup: false,
-      groups: 5
+      groupStatusPopup: false,
+      groupStatusText: [
+        { label: "全部", value: 1 },
+        { label: "故障", value: 2 },
+        { label: "正常", value: 3 }
+      ],
+      groupStatusIndex: 0,
+      currentGroupStatus: 1,
+      currentGroupText: "全部",
+      batteryPopup: false,
+      batteryIndex: 1,
+      batteryLength: 64,
+      batteryPopupData: [],
+      batteryWarnData: [],
+      batterySuccessData: [],
+      batteryAllData: [],
+      batterySingle: [],
+      batteryFilterIndex: this.batteryIndex,
+      totalFields: [
+        { label: "总电压", field: "rd_BatAllVol", isBool: false },
+        { label: "总电流1", field: "rd_BatAllCur1", isBool: false },
+        { label: "总电流2", field: "rd_BatAllCur", isBool: false },
+        { label: "后备时间", field: "rd_BatBackTime", isBool: false },
+        { label: "剩余毫安", field: "rd_RemTime", isBool: false },
+        { label: "总毫安", field: "rd_AllMAH", isBool: false },
+        { label: "剩余容量", field: "rd_RemCap", isBool: false },
+        { label: "充电电流", field: "rd_BatCharSta", isBool: true },
+        { label: "放电电流", field: "rd_BatDisCharSta", isBool: true },
+        { label: "总电压状态", field: "rd_BatAllVolSta", isBool: true },
+        { label: "通讯状态", field: "rd_BatAllVolSta", isBool: true },
+        { label: "网络通讯", field: "rd_NetCom", isBool: true }
+      ],
+      paramsField: [
+        { field: "SinVol", label: "电压", unit: "V" },
+        { field: "SinTemp", label: "温度", unit: "℃" },
+        { field: "SinRes", label: "内阻", unit: "V/A" }
+      ]
     };
   },
   computed: {
-    currentGroup() {
-      return this.getCurrentGroup(this.groupIndex);
+    currentBattery() {
+      return this.getBattery(this.batteryIndex);
+    },
+    batteryClass() {
+      return this.batteryWarnData.includes(this.batteryIndex);
+    }
+  },
+  watch: {
+    batteryFilterIndex(nval) {
+      if (!nval) return;
+      this.batteryIndex = nval;
+      this.batterySingle = this.genFields(this.batteryIndex);
+    },
+    detail(nval) {
+      if (!nval) return;
+      this.genBattery();
     }
   },
   methods: {
     fetchDevice,
-    selectButton(tab) {
-      this.active = tab;
+    openStatus() {
+      this.groupStatusPopup = true;
     },
-    genParamsFields(i) {
-      const fields = [
-        ["Volzy", "组压"],
-        ["Volgy", "最高电压"],
-        ["Voldybh", "最高电压电池编号"],
-        ["Voldy", "最低电压"],
-        ["Voldybh", "最低电压电池编号"],
-        ["Volpjdy", "平均电压"],
-        ["Voldcjs", "电池节数"]
-      ];
-      let paramsFields = [];
-      fields.forEach(item => {
-        let [field, label] = item;
-        paramsFields.push({
-          label: `${label}`,
-          field: `${this.prefix}${i}${field}`
-        });
-      });
-      this.paramsFields = paramsFields;
-    },
-    genDyFields(i) {
-      const fields = ["Vol", "号电池电压"];
-      const [field, label] = fields;
-      let dyFields = [];
-      for (let a = 1; a <= 80; a++) {
-        dyFields.push({
-          label: `${a - 1}${label}`,
-          field: `${this.prefix}${i}${field}${a}`
-        });
+    changeGroupStatus(index) {
+      this.groupStatusIndex = index;
+      const { value, label } = this.groupStatusText[index];
+      this.currentGroupText = label;
+      this.currentGroupStatus = value;
+      if (value == 1) {
+        this.batteryPopupData = this.batteryAllData;
       }
-      this.dyFields = dyFields;
-    },
-    genAlarmFields(i) {
-      const fields = [["Voldcgz", "号电池故障"], ["Voldyyc", "号电压异常"]];
-      let alarmFields = [];
-      for (let a = 1; a <= 80; a++) {
-        fields.forEach(item => {
-          let [field, label] = item;
-          alarmFields.push({
-            label: `${a - 1}${label}`,
-            field: `${this.prefix}${i}${field}${a}`
-          });
-        });
+      if (value == 2) {
+        this.batteryPopupData = this.batteryWarnData;
       }
-      this.alarmFields = alarmFields;
-    },
-    genNetFields(i) {
-      const fields = ["Model", "模块", "连线"];
-      const [field, label, surfix] = fields;
-      let netFields = [];
-      for (let a = 0; a < 10; a++) {
-        netFields.push({
-          label: `${label}${a}${surfix}`,
-          field: `${this.prefix}${field}${a}`
-        });
+      if (value == 3) {
+        this.batteryPopupData = this.batterySuccessData;
       }
-      this.netFields = netFields;
+    },
+    openBattery() {
+      this.batteryPopup = true;
+    },
+    changeBattery(index) {
+      this.batteryIndex = index;
+      this.batterySingle = this.genFields(index);
+    },
+    getBattery(i) {
+      return `${i}号电池`;
     },
     genFields(i) {
-      this.genParamsFields(i);
-      this.genDyFields(i);
-      this.genAlarmFields(i);
-      this.genNetFields(i);
+      return this.paramsField.map(item => {
+        item.value = this.detail[`rd_${item.field}_${i}`];
+        return item;
+      });
     },
-    getCurrentGroup(i) {
-      return `${this.groupName}${this.group[i - 1]}`;
-    },
-    changeGroup(index) {
-      this.groupIndex = index;
-      this.genFields(index);
-    },
-    openGroup() {
-      this.groupPopup = true;
+    genBattery() {
+      const warn = [];
+      const success = [];
+      const data = [];
+      for (let i = 1; i <= 64; i++) {
+        let warnField = `rd_SinWarn_${i}`;
+        data.push(i);
+        if (this.detail[warnField] == 0) {
+          success.push(i);
+        } else {
+          warn.push(i);
+        }
+      }
+      this.batteryAllData = data;
+      this.batteryWarnData = warn;
+      this.batterySuccessData = success;
+      this.batteryPopupData = this.batteryAllData;
+      this.batterySingle = this.genFields(this.batteryIndex);
     }
   },
 
   created() {
-    this.genFields(this.groupIndex);
     const { pdi } = this.$route.params;
     this.pdi = pdi;
     this.getData();
-    this.startTimer();
+    // this.startTimer();
   }
 };
 </script>
@@ -191,6 +187,64 @@ export default {
 <style lang='scss' scoped>
 .battery-group {
   border-color: rgba(#ccc, 0.5);
+}
+.bg-item-icon {
+  width: 8rem;
+  height: 8rem;
+  color: $theme-color;
+  &.battery-error {
+    color: #f44336;
+  }
+}
+.battery {
+  position: relative;
+  // background: url("../../assets/battery-bg.svg") no-repeat 50% 50%;
+  // background-size: 100% 100%;
+  // width: 100%;
+  // height: 50%;
+  color: $theme-color;
+}
+.battery-result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 2.5rem;
+  li {
+    line-height: 40px;
+    height: 40px;
+    text-align: left;
+    border-bottom: 1px solid $theme-color;
+    &.battery-title {
+      text-align: center;
+      line-height: 50px;
+      height: 50px;
+      font-size: 0.5rem;
+      &::after {
+        border: solid 2px $theme-color;
+        border-bottom-width: 0;
+        border-left-width: 0;
+        content: " ";
+        // position: absolute;
+        width: 6px;
+        height: 6px;
+        transform: rotate(135deg);
+        display: inline-block;
+        margin-left: 5px;
+        margin-bottom: 0.15rem;
+      }
+    }
+  }
+}
+.battery-popup {
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+.battery-total .mint-cell {
+  width: 50%;
+  min-height: 1.1rem;
+  display: inline-block;
 }
 </style>
 

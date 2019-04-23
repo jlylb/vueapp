@@ -2,7 +2,9 @@ import Vue from 'vue';
 /* eslint-disable */
 let exportObj = {};
 
-const px2rem = window.lib.flexible.px2rem;
+const px2rem = d => {
+  return Math.round(window.lib.flexible.px2rem(d));
+};
 
 if (!Vue.prototype.$isServer) {
   const docStyle = document.documentElement.style;
@@ -95,8 +97,8 @@ if (!Vue.prototype.$isServer) {
         y ? `${px2rem(y)}rem` : '0rem'
       }) translateZ(0rem)`;
     } else {
-      element.style[transformProperty] += ` translate(${x ? `${x}rem` : '0rem'},${
-        y ? `${y}rem` : '0rem'
+      element.style[transformProperty] += ` translate(${x ? `${px2rem(x)}rem` : '0rem'},${
+        y ? `${px2rem(y)}rem` : '0rem'
       })`;
     }
   };

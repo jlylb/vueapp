@@ -141,12 +141,12 @@ export default {
 
 <style lang='scss'>
 .slide-image {
-  height: 150px;
+  // height: 150px;
   padding: 0 0.15rem;
-  // flex: 0.9;
+  flex: 1.2;
   & img {
     display: inline-block;
-    height: 100%;
+    // height: 3.75rem;
     width: 100%;
     // max-width: 100%;
   }
@@ -156,6 +156,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
 }
 
 .fluid-content {
