@@ -10,14 +10,15 @@
       :auto-fill="false"
       ref="loadmore"
     >
-      <mt-cell-swipe
-        :title="String(item.pdi_index)"
-        :label="item.pdi_name"
-        @click.native="openDevice(item)"
-        is-link
-        v-for="(item, index) in device"
-        :key="index"
-        :right="[
+      <div class="page-cell">
+        <mt-cell-swipe
+          :title="String(item.pdi_index)"
+          :label="item.pdi_name"
+          @click.native="openDevice(item)"
+          is-link
+          v-for="(item, index) in device"
+          :key="index"
+          :right="[
         {
           content: '修改',
           style: { background: '#06509c', color: '#fff' },
@@ -29,7 +30,8 @@
           handler: () => { handlerDelete(item, index) }
         }
       ]"
-      ></mt-cell-swipe>
+        ></mt-cell-swipe>
+      </div>
     </mt-loadmore>
 
     <mt-popup v-model="popupDetail" class="popup-device" position="bottom">

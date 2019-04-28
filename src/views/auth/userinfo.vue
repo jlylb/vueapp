@@ -1,10 +1,12 @@
 <template>
   <div class="layout-container">
     <top-component></top-component>
-    <mt-cell title="公司名称">
-      <svg-icon icon-class="company" class="item-icon" slot="icon"></svg-icon>
-      {{ companyName }}
-    </mt-cell>
+    <div class="page-cell">
+      <mt-cell title="公司名称">
+        <!-- <svg-icon icon-class="company" class="item-icon" slot="icon"></svg-icon> -->
+        {{ companyName }}
+      </mt-cell>
+    </div>
   </div>
 </template>
 

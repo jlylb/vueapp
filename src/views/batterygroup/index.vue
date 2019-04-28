@@ -179,7 +179,7 @@ export default {
     const { pdi } = this.$route.params;
     this.pdi = pdi;
     this.getData();
-    // this.startTimer();
+    this.startTimer();
   }
 };
 </script>

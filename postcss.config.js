@@ -12,7 +12,7 @@ module.exports = {
         'picker-item',
         'layout-container',
       ],
-      propBlackList: ['/border/', 'background-image'],
+      propBlackList: ['/border/', 'background-image', 'background-size'],
     },
   },
 };

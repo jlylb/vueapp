@@ -10,7 +10,6 @@
       @click.native="openDetail(item)"
       class="cell-icon"
     >
-      <!-- <svg-icon :icon-class="item.icon" class="item-icon" slot="icon"></svg-icon> -->
       <icon-bg slot="icon" :icon="item.icon" small></icon-bg>
     </mt-cell>
   </div>
@@ -56,6 +55,9 @@ export default {
     display: inline-block;
     vertical-align: middle;
     margin-right: 0;
+  }
+  .mint-cell-title {
+    margin: 5px 0;
   }
 }
 </style>

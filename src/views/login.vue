@@ -48,8 +48,8 @@ export default {
       // username: "username1",
       // password: "123456",
       validateForm: {
-        username: "a88",
-        password: "123456"
+        username: "",
+        password: ""
       }
     };
   },

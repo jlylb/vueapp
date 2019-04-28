@@ -23,7 +23,7 @@
         <mt-cell>
           <v-circle :percent="fixPer(detail.rd_upsoutvol)" dashboard>
             <p>输出电压</p>
-            <p>{{ detail.rd_upsinvol }}</p>
+            <p>{{ detail.rd_upsoutvol }}</p>
           </v-circle>
         </mt-cell>
 
@@ -40,6 +40,10 @@
           :key="index"
         >
           <mt-switch v-model="detail[item.field]" disabled></mt-switch>
+        </mt-cell>
+
+        <mt-cell title="放电控制" label="点击开关开始放电">
+          <mt-switch v-model="isRelease" @change="release"></mt-switch>
         </mt-cell>
       </mt-tab-container-item>
 
@@ -64,9 +68,11 @@
 import { fetchDevice } from "@/api/monitor";
 import { getDataValue } from "@/tools";
 import VCircle from "@/components/vcircle";
+import ReleaseBattery from "@/tools/release.js";
 
 export default {
   components: { VCircle },
+  mixins: [ReleaseBattery],
   data() {
     return {
       rangeValue: 10,

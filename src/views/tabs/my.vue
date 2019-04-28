@@ -13,12 +13,16 @@
       您好, {{ name }}
     </mt-cell>
 
+    <mt-cell title="通知管理" is-link to="/notice">
+      <svg-icon icon-class="notice" class="item-icon" slot="icon"></svg-icon>
+    </mt-cell>
+
     <mt-cell title="修改密码" is-link to="/auth/password">
       <svg-icon icon-class="password-circle" class="item-icon" slot="icon"></svg-icon>
     </mt-cell>
 
     <mt-cell title="关于我们" is-link to="/auth/about">
-      <svg-icon icon-class="us-circle" class="item-icon" slot="icon"></svg-icon>
+      <svg-icon icon-class="about" class="item-icon" slot="icon"></svg-icon>
     </mt-cell>
 
     <mt-cell></mt-cell>

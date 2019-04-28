@@ -72,6 +72,7 @@ const user = {
   getters: {
     isget: state => state.isget,
     notification: state => state.notification,
+    companyId: state => state.companyId,
   },
   actions: {
     // 用户名登录
@@ -150,6 +151,7 @@ const user = {
             commit('SET_TOKEN', '');
             commit('SET_ROLES', []);
             dispatch('app/forgetGuide', null, { root: true });
+            dispatch('app/clearAppNotificationId', null, { root: true });
             commit('SET_IS_GET', false);
             removeToken();
             resolve();
@@ -161,10 +163,11 @@ const user = {
     },
 
     // 前端 登出
-    FedLogOut({ commit }) {
+    FedLogOut({ commit, dispatch }) {
       return new Promise((resolve) => {
         commit('SET_TOKEN', '');
         commit('SET_IS_GET', false);
+        dispatch('app/clearAppNotificationId', null, { root: true });
         removeToken();
         resolve();
       });
@@ -215,6 +218,9 @@ const user = {
             reject(error);
           });
       });
+    },
+    setNotification({ commit }, num) {
+      commit('SET_NOTIFICATION', num);
     },
   },
 };

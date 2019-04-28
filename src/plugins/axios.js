@@ -56,7 +56,7 @@ const _axios = axios.create(config);
 
 _axios.interceptors.request.use(
   (sconfig) => {
-    console.log(store.getters.token);
+    // console.log(store.getters.token);
     if (store.getters.token) {
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       sconfig.headers.Authorization = `Bearer ${getToken()}`;

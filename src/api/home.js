@@ -15,3 +15,12 @@ export function addDevice(data) {
     data,
   });
 }
+
+export function saveCommand(data) {
+  /* eslint-disable */
+  return axios({
+    url: '/donghuang/command',
+    method: 'post',
+    data,
+  });
+}

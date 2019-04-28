@@ -8,6 +8,9 @@ const app = {
     isGuide: false,
     province: null,
     isUpdateApp: false,
+    appNotice: true,
+    appRate: null,
+    notificationId: null,
   },
   mutations: {
     BAR_TITLE: (state, title) => {
@@ -22,13 +25,38 @@ const app = {
     IS_UPDATE_APP: (state, nVal) => {
       state.isUpdateApp = nVal;
     },
+    APP_NOTICE: (state, nVal) => {
+      state.appNotice = nVal;
+    },
+    APP_RATE: (state, nVal) => {
+      state.appRate = nVal;
+    },
+    APP_NORTIFICATION_ID: (state, nVal) => {
+      state.notificationId = nVal;
+    },
   },
   getters: {
     barTitle: state => state.barTitle,
     currentProvince: state => state.province,
     isUpdateApp: state => state.isUpdateApp,
+    appNotice: state => state.appNotice,
+    appRate: state => state.appRate,
+    AppNotificationId: state => state.notificationId,
   },
   actions: {
+    setAppNotificationId({ commit }, val) {
+      commit('APP_NORTIFICATION_ID', val);
+    },
+    clearAppNotificationId({ commit, state }) {
+      clearInterval(state.notificationId);
+      commit('APP_NORTIFICATION_ID', null);
+    },
+    setAppNotice({ commit }, val) {
+      commit('APP_NOTICE', val);
+    },
+    setAppRate({ commit }, val) {
+      commit('APP_RATE', val);
+    },
     giveGuide({ commit }, bVal) {
       commit('GUIDE', bVal);
       setGuide(bVal);
@@ -46,7 +74,7 @@ const app = {
       // const { version } = plus.runtime;
       const { name = 'Android' } = plus.os;
       const { version } = appdata;
-      
+
       // const version = '1.0.0';
       // const name = 'Android';
       const data = {

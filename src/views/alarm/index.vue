@@ -13,13 +13,16 @@
       infinite-scroll-distance="60"
     >
       <mt-cell
-        :title="item.pdi_name"
-        :label="item.pdi_warnname"
         @click.native.prevent="openRoute(item)"
         is-link
         v-for="(item, index) in device"
         :key="index"
       >
+        <template slot="title">
+          <span :class="['mint-cell-text', {'alarm-dot': isRead(item) } ]">{{ item.pdi_name }}</span>
+          <span class="mint-cell-label">{{ item.pdi_warnname }}</span>
+        </template>
+
         <mt-badge
           :type="wlevel[item.pdi_warnlevel]['class']"
           v-if="wlevel[item.pdi_warnlevel]"
@@ -38,18 +41,25 @@
     </p>
 
     <mt-popup v-model="popupVisible" class="popup-device" position="bottom">
-      <mt-cell title="告警信息" :label="selectItem.pdi_updatetime"></mt-cell>
-      <mt-cell title>
-        <span>{{ selectItem.pdi_warnname }}</span>
-      </mt-cell>
-      <mt-cell title></mt-cell>
+      <toolbar @cancel="cancelAlarm" @confirm="confirmAlarm(selectItem)" v-if="!selectItem.warnlog"></toolbar>
+      <mt-cell title="告警时间">{{ selectItem.pdi_updatetime }}</mt-cell>
+      <mt-cell title="设备编号">{{ selectItem.pdi_devid }}</mt-cell>
+      <mt-cell title="设备名称">{{ selectItem.pdi_name }}</mt-cell>
+      <mt-cell title="告警内容">{{ selectItem.pdi_warnname }}</mt-cell>
+      <mt-cell title="区域">{{ selectItem.pdi_areaname }}</mt-cell>
+
+      <template v-if="selectItem.warnlog">
+        <mt-cell title="确认时间">
+          <mt-badge type="success">{{ selectItem.warnlog.confirm_at }}</mt-badge>
+        </mt-cell>
+        <mt-cell title="确认人">
+          <mt-badge type="success">{{ selectItem.warnlog.confirm_user }}</mt-badge>
+        </mt-cell>
+      </template>
     </mt-popup>
 
     <mt-popup v-model="popupFilter" class="popup-device" position="bottom">
-      <mt-cell class="tool-button">
-        <mt-button class="btn" @click="cancalFilter">取消</mt-button>
-        <mt-button class="btn" @click="confirmFilter" type="primary">确定</mt-button>
-      </mt-cell>
+      <toolbar @cancel="cancalFilter" @confirm="confirmFilter"></toolbar>
       <mt-cell title="开始时间" @click.native="changeTimeStart">{{ formatTime(searchDate.start) }}</mt-cell>
       <mt-cell title="结束时间" @click.native="changeTimeEnd">{{ formatTime(searchDate.end) }}</mt-cell>
     </mt-popup>
@@ -73,14 +83,17 @@
 </template>
 
 <script>
-import { fetchList } from "@/api/alarm";
+import { fetchList, addWarn } from "@/api/alarm";
 import { parseTime } from "@/tools/";
-import { Toast } from "mint-ui";
+import Toast from "@/components/toast/toast.js";
+import { mapGetters } from "vuex";
 import MyDatetimePicker from "@/components/picker/datetime-picker.vue";
+import Toolbar from "@/components/toolbar.vue";
 // import VueQr from 'vue-qr'
 export default {
   components: {
-    MyDatetimePicker
+    MyDatetimePicker,
+    Toolbar
   },
   data() {
     return {
@@ -103,11 +116,20 @@ export default {
       isConfirm: false
     };
   },
+  computed: {
+    ...mapGetters("user", ["notification"])
+  },
   methods: {
     parseTime,
     openRoute(item) {
       this.selectItem = item;
-      // this.popupVisible = true
+      this.popupVisible = true;
+    },
+    desc() {
+      const alarmNum = this.notification - 1;
+      this.$store.dispatch("user/setNotification", alarmNum);
+      if (!window.plus) reutrn;
+      plus.runtime.setBadgeNumber(alarmNum);
     },
     getData() {
       this.loading = true;
@@ -163,6 +185,7 @@ export default {
       this.$refs.pickerTimeEnd.open();
     },
     cancalFilter() {
+      this.searchDate = { start: null, end: null };
       if (this.isConfirm) {
         this.search = {
           page: 0,
@@ -174,7 +197,7 @@ export default {
         this.getData();
       }
       this.isConfirm = false;
-      this.searchDate = { start: null, end: null };
+      // this.searchDate = { start: null, end: null };
       this.popupFilter = false;
     },
     confirmFilter() {
@@ -192,6 +215,21 @@ export default {
       this.device = [];
       this.hasPage = true;
       this.getData();
+    },
+    isRead(item) {
+      return !item.warnlog;
+    },
+    cancelAlarm() {
+      this.popupVisible = false;
+    },
+    confirmAlarm(item) {
+      addWarn({ warn_id: item.pdi_index }).then(res => {
+        this.popupVisible = false;
+        if (!res) return;
+        Toast("消息确认成功");
+        this.selectItem.warnlog = res.data.data;
+        this.desc();
+      });
     }
   },
   created() {
@@ -237,6 +275,20 @@ export default {
       padding: 0;
       border-radius: 0;
     }
+  }
+}
+.alarm-dot {
+  &::before {
+    height: 0.15rem;
+    width: 0.15rem;
+    padding: 0;
+    content: "";
+    border-radius: 50%;
+    display: inline-block;
+    color: #f44336;
+    background-color: #f44336;
+    position: absolute;
+    left: 0;
   }
 }
 </style>

@@ -22,6 +22,22 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/home.vue'),
         },
         {
+          path: '/tab_control',
+          name: 'tab_control',
+          meta: {
+            title: '控制',
+          },
+          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/control.vue'),
+        },
+        {
+          path: '/notice',
+          name: 'notice',
+          meta: {
+            title: '通知管理',
+          },
+          component: () => import(/* webpackChunkName: "notice" */ './views/notice/index.vue'),
+        },
+        {
           path: '/tab_discover',
           name: 'tab_discover',
           meta: {

@@ -12,7 +12,7 @@
     >{{ item.label }}</mt-button>
 
     <mt-tab-container v-model="active" v-if="detail">
-      <mt-tab-container-item id="tab-real" name="参数" class="real">
+      <mt-tab-container-item id="tab-real" name="参数" class="real-air">
         <mt-cell title="回风温度" :label="'当前: '+ convertInt(detail.rd_air_backwindtemp)">
           <mt-range
             class="air-range"
@@ -335,7 +335,7 @@ export default {
   justify-content: center;
   color: inherit;
 }
-.real {
+.real-air {
   .mint-cell-value {
     position: relative;
     flex: 2.5;

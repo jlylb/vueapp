@@ -1,5 +1,10 @@
 <template>
-  <mt-popup v-model="isDrop" class="popup-menu" v-bind="popProp" popup-transition="popup-fade">
+  <mt-popup
+    v-model="isDrop"
+    class="popup-menu dropdown-menu"
+    v-bind="popProp"
+    popup-transition="popup-fade"
+  >
     <mt-cell
       :title="item.label"
       v-for="(item, index) in data"
@@ -8,7 +13,7 @@
       @click.native="openPop(item, $event, index)"
     >
       <svg-icon :icon-class="item.icon" class="item-icon" slot="icon" v-if="item.icon"></svg-icon>
-      <span v-if="showLabel" style="color: green">{{ item.value }}</span>
+      <span v-if="showLabel" class="item-value">{{ item.value }}</span>
     </mt-cell>
   </mt-popup>
 </template>
@@ -69,11 +74,20 @@ export default {
 </script>
 
 <style lang='scss'>
+.dropdown-menu .item-value {
+  color: green;
+}
 .active-menu {
-  background-color: $blue;
+  background-color: $theme-color;
   .mint-cell-text {
     color: #fff;
     vertical-align: inherit;
+  }
+  .mint-cell-value {
+    color: #fff;
+  }
+  .item-value {
+    color: #fff;
   }
   .item-icon,
   span {

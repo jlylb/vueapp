@@ -5,6 +5,10 @@
     <mt-swipe :show-indicators="true" class="slide-image">
       <mt-swipe-item v-for="(item, index) in items" :key="index">
         <img :src="item.image">
+        <!-- <div
+          class="simg"
+          :style="{'background':`url(${item.image}) no-repeat center center`, 'background-size': '100% 100%'}"
+        ></div>-->
       </mt-swipe-item>
     </mt-swipe>
 
@@ -148,8 +152,13 @@ export default {
     display: inline-block;
     // height: 3.75rem;
     width: 100%;
+    // height: 100%;
     // max-width: 100%;
   }
+}
+.simg {
+  height: 100%;
+  width: 100%;
 }
 .tab-container {
   //   height: 100%;

@@ -48,6 +48,9 @@
         >
           <mt-switch v-model="detail[item.field]" disabled></mt-switch>
         </mt-cell>
+        <mt-cell title="放电控制" label="点击开关开始放电">
+          <mt-switch v-model="isRelease" @change="release"></mt-switch>
+        </mt-cell>
       </mt-tab-container-item>
 
       <mt-tab-container-item id="tab-alarm">
@@ -78,9 +81,11 @@ import { fetchDevice } from "@/api/monitor";
 import { getDataValue } from "@/tools";
 import VCircle from "@/components/vcircle";
 import PopupBottom from "@/components/dropdown";
+import ReleaseBattery from "@/tools/release.js";
 
 export default {
   components: { VCircle, PopupBottom },
+  mixins: [ReleaseBattery],
   data() {
     return {
       rangeValue: 10,
