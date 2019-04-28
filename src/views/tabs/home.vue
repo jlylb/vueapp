@@ -1,17 +1,14 @@
 <template>
   <div class="tab-container">
     <top-component></top-component>
-
-    <mt-swipe :show-indicators="true" class="slide-image">
-      <mt-swipe-item v-for="(item, index) in items" :key="index">
-        <img :src="item.image">
-        <!-- <div
-          class="simg"
-          :style="{'background':`url(${item.image}) no-repeat center center`, 'background-size': '100% 100%'}"
-        ></div>-->
-      </mt-swipe-item>
-    </mt-swipe>
-
+    <div class="slide-image1">
+      <mt-swipe :show-indicators="true" :auto="60000000">
+        <mt-swipe-item v-for="(item, index) in items" :key="index">
+          <!-- <img :src="item.image"> -->
+          <div class="zoom-image" :style="{'background-image':`url(${item.image})`}"></div>
+        </mt-swipe-item>
+      </mt-swipe>
+    </div>
     <div class="fluid-content">
       <div class="fluid-content-item">
         <div class="item-power item item-right" @click="openRouter('sysmenu', 'power')">
@@ -243,5 +240,45 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+$pb-height: 40%;
+.zoom-image {
+  width: calc(100% - 0.3rem);
+  // width: 100%;
+  height: 0;
+  padding-bottom: $pb-height;
+  overflow: hidden;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  margin: 0 auto;
+}
+
+.slide-image1 {
+  width: 100%;
+  height: 0;
+  padding-bottom: $pb-height;
+  position: relative;
+  overflow: hidden;
+  // flex: 1.2;
+  // padding-left: 0.15rem;
+  // padding-right: 0.15rem;
+  // margin: 0 auto;
+}
+.mint-swipe {
+  // width: calc(100% - 0.3rem);
+  width: 100%;
+  height: 0;
+  padding-bottom: $pb-height;
+}
+.mint-swipe-items-wrap {
+  width: 100%;
+  height: 0;
+  padding-bottom: $pb-height;
+}
+.mint-swipe-items-wrap > div {
+  width: 100%;
+  height: 0;
+  padding-bottom: $pb-height;
 }
 </style>
