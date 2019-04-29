@@ -1,11 +1,11 @@
 <template>
   <div class="tab-container">
     <top-component></top-component>
-    <div class="slide-image1">
+    <div class="slide-image" ref="slideimg">
       <mt-swipe :show-indicators="true" :auto="60000000">
         <mt-swipe-item v-for="(item, index) in items" :key="index">
-          <!-- <img :src="item.image"> -->
-          <div class="zoom-image" :style="{'background-image':`url(${item.image})`}"></div>
+          <img :src="item.image" class="slide-item-img">
+          <!-- <div class="zoom-image" :style="{'background-image':`url(${item.image})`}"></div> -->
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -100,11 +100,31 @@ export default {
     openRouter(name, type) {
       let params = type ? { type } : {};
       this.$router.push({ name, params: params });
+    },
+    slideImage() {
+      const simg = this.$refs.slideimg;
+      const { height } = simg.getBoundingClientRect();
+      console.log(height, "slide height........");
+      simg.querySelectorAll("img").forEach(item => {
+        item.style.height = `${height}px`;
+      });
+    },
+    resizeHandler() {
+      setTimeout(() => {
+        this.slideImage();
+      }, 300);
+    },
+    resizeImg() {
+      this.slideImage();
+      window.addEventListener("resize", this.resizeHandler, false);
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.resizeHandler, false);
   },
   mounted() {
     console.log("mounted ing ...before", this.isUpdateApp);
-
+    this.resizeImg();
     if (this.isUpdateApp) return;
     const AutoUpdateApp = this.$AutoUpdateApp();
     AutoUpdateApp.getVersion(version => {
@@ -240,45 +260,5 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-$pb-height: 40%;
-.zoom-image {
-  width: calc(100% - 0.3rem);
-  // width: 100%;
-  height: 0;
-  padding-bottom: $pb-height;
-  overflow: hidden;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  margin: 0 auto;
-}
-
-.slide-image1 {
-  width: 100%;
-  height: 0;
-  padding-bottom: $pb-height;
-  position: relative;
-  overflow: hidden;
-  // flex: 1.2;
-  // padding-left: 0.15rem;
-  // padding-right: 0.15rem;
-  // margin: 0 auto;
-}
-.mint-swipe {
-  // width: calc(100% - 0.3rem);
-  width: 100%;
-  height: 0;
-  padding-bottom: $pb-height;
-}
-.mint-swipe-items-wrap {
-  width: 100%;
-  height: 0;
-  padding-bottom: $pb-height;
-}
-.mint-swipe-items-wrap > div {
-  width: 100%;
-  height: 0;
-  padding-bottom: $pb-height;
 }
 </style>
