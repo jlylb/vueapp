@@ -192,7 +192,8 @@ export default {
     },
     setBage(num) {
       if (!window.plus) return;
-      plus.runtime.setBadgeNumber(num || this.notification);
+      let bageNum = num || this.notification || -1;
+      plus.runtime.setBadgeNumber(bageNum);
     },
     initApp() {
       this.addEventTest();

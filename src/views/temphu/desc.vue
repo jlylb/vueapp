@@ -13,6 +13,7 @@
         <p>
           {{ item['consta']['consta_name'] }}:
           <mt-badge
+            class="temphu-bage"
             :type="item['consta']['consta_value']==0?'success':'error'"
           >{{ item['consta']['consta_value']==0?'正常':'断线' }}</mt-badge>
         </p>
@@ -99,14 +100,19 @@ export default {
   }
 };
 </script>
-
+<style lang="scss">
+.temphu-bage.is-size-normal {
+  padding: 0.05rem 0.2rem;
+  // font-size: inherit;
+}
+</style>
 <style lang="scss" scoped>
 .chart-desc {
   height: 55%;
 }
 .item-title {
   letter-spacing: normal;
-  cursor: pointer;
+  // cursor: pointer;
   &::after {
     border: solid 2px $blue;
     border-bottom-width: 0;
@@ -115,7 +121,7 @@ export default {
     position: absolute;
     width: 6px;
     height: 6px;
-    transform: rotate(135deg);
+    transform: rotate(135deg) translateY(-0.1rem);
     display: inline-block;
     margin-left: 3px;
   }
@@ -127,6 +133,7 @@ export default {
   // padding: 10px 0;
   height: 25%;
   background-color: #e6effb;
+  font-size: 0.5rem;
 }
 .chart-desc-icon {
   width: 60px;
@@ -200,7 +207,7 @@ export default {
       border-radius: 25%;
       border: 1px solid rgba(255, 255, 255, 0.8);
       display: inline-block;
-      padding: 5px;
+      padding: 0.21rem;
     }
   }
 }

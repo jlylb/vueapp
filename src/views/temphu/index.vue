@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-container">
+  <div class="layout-container temphu">
     <top-component></top-component>
 
     <div class="chart-block">
@@ -26,14 +26,13 @@
     <mt-popup
       v-model="selectDevice"
       class="popup-device"
-      :style="{height: '240px'}"
+      :style="{height: '6rem'}"
       position="bottom"
     >
       <mt-cell
         :title="deviceName + item"
         @click.native="openDevice(item)"
         :class="{ itemSelect: itemIndex===item }"
-        is-link
         v-for="item in num"
         :key="item"
       >
@@ -263,14 +262,14 @@ export default {
   // overflow: hidden;
 }
 .itemSelect {
-  background-color: $blue;
-    .mint-cell-text {
-      color: #fff;
-      vertical-align: inherit;
-    }
-    .item-icon {
-      color: #fff;
-    }
+  background-color: $theme-color;
+  .mint-cell-text {
+    color: #fff;
+    vertical-align: inherit;
+  }
+  .item-icon {
+    color: #fff;
+  }
 }
 
 .chart {
@@ -281,11 +280,11 @@ export default {
   transform: translate3d(-50%, 0, 0);
 }
 
-.layout-container .popup-device {
+.temphu .popup-device {
   height: 40%;
   overflow-y: auto;
 }
-.layout-container {
+.temphu {
   height: 100%;
   overflow: hidden;
 }

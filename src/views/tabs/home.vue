@@ -2,10 +2,9 @@
   <div class="tab-container">
     <top-component></top-component>
     <div class="slide-image" ref="slideimg">
-      <mt-swipe :show-indicators="true" :auto="60000000">
+      <mt-swipe :show-indicators="true" ref="slideContainer" :style="imgStyle">
         <mt-swipe-item v-for="(item, index) in items" :key="index">
-          <img :src="item.image" class="slide-item-img">
-          <!-- <div class="zoom-image" :style="{'background-image':`url(${item.image})`}"></div> -->
+          <img :src="item.image" :ref="`slideimg_${index}`" class="slide-item-img">
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -89,7 +88,8 @@ export default {
           url: "http://www.baidu.com",
           image: testJpg3
         }
-      ]
+      ],
+      imgStyle: null
     };
   },
   computed: {
@@ -102,11 +102,18 @@ export default {
       this.$router.push({ name, params: params });
     },
     slideImage() {
+      console.log("img slide............");
       const simg = this.$refs.slideimg;
-      const { height } = simg.getBoundingClientRect();
-      console.log(height, "slide height........");
-      simg.querySelectorAll("img").forEach(item => {
-        item.style.height = `${height}px`;
+      let { height } = simg.getBoundingClientRect();
+
+      const indexs = [0, 1, 2];
+
+      this.imgStyle = { height: `${height}px` };
+
+      console.log(this.$refs.slideContainer);
+      indexs.forEach(index => {
+        let obj = `slideimg_${index}`;
+        this.$refs[obj][0].style.height = `${height}px`;
       });
     },
     resizeHandler() {
@@ -162,23 +169,19 @@ export default {
 
 <style lang='scss'>
 .slide-image {
-  // height: 150px;
   padding: 0 0.15rem;
   flex: 1.2;
+  position: relative;
+  // width: calc(100% - 0.3rem);
+  // margin: 0 auto;
+  overflow: hidden;
   & img {
     display: inline-block;
-    // height: 3.75rem;
     width: 100%;
-    // height: 100%;
-    // max-width: 100%;
   }
 }
-.simg {
-  height: 100%;
-  width: 100%;
-}
+
 .tab-container {
-  //   height: 100%;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -190,7 +193,6 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
   flex: 3;
-  //   height: 100%;
   .fluid-content-item {
     width: 50%;
     display: flex;

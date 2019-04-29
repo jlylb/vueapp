@@ -129,7 +129,7 @@ export default {
       const alarmNum = this.notification - 1;
       this.$store.dispatch("user/setNotification", alarmNum);
       if (!window.plus) reutrn;
-      plus.runtime.setBadgeNumber(alarmNum);
+      plus.runtime.setBadgeNumber(alarmNum || -1);
     },
     getData() {
       this.loading = true;
