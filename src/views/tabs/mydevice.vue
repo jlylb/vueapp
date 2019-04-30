@@ -67,7 +67,7 @@
         v-validate="{ required: true}"
       ></mt-field>
       <p class="field-error" v-if="states['name']=='error'">{{ errors.first('name') }}</p>
-      <mt-cell title="设备分类" class="type-device" @click.native="openType">{{ typeLabel }}</mt-cell>
+      <!-- <mt-cell title="设备分类" class="type-device" @click.native="openType">{{ typeLabel }}</mt-cell> -->
 
       <mt-cell title="区域" class="type-device" @click.native="openArea">{{ areaLabel }}</mt-cell>
 
@@ -353,15 +353,16 @@ export default {
           this.popupVisible = false;
           const {
             pdi: pdi_code,
-            name: pdi_name,
-            type: dpt_id
+            name: pdi_name
+            //  type: dpt_id
           } = this.deviceModel;
+          const dpt_id = 0;
           const { value: AreaId } = this.selectArea;
           postDevice({ pdi_code, pdi_name, dpt_id, AreaId }).then(res => {
             let first = this.provinces[0];
             this.$refs.pickArea.setSlotValue(0, first);
             this.$refs.pickArea.setSlotValue(1, this.cities[first.value][0]);
-            this.$refs.pickType.setSlotValue(0, this.types[0]);
+            // this.$refs.pickType.setSlotValue(0, this.types[0]);
             this.$validator.pause();
             this.deviceModel = {
               pdi: "",
@@ -442,7 +443,8 @@ export default {
       MessageBox.prompt("修改设备名称", "", {
         inputValue: item.pdi_name,
         closeOnClickModal: false,
-        inputValidator: this.inputValidator
+        inputValidator: this.inputValidator,
+        inputType: "text"
       })
         .then(({ value, action }) => {
           const data = {
@@ -487,7 +489,7 @@ export default {
   },
   created() {
     this.getData();
-    this.getAllType();
+    // this.getAllType();
     this.getAreas();
   }
 };

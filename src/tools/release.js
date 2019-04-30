@@ -12,17 +12,31 @@ export default {
     release(v) {
       console.log(v);
       if (v) return;
-      MessageBox.confirm('确定执行吗?')
-        .then(() => {
-          saveCommand({ pdi_index: this.pdi }).then(() => {
+      MessageBox.prompt('操作确认', '', {
+        inputValue: '',
+        closeOnClickModal: false,
+        inputValidator: this.inputValidator,
+        inputType: 'password',
+      })
+        .then(({ value: pwd }) => {
+          saveCommand({ pdi_index: this.pdi, pwd }).then((res) => {
             this.isRelease = false;
-            Toast('放电成功');
+            if (res) {
+              Toast('放电成功');
+            }
           });
         })
         .catch(() => {
           this.isRelease = false;
           Toast('已取消执行');
         });
+    },
+    inputValidator(value) {
+      const sStr = value.replace(/(^\s*)|(\s*$)/g, '');
+      if (!sStr) {
+        return '请输入密码';
+      }
+      return true;
     },
   },
 };
