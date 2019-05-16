@@ -158,7 +158,7 @@ export default {
   background-color: transparent;
   align-items: center;
   border: 1px solid #fff;
-  margin: 10px auto;
+  margin: 0.25rem auto;
   .mint-field-clear {
     opacity: 1;
   }

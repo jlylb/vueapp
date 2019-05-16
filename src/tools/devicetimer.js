@@ -10,6 +10,7 @@ export default {
           boolFields: [],
           subFields: [],
           toptitle: null,
+          topname: null,
         };
       },
       methods: {
@@ -45,6 +46,7 @@ export default {
                 this.formatChartData();
               }
               this.toptitle = res.data.title;
+              this.topname = res.data.pdi_name;
             })
             .catch(() => {
               this.clearTimerId();

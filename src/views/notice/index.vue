@@ -15,7 +15,7 @@
       position="bottom"
       :close-on-click-modal="false"
     >
-      <my-picker
+      <mt-picker
         :slots="rateSlots"
         @change="onRateChange"
         ref="pickRate"
@@ -23,19 +23,19 @@
         :show-toolbar="true"
       >
         <toolbar @cancel="cancel" @confirm="confirm"></toolbar>
-      </my-picker>
+      </mt-picker>
     </mt-popup>
   </div>
 </template>
 
 <script>
-import MyPicker from "@/components/picker/picker";
+//import MyPicker from "@/components/picker/picker";
 import Toolbar from "@/components/toolbar.vue";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    MyPicker,
+    // MyPicker,
     Toolbar
   },
   data() {

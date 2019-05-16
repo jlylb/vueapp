@@ -53,14 +53,6 @@ const router = new Router({
             title: '我的',
           },
         },
-        {
-          path: '/mydevice',
-          name: 'mydevice',
-          component: () => import(/* webpackChunkName: "tabs" */ './views/tabs/mydevice.vue'),
-          meta: {
-            title: '我的设备',
-          },
-        },
 
         {
           path: '/upload',
@@ -93,7 +85,7 @@ const router = new Router({
           meta: {
             title: '实时报警',
           },
-          component: () => import(/* webpackChunkName: "alarm" */ './views/alarm/index.vue'),
+          component: () => import(/* webpackChunkName: "realalarm" */ './views/alarm/index.vue'),
         },
 
         {
@@ -258,6 +250,34 @@ router.beforeEach((to, form, next) => {
   // 如果自定义了标题就取标题，否则拿全局标题
   store.commit('app/BAR_TITLE', to.meta.title);
   next();
+});
+
+router.onError((error) => {
+  const pattern = /Loading chunk (.*?) failed/g;
+  const isChunkLoadFailed = error.message.match(pattern);
+  const targetPath = router.history.pending.fullPath;
+  console.log(error);
+  // if (isChunkLoadFailed) {
+  //   router.replace(targetPath);
+  // }
+
+  if (isChunkLoadFailed) {
+    // window.location.reload();
+    const LoadingChunk = window.sessionStorage.getItem('LoadingChunk');
+    if (LoadingChunk) {
+      window.sessionStorage.setItem('LoadingChunk', +LoadingChunk + 1);
+    } else {
+      window.sessionStorage.setItem('LoadingChunk', 1);
+    }
+    if (LoadingChunk - 0 > 1) {
+      // 防止 死循环
+      return false;
+    }
+    // router.replace(targetPath);
+    window.location.reload();
+  } else {
+    console.log(error);
+  }
 });
 
 export default router;

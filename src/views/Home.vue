@@ -93,6 +93,8 @@ export default {
           if (path === "/tab_home" || path === "/login") {
             // 入口页了，执行退出。
             plus.runtime.quit();
+          } else if (path === "/alarm/index") {
+            vm.$router.replace({ path: "/tab_home" });
           } else {
             // 根据实际需求选择相应的方法
             vm.$router.go(-1);
@@ -150,7 +152,12 @@ export default {
       );
     },
     gotoRouter() {
-      this.$router.push({ name: "alarm", replace: true });
+      this.$router.replace({
+        name: "alarm",
+        onComplete: () => {
+          console.log("go.......");
+        }
+      });
     },
     createLocalPushMsg(num) {
       if (num < 1) return;

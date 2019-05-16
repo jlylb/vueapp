@@ -2,8 +2,6 @@
   <div class="layout-container">
     <top-component></top-component>
     <mt-cell
-      :title="item.label"
-      :label="`设备编号: ${item.value}`"
       v-for="item in devices"
       :key="item.value"
       is-link
@@ -11,6 +9,10 @@
       class="cell-icon"
     >
       <icon-bg slot="icon" :icon="item.icon" small></icon-bg>
+      <div class="mint-cell-title device-title" slot="title">
+        <span class="mint-cell-text">{{ item.label }}</span>
+        <span class="mint-cell-label">{{ `设备编号: ${item.value}` }}</span>
+      </div>
     </mt-cell>
   </div>
 </template>
@@ -57,7 +59,13 @@ export default {
     margin-right: 0;
   }
   .mint-cell-title {
-    margin: 5px 0;
+    // margin: 5px 0;
+    display: flex;
+    align-items: center;
+  }
+  .device-title {
+    display: inline-block;
+    padding-left: 5px;
   }
 }
 </style>

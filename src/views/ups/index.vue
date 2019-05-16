@@ -13,29 +13,16 @@
 
     <mt-tab-container v-model="active" v-if="detail">
       <mt-tab-container-item id="tab-real" class="real">
-        <mt-cell is-link @click.native="openDetail('in')">
-          <v-circle :percent="fixPer(avgin)" dashboard>
-            <p>输入电压</p>
-            <p>{{ avgin }}</p>
+        <mt-cell v-for="(item, index) in realFields" :key="index">
+          <v-circle
+            :percent="fixPer(detail[itemFields])"
+            dashboard
+            v-for="(itemFields, findex) in item"
+            :key="findex"
+          >
+            <p>{{ index }}相{{ findex==0?"输入":"输出" }}</p>
+            <p>{{ detail[itemFields] }} V</p>
           </v-circle>
-        </mt-cell>
-
-        <mt-cell is-link @click.native="openDetail('out')">
-          <v-circle :percent="fixPer(avgout)" dashboard>
-            <p>输出电压</p>
-            <p>{{ avgout }}</p>
-          </v-circle>
-        </mt-cell>
-
-        <mt-cell is-link @click.native="openDetail('other')">
-          <v-circle :percent="fixPer(avgother)" dashboard>
-            <p>旁路电压</p>
-            <p>{{ avgother }}</p>
-          </v-circle>
-        </mt-cell>
-
-        <mt-cell>
-          <mt-button type="primary" size="small" @click.native.prevent="more">更多参数</mt-button>
         </mt-cell>
       </mt-tab-container-item>
 
@@ -61,9 +48,26 @@
         </mt-cell>
       </mt-tab-container-item>
 
-      <mt-tab-container-item id="tab-temp">
-        <mt-cell :title="item.label" v-for="(item, index) in moreParams" :key="index">
-          <span style="color: green">{{ detail[item.field] }}</span>
+      <mt-tab-container-item id="tab-temp" class="basic-info">
+        <mt-cell class="info-title">{{ toptitle }}-{{ topname }}</mt-cell>
+        <mt-cell v-for="(items, index) in moreFields" :key="index">
+          <div class="info-tips">
+            <div>{{ items.name }}</div>
+            <icon-bg :icon="items.icon" small></icon-bg>
+          </div>
+          <div class="info-params">
+            <p v-for="(item, findex) in items.fields" :key="findex">
+              {{ item.label }}:
+              <span
+                class="text-green"
+                v-if="!item.isBool"
+              >{{ detail[item.field] }} {{ item.unit }}</span>
+              <span
+                :class="{'text-green': detail[item.field]==0 ,'text-red': detail[item.field]==1}"
+                v-if="item.isBool"
+              >{{ detail[item.field]==0?item.tLabel:item.fLabel }}</span>
+            </p>
+          </div>
         </mt-cell>
       </mt-tab-container-item>
     </mt-tab-container>
@@ -227,66 +231,111 @@ export default {
         }
       ],
       boolFields: ["rd_UPSShutWarn", "rd_SystemShutWarn"],
-      moreParams: [
-        { label: "厂商信息", field: "rd_upsmanuinfo" },
-        { label: "UPS机型", field: "rd_upsmactype" },
-        { label: "UPS版本", field: "rd_upsver" },
-        { label: "UPS额定电压", field: "rd_upsvolr" },
-        { label: "UPS额定电流", field: "rd_upscurr" },
-        { label: "UPS额定电池电压", field: "rd_upsbatvolr" },
-        { label: "UPS额定输入频率", field: "rd_upsfreqr" },
-        { label: "电池可维持的时间", field: "rd_BatLastTime" },
-
-        { label: "电池电压", field: "rd_BatVol" },
-        { label: "电池电流", field: "rd_BatCur" },
-        { label: "电池温度", field: "rd_BatTemp" }
-      ],
       chartData: {},
       chartSettings: {},
       openPop: false,
       popData: [],
-      mapFields: {
-        in: [
-          { field: "rd_InVol", label: "输入电压", unit: "V" },
-          { field: "rd_InFreq", label: "输入频率", unit: "HZ" },
-          { field: "rd_InCur", label: "输入电流", unit: "A" },
-          { field: "rd_InPower", label: "输入功率", unit: "W" }
-        ],
-        out: [
-          { field: "rd_OutVol", label: "输出电压", unit: "V" },
-          { field: "rd_OutCur", label: "输出电流", unit: "A" },
-          { field: "rd_OutPower", label: "输出功率", unit: "W" },
-          { field: "rd_OutLoad", label: "输出负载", unit: "%" }
-        ],
-        other: [
-          { field: "rd_PassVol", label: "旁路电压", unit: "V" },
-          { field: "rd_PassCur", label: "旁路电流", unit: "A" },
-          { field: "rd_PassPower", label: "旁路功率", unit: "HZ" }
-        ]
+      realFields: {
+        A: ["rd_InVol1", "rd_OutVol1"],
+        B: ["rd_InVol2", "rd_OutVol2"],
+        C: ["rd_InVol3", "rd_OutVol3"]
+      },
+      moreFields: {
+        basic: {
+          icon: "basic",
+          name: "基本信息",
+          fields: [
+            {
+              label: "工作模式",
+              field: "rd_PassFailWarn",
+              isBool: true,
+              tLabel: "正常",
+              fLabel: "旁路",
+              unit: ""
+            },
+            { label: "电池容量", field: "rd_BatCapacity", unit: "%" },
+            { label: "输出负载", field: "rd_OutAllLoad", unit: "%" },
+            { label: "UPS温度", field: "rd_MachTemp", unit: "℃" },
+            { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
+            { label: "机型", field: "rd_upsmactype", unit: "" }
+          ]
+        },
+        in1: {
+          icon: "in",
+          name: "A相输入",
+          fields: [
+            { label: "输入电压", field: "rd_InVol1", unit: "V" },
+            { label: "输入频率", field: "rd_InFreq1", unit: "HZ" },
+            { label: "输入电流", field: "rd_InCur1", unit: "mA" },
+            { label: "输入功率", field: "rd_InPower1", unit: "W" }
+          ]
+        },
+        out1: {
+          icon: "out",
+          name: "A相输出",
+          fields: [
+            { label: "输出负载", field: "rd_OutLoad1", unit: "%" },
+            { label: "输出电压", field: "rd_OutVol1", unit: "V" },
+            { label: "输出功率", field: "rd_OutPower1", unit: "W" },
+            { label: "旁路电压", field: "rd_PassVol1", unit: "V" },
+            { label: "旁路功率", field: "rd_PassPower1", unit: "W" }
+          ]
+        },
+        in2: {
+          icon: "in",
+          name: "B相输入",
+          fields: [
+            { label: "输入电压", field: "rd_InVol2", unit: "V" },
+            { label: "输入频率", field: "rd_InFreq2", unit: "HZ" },
+            { label: "输入电流", field: "rd_InCur2", unit: "mA" },
+            { label: "输入功率", field: "rd_InPower2", unit: "W" }
+          ]
+        },
+        out2: {
+          icon: "out",
+          name: "B相输出",
+          fields: [
+            { label: "输出负载", field: "rd_OutLoad2", unit: "%" },
+            { label: "输出电压", field: "rd_OutVol2", unit: "V" },
+            { label: "输出功率", field: "rd_OutPower2", unit: "W" },
+            { label: "旁路电压", field: "rd_PassVol2", unit: "V" },
+            { label: "旁路功率", field: "rd_PassPower2", unit: "W" }
+          ]
+        },
+        in3: {
+          icon: "in",
+          name: "C相输入",
+          fields: [
+            { label: "输入电压", field: "rd_InVol3", unit: "V" },
+            { label: "输入频率", field: "rd_InFreq3", unit: "HZ" },
+            { label: "输入电流", field: "rd_InCur3", unit: "mA" },
+            { label: "输入功率", field: "rd_InPower3", unit: "W" }
+          ]
+        },
+        out3: {
+          icon: "out",
+          name: "C相输出",
+          fields: [
+            { label: "输出负载", field: "rd_OutLoad3", unit: "%" },
+            { label: "输出电压", field: "rd_OutVol3", unit: "V" },
+            { label: "输出功率", field: "rd_OutPower3", unit: "W" },
+            { label: "旁路电压", field: "rd_PassVol3", unit: "V" },
+            { label: "旁路功率", field: "rd_PassPower3", unit: "W" }
+          ]
+        },
+        battery: {
+          icon: "battery",
+          name: "电池",
+          fields: [
+            { label: "电池电压", field: "rd_BatVol", unit: "V" },
+            { label: "电池电流", field: "rd_BatCur", unit: "mA" },
+            { label: "电池温度", field: "rd_BatTemp", unit: "℃" }
+          ]
+        }
       }
     };
   },
-  computed: {
-    avgin() {
-      const { rd_InVol1, rd_InVol2, rd_InVol3 } = this.detail;
-      console.log(
-        rd_InVol1,
-        rd_InVol2,
-        rd_InVol3,
-        this.round((rd_InVol1 + rd_InVol2 + rd_InVol3) / 3),
-        "avg....."
-      );
-      return this.round((rd_InVol1 + rd_InVol2 + rd_InVol3) / 3);
-    },
-    avgout() {
-      const { rd_OutVol1, rd_OutVol2, rd_OutVol3 } = this.detail;
-      return this.round((rd_OutVol1 + rd_OutVol2 + rd_OutVol3) / 3);
-    },
-    avgother() {
-      const { rd_PassVol1, rd_PassVol2, rd_PassVol3 } = this.detail;
-      return this.round((rd_PassVol1 + rd_PassVol2 + rd_PassVol3) / 3);
-    }
-  },
+  computed: {},
   methods: {
     fetchDevice,
     fixPer(val) {
@@ -300,39 +349,10 @@ export default {
     },
     more() {
       this.active = "tab-temp";
-    },
-    openDetail(pName) {
-      this.popData = [];
-      this.openPop = true;
-      let params = this.mapFields[pName];
-      const prefix = ["A相", "B相", "C相"];
-      [1, 2, 3].map(item => {
-        params.map(v => {
-          let { field, label, unit } = v;
-          let fieldDesc = prefix[item - 1] + label;
-          this.popData.push({
-            label: fieldDesc,
-            value: this.detail[field + item] + " " + unit
-          });
-        });
-      });
-      console.log(this.popData, "after open detail");
     }
   },
 
   created() {
-    this.extend = {
-      grid: {
-        left: "5%",
-        right: "5%",
-        bottom: "1%"
-      },
-      xAxis: {
-        axisLabel: {
-          interval: 0
-        }
-      }
-    };
     const { pdi } = this.$route.params;
     this.pdi = pdi;
     this.getData();

@@ -102,4 +102,38 @@ body {
   }
 }
 
+//ups
+.basic-info {
+  .info-title {
+    .mint-cell-value {
+      justify-content: center;
+      color: $theme-color;
+    }
+  }
+  .mint-cell-value {
+    width: 100%;
+    margin: 10px 0;
+    .info-tips {
+      width: 40%;
+      color: $theme-color;
+      .icon-background {
+        display: inline-block;
+      }
+    }
+    .info-params {
+      text-align: left;
+      p {
+        color: $theme-color;
+        line-height: 30px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+.text-green {
+  color: green;
+}
+.text-red {
+  color: red;
+}
 @import 'mintui.scss';

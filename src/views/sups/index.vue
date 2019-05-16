@@ -26,10 +26,6 @@
             <p>{{ detail.rd_upsoutvol }}</p>
           </v-circle>
         </mt-cell>
-
-        <mt-cell>
-          <mt-button type="primary" size="small" @click.native.prevent="more">更多参数</mt-button>
-        </mt-cell>
       </mt-tab-container-item>
 
       <mt-tab-container-item id="tab-running">
@@ -55,9 +51,26 @@
         </mt-cell>
       </mt-tab-container-item>
 
-      <mt-tab-container-item id="tab-temp">
-        <mt-cell :title="item.label" v-for="(item, index) in moreParams" :key="index">
-          <span style="color: green">{{ detail[item.field] }}</span>
+      <mt-tab-container-item id="tab-temp" class="basic-info">
+        <mt-cell class="info-title">{{ toptitle }}-{{ topname }}</mt-cell>
+        <mt-cell v-for="(items, index) in moreFields" :key="index">
+          <div class="info-tips">
+            <div>{{ items.name }}</div>
+            <icon-bg :icon="items.icon" small></icon-bg>
+          </div>
+          <div class="info-params">
+            <p v-for="(item, findex) in items.fields" :key="findex">
+              {{ item.label }}:
+              <span
+                class="text-green"
+                v-if="!item.isBool"
+              >{{ detail[item.field] }} {{ item.unit }}</span>
+              <span
+                :class="{'text-green': detail[item.field]==0 ,'text-red': detail[item.field]==1}"
+                v-if="item.isBool"
+              >{{ detail[item.field]==0?item.tLabel:item.fLabel }}</span>
+            </p>
+          </div>
         </mt-cell>
       </mt-tab-container-item>
     </mt-tab-container>
@@ -105,8 +118,8 @@ export default {
         {
           label: "旁路状态",
           field: "rd_upsbypassstat",
-          tLabel: "取消",
-          fLabel: "故障"
+          tLabel: "正常",
+          fLabel: "旁路"
         },
         {
           label: "电池电压",
@@ -140,26 +153,56 @@ export default {
         }
       ],
       boolFields: ["rd_upspoweroff", "rd_upssound"],
-      moreParams: [
-        { label: "厂商信息", field: "rd_upsmanuinfo" },
-        { label: "机型", field: "rd_upsmactype" },
-        { label: "版本", field: "rd_upsver" },
-        { label: "额定电压", field: "rd_upsvolr" },
-        { label: "额定电流", field: "rd_upscurr" },
-        { label: "额定电池电压", field: "rd_upsbatvolr" },
-        { label: "额定输入频率", field: "rd_upsfreqr" },
-        { label: "当前负载", field: "rd_upscurload" },
-        { label: "输入频率", field: "rd_upsinfreq" },
-        { label: "UPS电池单体电压", field: "rd_ups1batvol" },
-        { label: "UPS的温度", field: "rd_upstemp" },
-        { label: "电池容量", field: "rd_BattCap" },
-        { label: "电池温度", field: "rd_BatTemp" },
-        { label: "电池总电压", field: "rd_BatAllVol" },
-        { label: "剩余时间", field: "rd_ReTime" }
-      ],
       chartData: {},
       chartSettings: {},
-      pdi: null
+      pdi: null,
+      moreFields: {
+        basic: {
+          icon: "basic",
+          name: "基本信息",
+          fields: [
+            {
+              label: "工作模式",
+              field: "rd_upsbypassstat",
+              isBool: true,
+              tLabel: "正常",
+              fLabel: "旁路",
+              unit: ""
+            },
+            { label: "电池容量", field: "rd_BattCap", unit: "%" },
+            { label: "输出负载", field: "rd_upscurload", unit: "%" },
+            { label: "UPS温度", field: "rd_BatTemp", unit: "℃" },
+            { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
+            { label: "机型", field: "rd_upsmactype", unit: "" }
+          ]
+        },
+        in: {
+          icon: "in",
+          name: "UPS输入",
+          fields: [
+            { label: "输入电压", field: "rd_upsinvol", unit: "V" },
+            { label: "输入频率", field: "rd_upsinfreq", unit: "HZ" }
+          ]
+        },
+        out: {
+          icon: "out",
+          name: "UPS输出",
+          fields: [
+            { label: "输出电压", field: "rd_upsoutvol", unit: "V" },
+            { label: "最大电压", field: "rd_OutMaxVol", unit: "V" },
+            { label: "最小电压", field: "rd_OutMinVol", unit: "V" }
+          ]
+        },
+        battery: {
+          icon: "battery",
+          name: "电池",
+          fields: [
+            { label: "电池容量", field: "rd_BattCap", unit: "%" },
+            { label: "电池电压", field: "rd_upscurload", unit: "V" },
+            { label: "UPS温度", field: "rd_BatAllVol", unit: "℃" }
+          ]
+        }
+      }
     };
   },
   computed: {},
@@ -173,6 +216,9 @@ export default {
     },
     more() {
       this.active = "tab-temp";
+    },
+    getBool(item, trueValue = 0) {
+      return item == trueValue;
     }
   },
 

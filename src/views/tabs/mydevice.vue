@@ -12,8 +12,8 @@
     >
       <div class="page-cell">
         <mt-cell-swipe
-          :title="String(item.pdi_index)"
-          :label="item.pdi_name"
+          :title="item.pdi_name"
+          :label="`设备编号: ${item.pdi_index}`"
           @click.native="openDevice(item)"
           is-link
           v-for="(item, index) in device"
@@ -35,8 +35,8 @@
     </mt-loadmore>
 
     <mt-popup v-model="popupDetail" class="popup-device" position="bottom">
-      <mt-cell title="设备索引">{{ item.pdi_index }}</mt-cell>
       <mt-cell title="设备名称">{{ item.pdi_name }}</mt-cell>
+      <mt-cell title="设备编号">{{ item.pdi_index }}</mt-cell>
       <mt-cell title="设备类型">{{ item.types && item.types.dt_typename }}</mt-cell>
 
       <mt-cell title="所在区域">{{ item.area && item.area.AreaName }}</mt-cell>
@@ -50,8 +50,8 @@
       popup-transition="popup-fade"
     >
       <mt-field
-        label="设备编号"
-        placeholder="请输入设备编号"
+        label="设备编码"
+        placeholder="请输入设备编码"
         v-model="deviceModel.pdi"
         data-vv-name="pdi"
         :state="states['pdi']"
@@ -78,17 +78,17 @@
     </mt-popup>
 
     <mt-popup v-model="popupDetailType" class="popup-device" position="bottom">
-      <my-picker
+      <mt-picker
         :slots="typeSlots"
         class="device-type"
         @change="onTypeChange"
         ref="pickType"
         :value-key="'label'"
-      ></my-picker>
+      ></mt-picker>
     </mt-popup>
 
     <mt-popup v-model="popupArea" class="popup-device" position="bottom">
-      <my-picker :slots="areaSlots" @change="onAreaChange" ref="pickArea" :value-key="'label'"></my-picker>
+      <mt-picker :slots="areaSlots" @change="onAreaChange" ref="pickArea" :value-key="'label'"></mt-picker>
     </mt-popup>
 
     <mt-popup v-model="isAdd" class="popup-menu" popup-transition="popup-fade">
@@ -111,7 +111,7 @@ import {
 
 import Toast from "@/components/toast/toast.js";
 
-import MyPicker from "@/components/picker/picker";
+// import MyPicker from "@/components/picker/picker";
 
 // 处理点击事件
 var openw = null;
@@ -119,7 +119,7 @@ var w = window;
 
 export default {
   components: {
-    MyPicker
+    // MyPicker
   },
   data() {
     return {

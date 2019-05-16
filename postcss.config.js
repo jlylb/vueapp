@@ -11,6 +11,8 @@ module.exports = {
         'mint-cell-wrapper',
         'picker-item',
         'layout-container',
+        'custom-input',
+        'input-active',
       ],
       propBlackList: ['/border/', 'background-image', 'background-size'],
     },

@@ -64,21 +64,21 @@
       <mt-cell title="结束时间" @click.native="changeTimeEnd">{{ formatTime(searchDate.end) }}</mt-cell>
     </mt-popup>
 
-    <my-datetime-picker
+    <mt-datetime-picker
       ref="pickerTimeStart"
       type="date"
       @confirm="handleConfirm($event, 'start')"
       @cancel="handleCancel('start')"
       v-model="pickerStart"
-    ></my-datetime-picker>
+    ></mt-datetime-picker>
 
-    <my-datetime-picker
+    <mt-datetime-picker
       ref="pickerTimeEnd"
       type="date"
       @confirm="handleConfirm($event, 'end')"
       @cancel="handleCancel('end')"
       v-model="pickerEnd"
-    ></my-datetime-picker>
+    ></mt-datetime-picker>
   </div>
 </template>
 
@@ -87,12 +87,12 @@ import { fetchList, addWarn } from "@/api/alarm";
 import { parseTime } from "@/tools/";
 import Toast from "@/components/toast/toast.js";
 import { mapGetters } from "vuex";
-import MyDatetimePicker from "@/components/picker/datetime-picker.vue";
+// import MyDatetimePicker from "@/components/picker/datetime-picker.vue";
 import Toolbar from "@/components/toolbar.vue";
 // import VueQr from 'vue-qr'
 export default {
   components: {
-    MyDatetimePicker,
+    // MyDatetimePicker,
     Toolbar
   },
   data() {

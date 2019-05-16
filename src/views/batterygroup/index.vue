@@ -80,14 +80,14 @@ export default {
       batteryFilterIndex: this.batteryIndex,
       totalFields: [
         { label: "总电压", field: "rd_BatAllVol", isBool: false },
-        { label: "总电流1", field: "rd_BatAllCur1", isBool: false },
-        { label: "总电流2", field: "rd_BatAllCur", isBool: false },
+        { label: "充电电流", field: "rd_BatAllCur1", isBool: false },
+        { label: "放电电流", field: "rd_BatAllCur", isBool: false },
         { label: "后备时间", field: "rd_BatBackTime", isBool: false },
-        { label: "剩余毫安", field: "rd_RemTime", isBool: false },
-        { label: "总毫安", field: "rd_AllMAH", isBool: false },
+        // { label: "剩余毫安", field: "rd_RemTime", isBool: false },
+        // { label: "总毫安", field: "rd_AllMAH", isBool: false },
         { label: "剩余容量", field: "rd_RemCap", isBool: false },
-        { label: "充电电流", field: "rd_BatCharSta", isBool: true },
-        { label: "放电电流", field: "rd_BatDisCharSta", isBool: true },
+        { label: "充电状态", field: "rd_BatCharSta", isBool: true },
+        { label: "放电状态", field: "rd_BatDisCharSta", isBool: true },
         { label: "总电压状态", field: "rd_BatAllVolSta", isBool: true },
         { label: "通讯状态", field: "rd_BatAllVolSta", isBool: true },
         { label: "网络通讯", field: "rd_NetCom", isBool: true }
@@ -95,7 +95,7 @@ export default {
       paramsField: [
         { field: "SinVol", label: "电压", unit: "V" },
         { field: "SinTemp", label: "温度", unit: "℃" },
-        { field: "SinRes", label: "内阻", unit: "V/A" }
+        { field: "SinRes", label: "内阻", unit: "mΩ" }
       ]
     };
   },
