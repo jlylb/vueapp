@@ -9,6 +9,7 @@
       :bottom-all-loaded="allLoaded"
       :auto-fill="false"
       ref="loadmore"
+      class="device-more"
     >
       <div class="page-cell">
         <mt-cell-swipe
@@ -537,6 +538,9 @@ export default {
 .device-type .picker-toolbar {
   text-align: right;
   line-height: 40px;
+}
+.device-more {
+  margin-bottom: 10px;
 }
 </style>
 
