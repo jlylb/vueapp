@@ -64,13 +64,11 @@
 </template>
 
 <script>
-// import testJpg from '@/assets/test.jpg'
-import testJpg1 from "@/assets/s1.jpg";
-import testJpg2 from "@/assets/s2.jpg";
-import testJpg3 from "@/assets/s3.jpg";
 import { mapGetters } from "vuex";
 import { MessageBox } from "mint-ui";
 import { getImageUrl } from "@/tools";
+
+import Myimg from "@/tools/img.js";
 
 export default {
   data() {
@@ -78,15 +76,15 @@ export default {
       items: [
         {
           url: "http://www.baidu.com",
-          image: testJpg1
+          image: Myimg.TestJpg1
         },
         {
           url: "http://www.baidu.com",
-          image: testJpg2
+          image: Myimg.TestJpg2
         },
         {
           url: "http://www.baidu.com",
-          image: testJpg3
+          image: Myimg.TestJpg3
         }
       ],
       imgStyle: null
