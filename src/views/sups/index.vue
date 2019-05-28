@@ -171,7 +171,7 @@ export default {
             },
             { label: "电池容量", field: "rd_BattCap", unit: "%" },
             { label: "输出负载", field: "rd_upscurload", unit: "%" },
-            { label: "UPS温度", field: "rd_BatTemp", unit: "℃" },
+            { label: "UPS温度", field: "rd_upstemp", unit: "℃" },
             { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
             { label: "机型", field: "rd_upsmactype", unit: "" }
           ]
@@ -198,8 +198,8 @@ export default {
           name: "电池",
           fields: [
             { label: "电池容量", field: "rd_BattCap", unit: "%" },
-            { label: "电池电压", field: "rd_upscurload", unit: "V" },
-            { label: "UPS温度", field: "rd_BatAllVol", unit: "℃" }
+            { label: "电池电压", field: "rd_BatAllVol", unit: "V" },
+            { label: "UPS温度", field: "rd_upstemp", unit: "℃" }
           ]
         }
       }

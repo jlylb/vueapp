@@ -1,18 +1,21 @@
 import Vue from 'vue';
-import AddtestApp from '@/views/tabs/addtest.vue';
-// import Router from 'vue-router';
+// import AddtestApp from '@/views/tabs/addtest.vue';
+import Router from 'vue-router';
+import App from './App.vue';
 
-// Vue.use(Router);
+Vue.use(Router);
 
-// const router = new Router({
-//   routes: [
-//     {
-//       path: '/',
-//       name: 'home1',
-//       component: AddtestApp,
-//     },
-//   ],
-// });
+const router = new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'home1',
+      component: () => import('./views/tabs/addtest.vue'),
+    },
+  ],
+});
+
 new Vue({
-  render: h => h(AddtestApp),
+  router,
+  render: h => h(App),
 }).$mount('#app');
