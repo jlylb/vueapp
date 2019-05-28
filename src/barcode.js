@@ -1,6 +1,9 @@
 import Vue from 'vue';
 // import AddtestApp from '@/views/tabs/addtest.vue';
 import Router from 'vue-router';
+
+import '@/tools/flexible/flexible';
+
 import App from './App.vue';
 
 Vue.use(Router);
