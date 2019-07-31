@@ -171,9 +171,9 @@ export default {
             },
             { label: "电池容量", field: "rd_BattCap", unit: "%" },
             { label: "输出负载", field: "rd_upscurload", unit: "%" },
-            { label: "UPS温度", field: "rd_upstemp", unit: "℃" },
-            { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
-            { label: "机型", field: "rd_upsmactype", unit: "" }
+            { label: "UPS温度", field: "rd_upstemp", unit: "℃" }
+            // { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
+            // { label: "机型", field: "rd_upsmactype", unit: "" }
           ]
         },
         in: {
@@ -188,9 +188,9 @@ export default {
           icon: "out",
           name: "UPS输出",
           fields: [
-            { label: "输出电压", field: "rd_upsoutvol", unit: "V" },
-            { label: "最大电压", field: "rd_OutMaxVol", unit: "V" },
-            { label: "最小电压", field: "rd_OutMinVol", unit: "V" }
+            { label: "输出电压", field: "rd_upsoutvol", unit: "V" }
+            // { label: "最大电压", field: "rd_OutMaxVol", unit: "V" },
+            // { label: "最小电压", field: "rd_OutMinVol", unit: "V" }
           ]
         },
         battery: {
@@ -198,8 +198,7 @@ export default {
           name: "电池",
           fields: [
             { label: "电池容量", field: "rd_BattCap", unit: "%" },
-            { label: "电池电压", field: "rd_BatAllVol", unit: "V" },
-            { label: "UPS温度", field: "rd_upstemp", unit: "℃" }
+            { label: "电池电压", field: "rd_BatAllVol", unit: "V" }
           ]
         }
       }

@@ -253,11 +253,11 @@ export default {
               fLabel: "旁路",
               unit: ""
             },
-            { label: "电池容量", field: "rd_BatCapacity", unit: "%" },
+
             { label: "输出负载", field: "rd_OutAllLoad", unit: "%" },
-            { label: "UPS温度", field: "rd_MachTemp", unit: "℃" },
-            { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
-            { label: "机型", field: "rd_upsmactype", unit: "" }
+            { label: "UPS温度", field: "rd_MachTemp", unit: "℃" }
+            // { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
+            // { label: "机型", field: "rd_upsmactype", unit: "" }
           ]
         },
         in1: {
@@ -266,8 +266,8 @@ export default {
           fields: [
             { label: "输入电压", field: "rd_InVol1", unit: "V" },
             { label: "输入频率", field: "rd_InFreq1", unit: "HZ" },
-            { label: "输入电流", field: "rd_InCur1", unit: "mA" },
-            { label: "输入功率", field: "rd_InPower1", unit: "W" }
+            { label: "输入电流", field: "rd_InCur1", unit: "mA" }
+            // { label: "输入功率", field: "rd_InPower1", unit: "W" }
           ]
         },
         out1: {
@@ -277,8 +277,8 @@ export default {
             { label: "输出负载", field: "rd_OutLoad1", unit: "%" },
             { label: "输出电压", field: "rd_OutVol1", unit: "V" },
             { label: "输出功率", field: "rd_OutPower1", unit: "W" },
-            { label: "旁路电压", field: "rd_PassVol1", unit: "V" },
-            { label: "旁路功率", field: "rd_PassPower1", unit: "W" }
+            { label: "旁路电压", field: "rd_PassVol1", unit: "V" }
+            // { label: "旁路功率", field: "rd_PassPower1", unit: "W" }
           ]
         },
         in2: {
@@ -287,8 +287,8 @@ export default {
           fields: [
             { label: "输入电压", field: "rd_InVol2", unit: "V" },
             { label: "输入频率", field: "rd_InFreq2", unit: "HZ" },
-            { label: "输入电流", field: "rd_InCur2", unit: "mA" },
-            { label: "输入功率", field: "rd_InPower2", unit: "W" }
+            { label: "输入电流", field: "rd_InCur2", unit: "mA" }
+            // { label: "输入功率", field: "rd_InPower2", unit: "W" }
           ]
         },
         out2: {
@@ -298,8 +298,8 @@ export default {
             { label: "输出负载", field: "rd_OutLoad2", unit: "%" },
             { label: "输出电压", field: "rd_OutVol2", unit: "V" },
             { label: "输出功率", field: "rd_OutPower2", unit: "W" },
-            { label: "旁路电压", field: "rd_PassVol2", unit: "V" },
-            { label: "旁路功率", field: "rd_PassPower2", unit: "W" }
+            { label: "旁路电压", field: "rd_PassVol2", unit: "V" }
+            // { label: "旁路功率", field: "rd_PassPower2", unit: "W" }
           ]
         },
         in3: {
@@ -308,8 +308,8 @@ export default {
           fields: [
             { label: "输入电压", field: "rd_InVol3", unit: "V" },
             { label: "输入频率", field: "rd_InFreq3", unit: "HZ" },
-            { label: "输入电流", field: "rd_InCur3", unit: "mA" },
-            { label: "输入功率", field: "rd_InPower3", unit: "W" }
+            { label: "输入电流", field: "rd_InCur3", unit: "mA" }
+            // { label: "输入功率", field: "rd_InPower3", unit: "W" }
           ]
         },
         out3: {
@@ -319,8 +319,8 @@ export default {
             { label: "输出负载", field: "rd_OutLoad3", unit: "%" },
             { label: "输出电压", field: "rd_OutVol3", unit: "V" },
             { label: "输出功率", field: "rd_OutPower3", unit: "W" },
-            { label: "旁路电压", field: "rd_PassVol3", unit: "V" },
-            { label: "旁路功率", field: "rd_PassPower3", unit: "W" }
+            { label: "旁路电压", field: "rd_PassVol3", unit: "V" }
+            // { label: "旁路功率", field: "rd_PassPower3", unit: "W" }
           ]
         },
         battery: {
@@ -328,8 +328,9 @@ export default {
           name: "电池",
           fields: [
             { label: "电池电压", field: "rd_BatVol", unit: "V" },
-            { label: "电池电流", field: "rd_BatCur", unit: "mA" },
-            { label: "电池温度", field: "rd_BatTemp", unit: "℃" }
+            { label: "电池容量", field: "rd_BatCapacity", unit: "%" }
+            // { label: "电池电流", field: "rd_BatCur", unit: "mA" },
+            // { label: "电池温度", field: "rd_BatTemp", unit: "℃" }
           ]
         }
       }
@@ -339,7 +340,7 @@ export default {
   methods: {
     fetchDevice,
     fixPer(val) {
-      return Number(((val * 100) / 240).toFixed(1));
+      return Number(((val * 100) / 380).toFixed(1));
     },
     round(val, surfix = 1) {
       return (val && val.toFixed(surfix)) || 0;
