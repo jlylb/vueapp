@@ -36,35 +36,34 @@
           </mt-index-section>
 
           <mt-index-section
-            v-for="(items, outIndex) in device.out"
-            :key="'out_'+outIndex"
-            :index="String(outIndex+1)"
+            v-for="items in device.out"
+            :key="'out_'+items.order"
+            :index="items.order"
           >
-            <mt-cell :key="'out_'+outIndex+'_'+itemIndex" v-for="(item, itemIndex) in items">
+            <mt-cell
+              :key="'out_'+items.order+'_'+itemIndex"
+              v-for="(item, itemIndex) in items.line"
+            >
               <icon-bg
                 slot="title"
-              >{{ itemIndex==0?(items.length > 1 ? three[item.status] : two[item.status]): four[item.status] }}</icon-bg>
-              <template v-if="items.length==1">
+              >{{ itemIndex==0?(items.line.length > 1 ? three[item.value] : two[item.value]): four[item.value] }}</icon-bg>
+              <template v-if="items.line.length==1">
                 <mt-switch
                   v-model="item.bStatus"
-                  @change="changeControl($event, items, item,  outIndex)"
+                  @change="changeControl($event, items.line, item,  items.order)"
                 ></mt-switch>
               </template>
-              <template v-if="items.length==2">
+              <template v-if="items.line.length==2">
                 <my-switch
-                  @switch-change="changeControl($event, items, item,  outIndex)"
+                  @switch-change="changeControl($event, items.line, item,  items.order)"
                   :sstatus.sync="item.bStatus"
                   :true-label="itemIndex==0?'起':'落'"
                 ></my-switch>
               </template>
             </mt-cell>
-            <mt-cell is-link>
-              <icon-bg slot="icon" :icon="items.length > 0?items[0].ts_Icon:'control'"></icon-bg>
-              <mt-button
-                @click.native="chooseType(items, outIndex)"
-                type="primary"
-                size="small"
-              >{{ items.length > 0?items[0].ts_TypeMo:'点击选择类型' }}</mt-button>
+            <mt-cell>
+              <icon-bg slot="icon" :icon="items.icon"></icon-bg>
+              {{ items.label }}
             </mt-cell>
           </mt-index-section>
         </mt-index-list>
@@ -180,7 +179,8 @@ export default {
       swipeIndex: 0,
       titleOpen: false,
       topHeight: 0,
-      indexOutKey: "index-list1"
+      indexOutKey: "index-list1",
+      deviceOut: []
     };
   },
   directives: {
@@ -224,10 +224,11 @@ export default {
     },
     getData(data) {
       Indicator.open("正在加载中...");
-      fetchDeviceData(data)
+      return fetchDeviceData(data)
         .then(res => {
           console.log(res, "control deviceing......");
           this.device = res.data.devicesData;
+          this.deviceOut = this.device.out;
           if (this.device) {
             const { rd_NetCom, sub } = res.data.devicesData;
             this.netStatus = rd_NetCom === 0 ? true : false;
@@ -281,9 +282,11 @@ export default {
       this.allLoaded = true;
       this.$refs.loadmore.onTopLoaded();
       this.$refs.loadmore1.onTopLoaded();
+      this.$forceUpdate();
     },
 
     loadTop() {
+      //this.device = null;
       this.fetchData();
     },
     handlerChange(index) {
@@ -448,28 +451,28 @@ export default {
       })
         .then(action => {
           Indicator.open("正在处理中...");
-          const { tu_Warnid: dpId } = current;
+          const { dp_id: dpId } = current;
           const { value: pdi_index } = this.pdiIndex;
           const params = [];
           params.push({ status: current.bStatus ? 1 : 0, dp_id: dpId });
           data.map(item => {
-            if (item.tu_Warnid != dpId) {
+            if (item.dp_id != dpId) {
               params.push({
                 status: 0,
-                dp_id: item.tu_Warnid
+                dp_id: item.dp_id
               });
             }
           });
           saveCommand({ params, pdi_index: pdi_index })
             .then(res => {
               data.map(item => {
-                if (item.tu_Warnid != dpId) {
+                if (item.dp_id != dpId) {
                   item.bStatus = false;
-                  item.status = 0;
+                  item.value = 0;
                 }
                 return item;
               });
-              current.status = current.bStatus ? 1 : 0;
+              current.value = current.bStatus ? 1 : 0;
               setTimeout(() => {
                 Indicator.close();
                 Toast(res.data.msg);
@@ -477,14 +480,14 @@ export default {
             })
             .catch(() => {
               current.bStatus = !current.bStatus;
-              current.status = current.bStatus ? 1 : 0;
+              current.value = current.bStatus ? 1 : 0;
               Indicator.close();
               Toast("已取消更改");
             });
         })
         .catch(res => {
           current.bStatus = !current.bStatus;
-          current.status = current.bStatus ? 1 : 0;
+          current.value = current.bStatus ? 1 : 0;
           Indicator.close();
         });
     }

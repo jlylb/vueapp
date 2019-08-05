@@ -5,7 +5,7 @@
       <div class="user-info">
         <div class="user-avatr" @click="openAvatar">
           <!-- <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon> -->
-          <img :src="showAvatar()" class="item-icon">
+          <img :src="showAvatar()" class="item-icon" />
         </div>
       </div>
     </div>
@@ -38,6 +38,10 @@
     <mt-cell title="关于我们" is-link to="/auth/about">
       <svg-icon icon-class="us-circle" class="item-icon" slot="icon"></svg-icon>
     </mt-cell>
+    <mt-cell title="当前版本">
+      <svg-icon icon-class="us-circle" class="item-icon" slot="icon"></svg-icon>
+      <span>{{ version }}</span>
+    </mt-cell>
     <!-- <mt-cell title="login" is-link to='/login4'>
             <svg-icon icon-class='monitor' class='item-icon' slot='icon'></svg-icon>
     </mt-cell>-->
@@ -47,15 +51,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { getImageUrl } from "@/tools";
 
 export default {
   computed: {
-    ...mapState("user", ["name", "avatar"])
+    ...mapState("user", ["name", "avatar"]),
+    ...mapGetters("app", ["version"])
   },
   methods: {
     showAvatar() {
+      if (!this.avatar) return this.avatar;
       return this.avatar.indexOf("data:") > -1
         ? this.avatar
         : getImageUrl(this.avatar);

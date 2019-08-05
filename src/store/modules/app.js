@@ -8,6 +8,7 @@ const app = {
     isGuide: false,
     province: null,
     isUpdateApp: false,
+    version: '',
   },
   mutations: {
     BAR_TITLE: (state, title) => {
@@ -22,11 +23,15 @@ const app = {
     IS_UPDATE_APP: (state, nVal) => {
       state.isUpdateApp = nVal;
     },
+    SET_VERSION: (state, nVal) => {
+      state.version = nVal;
+    },
   },
   getters: {
     barTitle: state => state.barTitle,
     currentProvince: state => state.province,
     isUpdateApp: state => state.isUpdateApp,
+    version: state => state.version,
   },
   actions: {
     giveGuide({ commit }, bVal) {
@@ -39,6 +44,9 @@ const app = {
     },
     setProvince({ commit }, nVal) {
       commit('PROVINCE', nVal);
+    },
+    setVersion({ commit }, nVal) {
+      commit('SET_VERSION', nVal);
     },
     updateApp({ commit }, appdata) {
       console.log('update app......');

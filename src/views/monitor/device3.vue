@@ -60,6 +60,20 @@
                 </div>
                 <span class="row-right">{{ itemValue['lwarn_value']===0?'正常':'过低' }}</span>
               </div>
+              <div class="row">
+                <div class="row-left">
+                  <icon-bg icon="limit-up" slot="icon" small></icon-bg>
+                  <span>上限阀值</span>
+                </div>
+                <span class="row-right">{{ itemValue['up_value'] }} {{ unit[index] }}</span>
+              </div>
+              <div class="row">
+                <div class="row-left">
+                  <icon-bg icon="limit-down" slot="icon" small></icon-bg>
+                  <span>下限阀值</span>
+                </div>
+                <span class="row-right">{{ itemValue['down_value'] }} {{ unit[index] }}</span>
+              </div>
             </div>
           </mt-swipe-item>
         </mt-swipe>
@@ -81,10 +95,21 @@
         :key="item"
       >
         <icon-bg :icon="pdiIndex.icon" slot="icon" small v-if="pdiIndex"></icon-bg>
+
+        <mt-button size="small" @click="setValue" v-if="limitItems.length>0">
+          <svg-icon icon-class="limit-config" slot="icon"></svg-icon>
+        </mt-button>
       </mt-cell>
     </mt-popup>
 
     <drop-menu :open.sync="openMenu" :data="deviceData" @menuItem="clickMenu"></drop-menu>
+
+    <value-setting
+      :visible.sync="openSetting"
+      :pdi-index="deviceIndex"
+      :item-index="itemIndex"
+      :items="limitItems"
+    ></value-setting>
   </div>
 </template>
 
@@ -96,9 +121,10 @@ import { getDataValue } from "@/tools";
 import IconBg from "@/components/iconBg";
 import freshData from "@/tools/freshdata";
 import MyLoading from "@/tools/reloading";
+import ValueSetting from "./setting";
 
 export default {
-  components: { DropMenu, IconBg },
+  components: { DropMenu, IconBg, ValueSetting },
   mixins: [freshData],
   data() {
     return {
@@ -125,18 +151,25 @@ export default {
       chart: null,
       loading: false,
       isColumn: false,
-      deviceParams: {}
+      deviceParams: {},
+      openSetting: false
     };
   },
   computed: {
     currentItem() {
       let items = {};
       for (let itemKey in this.item) {
-        if (itemKey != "consta") {
+        if (itemKey != "consta" && itemKey != "limit") {
           items[itemKey] = this.item[itemKey];
         }
       }
       return items;
+    },
+    limitItems() {
+      return this.item ? this.item.limit : null;
+    },
+    deviceIndex() {
+      return this.pdiIndex ? this.pdiIndex.value : null;
     }
   },
   methods: {
@@ -256,6 +289,9 @@ export default {
         .catch(() => {
           MyLoading.close();
         });
+    },
+    setValue() {
+      this.openSetting = true;
     }
   },
   watch: {

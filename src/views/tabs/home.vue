@@ -81,6 +81,8 @@ export default {
     AutoUpdateApp.getVersion(version => {
       console.log(version, "version......");
       this.$store
+        .dispatch("app/setVersion", version)
+      this.$store
         .dispatch("app/updateApp", { version })
         .then(res => {
           const { apk } = res;
