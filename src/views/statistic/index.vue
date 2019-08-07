@@ -353,6 +353,7 @@ export default {
         min.push("dataMin");
         max.push("dataMax");
         yAxisName.push(surfix[field] + " " + unit[field]);
+        // yAxisName.push(unit[field]);
       });
 
       this.chartSettings = {
@@ -388,6 +389,10 @@ export default {
             };
           });
           return v;
+        },
+        grid: {
+          left: "8%",
+          right: "8%"
         }
       };
       console.log("format chart data......");

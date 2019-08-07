@@ -1,25 +1,75 @@
 <template>
   <div class="layout-container" ref="topLayout">
     <top-component @top-btn="selectType"></top-component>
-    <mt-loadmore
-      :top-method="loadTop"
-      :bottom-all-loaded="allLoaded"
-      ref="loadmore"
-      :auto-fill="false"
-    >
-      <!-- <div v-if="device">
-        <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
-        <mt-cell title="网络状态">
-          <mt-switch v-model="netStatus" disabled></mt-switch>
-        </mt-cell>
-        <mt-cell title="当前状态">
-          <mt-badge
-            :type="device.in[1].status==1?'primary':'error'"
-          >{{ device.in[1].status==1?"自动":"手动" }}</mt-badge>
-        </mt-cell>
-      </div>-->
-      <u-grid :items="device.out" v-if="device"></u-grid>
-    </mt-loadmore>
+
+    <mt-swipe :auto="0" @change="handlerChange" :show-indicators="false">
+      <mt-swipe-item class="slide2" key="slide2">
+        <mt-index-list
+          ref="outSlide"
+          :show-indicator="false"
+          :key="indexOutKey"
+          v-if="device"
+          class="mylist"
+          :height="indexHeight"
+          v-sindex
+        >
+          <mt-index-section :index="'输出'" key="out_first">
+            <mt-loadmore
+              :top-method="loadTop"
+              :bottom-all-loaded="allLoaded"
+              ref="loadmore"
+              :auto-fill="false"
+            >
+              <div>
+                <!-- <mt-cell class="control-title">输出</mt-cell> -->
+                <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
+                <mt-cell title="网络状态">
+                  <mt-switch v-model="netStatus" disabled></mt-switch>
+                </mt-cell>
+                <mt-cell title="当前状态">
+                  <mt-badge
+                    :type="device.in[1].status==1?'primary':'error'"
+                  >{{ device.in[1].status==1?"自动":"手动" }}</mt-badge>
+                </mt-cell>
+              </div>
+            </mt-loadmore>
+          </mt-index-section>
+
+          <mt-index-section
+            v-for="items in device.out"
+            :key="'out_'+items.order"
+            :index="items.order"
+          >
+            <mt-cell
+              :key="'out_'+items.order+'_'+itemIndex"
+              v-for="(item, itemIndex) in items.line"
+            >
+              <icon-bg
+                slot="title"
+              >{{ itemIndex==0?(items.line.length > 1 ? three[item.value] : two[item.value]): four[item.value] }}</icon-bg>
+              <template v-if="items.line.length==1">
+                <mt-switch
+                  v-model="item.bStatus"
+                  @change="changeControl($event, items.line, item,  items.order)"
+                ></mt-switch>
+              </template>
+              <template v-if="items.line.length==2">
+                <my-switch
+                  @switch-change="changeControl($event, items.line, item,  items.order)"
+                  :sstatus.sync="item.bStatus"
+                  :true-label="itemIndex==0?'起':'落'"
+                ></my-switch>
+              </template>
+            </mt-cell>
+            <mt-cell>
+              <icon-bg slot="icon" :icon="items.icon"></icon-bg>
+              {{ items.label }}
+            </mt-cell>
+          </mt-index-section>
+        </mt-index-list>
+      </mt-swipe-item>
+    </mt-swipe>
+
     <drop-menu :open.sync="openMenu" :data="deviceData" @menuItem="clickMenu"></drop-menu>
     <my-popup
       :show-toolbar="true"
@@ -48,10 +98,9 @@ import MyPopup from "@/components/popup";
 import { Indicator, Toast } from "mint-ui";
 import IconBg from "@/components/iconBg";
 import MySwitch from "@/components/mySwitch";
-import uGrid from "@/components/grid/grid";
 
 export default {
-  components: { DropMenu, MyPopup, IconBg, MySwitch, uGrid },
+  components: { DropMenu, MyPopup, IconBg, MySwitch },
   data() {
     return {
       popupVisible: false,
@@ -100,11 +149,6 @@ export default {
       update(el, binding, vnode) {},
       componentUpdated(el, binding, vnode) {}
     }
-  },
-  provide() {
-    return {
-      control: this
-    };
   },
   computed: {
     indexHeight: {
@@ -188,7 +232,7 @@ export default {
       this.getData({ pdi_index, dpt_id });
       this.allLoaded = true;
       this.$refs.loadmore.onTopLoaded();
-      // this.$refs.loadmore1.onTopLoaded();
+      this.$refs.loadmore1.onTopLoaded();
       this.$forceUpdate();
     },
 
@@ -248,7 +292,90 @@ export default {
       }
       return 0;
     },
+    inputSelect() {
+      const { Dp_id: dp_id, dp_paramdesc: desc } = this.currentItem;
+      const { value: subtype = 0 } = this.currentType;
+      const { value: pdi_index } = this.pdiIndex;
+      Indicator.open("正在处理中...");
+      saveSwitch({
+        sindex: this.currentIndex,
+        pdi_index: pdi_index,
+        dp_id,
+        subtype,
+        desc
+      })
+        .then(res => {
+          Toast(res.data.msg);
+          const inData = this.device.in;
+          const {
+            value: tu_SubTypeId,
+            label: ts_TypeMo,
+            icon: ts_Icon
+          } = this.currentType;
+          inData[this.currentIndex] = Object.assign(
+            {},
+            inData[this.currentIndex],
+            { tu_SubTypeId, ts_TypeMo, ts_Icon }
+          );
+          this.device.in = inData;
+          Indicator.close();
+        })
+        .catch(() => {
+          Indicator.close();
+        });
+    },
+    inputSave(pdesc, data, index) {
+      const { Dp_id: dp_id, dp_paramdesc: sdesc } = data;
 
+      const { tu_SubTypeId: subtype = 0 } = data;
+
+      let desc = pdesc ? pdesc : sdesc;
+
+      Indicator.open("正在处理中...");
+      const { value: pdi_index } = this.pdiIndex;
+      saveSwitch({
+        sindex: index,
+        pdi_index: pdi_index,
+        dp_id,
+        subtype,
+        desc
+      })
+        .then(res => {
+          Toast(res.data.msg);
+          const inData = this.device.in;
+
+          inData[index] = Object.assign({}, inData[index], {
+            dp_paramdesc: desc
+          });
+          this.device.in = inData;
+          Indicator.close();
+        })
+        .catch(() => {
+          Indicator.close();
+        });
+    },
+    outSelect() {
+      const dpId = [];
+      this.currentItem.forEach(item => {
+        dpId.push(item.tu_Warnid);
+      });
+      const { value: pdi_index, device_type: dpt_id } = this.pdiIndex;
+      const { value: subtype = 0 } = this.currentType;
+      Indicator.open("正在处理中...");
+      saveOut({
+        pdi_index: pdi_index,
+        subtype,
+        dp_id: dpId
+      })
+        .then(res => {
+          this.getData({ pdi_index: pdi_index, dpt_id: dpt_id });
+          Toast(res.data.msg);
+          Indicator.close();
+        })
+        .catch(() => {
+          Indicator.close();
+        });
+    },
     confirmOk() {
       this.open = false;
       // 输入
@@ -324,6 +451,12 @@ export default {
   },
   beforeUpdate() {},
   mounted() {
+    console.log(
+      this.$refs.topLayout,
+      "mounted.......",
+      this.$refs.topLayout.offsetHeight
+    );
+
     window.addEventListener("resize", () => {
       setTimeout(() => {
         this.indexHeight = this.$refs.topLayout.offsetHeight;

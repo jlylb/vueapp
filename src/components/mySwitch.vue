@@ -56,7 +56,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .my-switch {
   display: flex;
   align-items: center;
