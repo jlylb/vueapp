@@ -4,7 +4,7 @@
     <div class="slide-image" ref="slideimg">
       <mt-swipe :show-indicators="true" ref="slideContainer" :style="imgStyle">
         <mt-swipe-item v-for="(item, index) in items" :key="index">
-          <img :src="item.image" :ref="`slideimg_${index}`" class="slide-item-img">
+          <img :src="item.image" :ref="`slideimg_${index}`" class="slide-item-img" />
         </mt-swipe-item>
       </mt-swipe>
     </div>

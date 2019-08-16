@@ -58,10 +58,14 @@
           <div class="info-params">
             <p v-for="(item, findex) in items.fields" :key="findex">
               {{ item.label }}:
-              <span
-                class="text-green"
-                v-if="!item.isBool"
-              >{{ detail[item.field] }} {{ item.unit }}</span>
+              <span class="text-green" v-if="!item.isBool">
+                <template
+                  v-if="parseFloat(detail[item.field])"
+                >{{ detail[item.field] }} {{ item.unit }}</template>
+                <template v-else>
+                  <b class="text-gray">N/A</b>
+                </template>
+              </span>
               <span
                 :class="{'text-green': detail[item.field]==0 ,'text-red': detail[item.field]==1}"
                 v-if="item.isBool"
@@ -166,12 +170,6 @@ export default {
           tLabel: "正常",
           fLabel: "告警"
         },
-        {
-          label: "熔丝状态",
-          field: "rd_FusiWarn",
-          tLabel: "正常",
-          fLabel: "告警"
-        },
 
         {
           label: "市电恢复状态",
@@ -228,6 +226,12 @@ export default {
           field: "rd_NetCom",
           tLabel: "正常",
           fLabel: "断线"
+        },
+        {
+          label: "测试状态",
+          field: "rd_TestWarn",
+          tLabel: "自检完成",
+          fLabel: "自检中"
         }
       ],
       boolFields: ["rd_UPSShutWarn", "rd_SystemShutWarn"],
@@ -256,7 +260,7 @@ export default {
 
             { label: "输出负载", field: "rd_OutAllLoad", unit: "%" },
             { label: "UPS温度", field: "rd_MachTemp", unit: "℃" }
-            // { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
+            // { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" }
             // { label: "机型", field: "rd_upsmactype", unit: "" }
           ]
         },
@@ -265,9 +269,9 @@ export default {
           name: "A相输入",
           fields: [
             { label: "输入电压", field: "rd_InVol1", unit: "V" },
-            { label: "输入频率", field: "rd_InFreq1", unit: "HZ" },
-            { label: "输入电流", field: "rd_InCur1", unit: "mA" }
-            // { label: "输入功率", field: "rd_InPower1", unit: "W" }
+            { label: "输入频率", field: "rd_InFreq1", unit: "HZ" }
+            // { label: "输入电流", field: "rd_InCur1", unit: "A" }
+            // { label: "输入功率", field: "rd_InPower1", unit: "KW" }
           ]
         },
         out1: {
@@ -276,9 +280,10 @@ export default {
           fields: [
             { label: "输出负载", field: "rd_OutLoad1", unit: "%" },
             { label: "输出电压", field: "rd_OutVol1", unit: "V" },
-            { label: "输出功率", field: "rd_OutPower1", unit: "W" },
-            { label: "旁路电压", field: "rd_PassVol1", unit: "V" }
-            // { label: "旁路功率", field: "rd_PassPower1", unit: "W" }
+            { label: "输出频率", field: "rd_OutFreq", unit: "HZ" }
+            // { label: "输出功率", field: "rd_OutPower1", unit: "KW" },
+            // { label: "旁路电压", field: "rd_PassVol1", unit: "V" }
+            // { label: "旁路功率", field: "rd_PassPower1", unit: "KW" }
           ]
         },
         in2: {
@@ -286,9 +291,9 @@ export default {
           name: "B相输入",
           fields: [
             { label: "输入电压", field: "rd_InVol2", unit: "V" },
-            { label: "输入频率", field: "rd_InFreq2", unit: "HZ" },
-            { label: "输入电流", field: "rd_InCur2", unit: "mA" }
-            // { label: "输入功率", field: "rd_InPower2", unit: "W" }
+            { label: "输入频率", field: "rd_InFreq2", unit: "HZ" }
+            // { label: "输入电流", field: "rd_InCur2", unit: "A" }
+            // { label: "输入功率", field: "rd_InPower2", unit: "KW" }
           ]
         },
         out2: {
@@ -297,9 +302,10 @@ export default {
           fields: [
             { label: "输出负载", field: "rd_OutLoad2", unit: "%" },
             { label: "输出电压", field: "rd_OutVol2", unit: "V" },
-            { label: "输出功率", field: "rd_OutPower2", unit: "W" },
-            { label: "旁路电压", field: "rd_PassVol2", unit: "V" }
-            // { label: "旁路功率", field: "rd_PassPower2", unit: "W" }
+            { label: "输出频率", field: "rd_OutFreq", unit: "HZ" }
+            // { label: "输出功率", field: "rd_OutPower2", unit: "KW" },
+            // { label: "旁路电压", field: "rd_PassVol2", unit: "V" }
+            // { label: "旁路功率", field: "rd_PassPower2", unit: "KW" }
           ]
         },
         in3: {
@@ -307,9 +313,9 @@ export default {
           name: "C相输入",
           fields: [
             { label: "输入电压", field: "rd_InVol3", unit: "V" },
-            { label: "输入频率", field: "rd_InFreq3", unit: "HZ" },
-            { label: "输入电流", field: "rd_InCur3", unit: "mA" }
-            // { label: "输入功率", field: "rd_InPower3", unit: "W" }
+            { label: "输入频率", field: "rd_InFreq3", unit: "HZ" }
+            // { label: "输入电流", field: "rd_InCur3", unit: "A" }
+            // { label: "输入功率", field: "rd_InPower3", unit: "KW" }
           ]
         },
         out3: {
@@ -318,9 +324,10 @@ export default {
           fields: [
             { label: "输出负载", field: "rd_OutLoad3", unit: "%" },
             { label: "输出电压", field: "rd_OutVol3", unit: "V" },
-            { label: "输出功率", field: "rd_OutPower3", unit: "W" },
-            { label: "旁路电压", field: "rd_PassVol3", unit: "V" }
-            // { label: "旁路功率", field: "rd_PassPower3", unit: "W" }
+            { label: "输出频率", field: "rd_OutFreq", unit: "HZ" }
+            // { label: "输出功率", field: "rd_OutPower3", unit: "KW" },
+            // { label: "旁路电压", field: "rd_PassVol3", unit: "V" }
+            // { label: "旁路功率", field: "rd_PassPower3", unit: "KW" }
           ]
         },
         battery: {

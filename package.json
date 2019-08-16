@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "hainan": "vue-cli-service build --mode hainan"
+    "hainan": "vue-cli-service build --mode hainan",
+    "serve-hainan": "vue-cli-service serve --mode hainan"
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",

@@ -79,7 +79,7 @@ const app = {
       // const name = 'Android';
       const data = {
         version,
-        app_type: 1,
+        app_type: process.env.VUE_APP_APPTYPE,
         app_phone: name,
       };
       /* eslint-disable */

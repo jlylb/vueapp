@@ -1,4 +1,5 @@
-const slideImgDir = 'hainan';
+// const slideImgDir = 'hainan';
+const slideImgDir = process.env.VUE_APP_HAINAN;
 
 /* eslint-disable */
 const TestJpg1 = require(`@/assets/${slideImgDir}/s1.jpg`);

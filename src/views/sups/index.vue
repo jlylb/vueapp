@@ -61,10 +61,14 @@
           <div class="info-params">
             <p v-for="(item, findex) in items.fields" :key="findex">
               {{ item.label }}:
-              <span
-                class="text-green"
-                v-if="!item.isBool"
-              >{{ detail[item.field] }} {{ item.unit }}</span>
+              <span class="text-green" v-if="!item.isBool">
+                <template
+                  v-if="parseFloat(detail[item.field])"
+                >{{ detail[item.field] }} {{ item.unit }}</template>
+                <template v-else>
+                  <b class="text-gray">N/A</b>
+                </template>
+              </span>
               <span
                 :class="{'text-green': detail[item.field]==0 ,'text-red': detail[item.field]==1}"
                 v-if="item.isBool"
@@ -150,6 +154,12 @@ export default {
           field: "rd_upsdisconn",
           tLabel: "正常",
           fLabel: "断线"
+        },
+        {
+          label: "测试状态",
+          field: "rd_upstest",
+          tLabel: "自检完成",
+          fLabel: "自检中"
         }
       ],
       boolFields: ["rd_upspoweroff", "rd_upssound"],
@@ -172,7 +182,7 @@ export default {
             { label: "电池容量", field: "rd_BattCap", unit: "%" },
             { label: "输出负载", field: "rd_upscurload", unit: "%" },
             { label: "UPS温度", field: "rd_upstemp", unit: "℃" }
-            // { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" },
+            // { label: "厂商型号", field: "rd_upsmanuinfo", unit: "" }
             // { label: "机型", field: "rd_upsmactype", unit: "" }
           ]
         },
@@ -188,7 +198,8 @@ export default {
           icon: "out",
           name: "UPS输出",
           fields: [
-            { label: "输出电压", field: "rd_upsoutvol", unit: "V" }
+            { label: "输出电压", field: "rd_upsoutvol", unit: "V" },
+            { label: "输出频率", field: "rd_upsoutfreq", unit: "HZ" }
             // { label: "最大电压", field: "rd_OutMaxVol", unit: "V" },
             // { label: "最小电压", field: "rd_OutMinVol", unit: "V" }
           ]
