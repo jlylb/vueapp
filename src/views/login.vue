@@ -3,7 +3,8 @@
     <div class="home-content" id="login-cover">
       <transition name="logo-scale">
         <div class="logo" v-show="showLogo">
-          <svg-icon icon-class="dapeng" class="logo-icon"></svg-icon>
+          <!-- <svg-icon icon-class="dapeng" class="logo-icon"></svg-icon> -->
+          <img :src="iconPng" />
         </div>
       </transition>
 
@@ -48,6 +49,8 @@
 import MyInput from "@/components/myinput";
 import { mapState } from "vuex";
 
+import iconPng from "@/assets/icon.png";
+
 export default {
   components: { MyInput },
   data() {
@@ -57,7 +60,8 @@ export default {
         password: ""
       },
       showLogo: true,
-      keyboard: null
+      keyboard: null,
+      iconPng: iconPng
     };
   },
   directives: {},
@@ -181,7 +185,7 @@ $placeholder-color: #ccc;
   margin: 0 auto;
   // background-color: $logo-color;
   border-radius: 50%;
-  border: 5px solid rgba(#fff, 0.5);
+  border: 1px solid rgba(#fff, 0.5);
   margin-bottom: 20px;
   display: flex;
   align-items: center;

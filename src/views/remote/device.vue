@@ -7,51 +7,35 @@
       ref="loadmore"
       :auto-fill="false"
     >
-      <!-- <div v-if="device">
-        <mt-cell title="更新时间">{{ device.rd_updatetime }}</mt-cell>
-        <mt-cell title="网络状态">
-          <mt-switch v-model="netStatus" disabled></mt-switch>
-        </mt-cell>
-        <mt-cell title="当前状态">
-          <mt-badge
-            :type="device.in[1].status==1?'primary':'error'"
-          >{{ device.in[1].status==1?"自动":"手动" }}</mt-badge>
-        </mt-cell>
-      </div>-->
       <u-grid :items="device.out" v-if="device"></u-grid>
+      <mt-field
+        :label="item.label"
+        placeholder="请输入时间"
+        v-model="item.line.value"
+        v-for="item in time"
+        :key="item.label"
+      >分钟</mt-field>
+      <mt-cell title class="btn-save" v-if="time.length>0">
+        <mt-button type="primary" @click="saveTime" size="large">保存</mt-button>
+      </mt-cell>
     </mt-loadmore>
     <drop-menu :open.sync="openMenu" :data="deviceData" @menuItem="clickMenu"></drop-menu>
-    <my-popup
-      :show-toolbar="true"
-      v-model="currentType"
-      @input-change="changeType"
-      :open.sync="open"
-      :slots="slots"
-      @confirm="confirmOk"
-      @cancel="cancel"
-    ></my-popup>
   </div>
 </template>
 
 <script>
 import { MessageBox } from "mint-ui";
-import {
-  fetchAreaDevice,
-  fetchDeviceData,
-  saveCommand,
-  saveSwitch,
-  saveOut
-} from "@/api/control";
+import { fetchAreaDevice, fetchDeviceData, saveCommand } from "@/api/yuxiang";
 import DropMenu from "@/components/dropdown";
 import { getDataValue } from "@/tools";
-import MyPopup from "@/components/popup";
+
 import { Indicator, Toast } from "mint-ui";
 import IconBg from "@/components/iconBg";
 import MySwitch from "@/components/mySwitch";
 import uGrid from "@/components/grid/grid";
 
 export default {
-  components: { DropMenu, MyPopup, IconBg, MySwitch, uGrid },
+  components: { DropMenu, IconBg, MySwitch, uGrid },
   data() {
     return {
       popupVisible: false,
@@ -72,35 +56,12 @@ export default {
       sub: [],
       formatSub: {},
       open: false,
-      slots: [],
-      slotsValue: [],
-      currentType: null,
-      currentItem: null,
-      currentIndex: null,
-      index2: "index-list2",
-      swipeIndex: 0,
-      titleOpen: false,
       topHeight: 0,
-      indexOutKey: "index-list1",
-      deviceOut: []
+      deviceOut: [],
+      time: []
     };
   },
-  directives: {
-    sindex: {
-      // 指令的定义
-      bind: function(el, binding, vnode) {},
-      inserted: function(el, binding, vnode) {
-        console.log(el, binding, "inserted....", vnode, this);
-        const { key: currentKey } = vnode;
-        if (currentKey === "index-list2") {
-          const { content } = vnode.child.$refs;
-          content.style.marginRight = `36px`;
-        }
-      },
-      update(el, binding, vnode) {},
-      componentUpdated(el, binding, vnode) {}
-    }
-  },
+
   provide() {
     return {
       control: this
@@ -135,19 +96,10 @@ export default {
         .then(res => {
           console.log(res, "control deviceing......");
           this.device = res.data.devicesData;
-          this.deviceOut = this.device.out;
+
           if (this.device) {
-            const { rd_NetCom, sub } = res.data.devicesData;
-            this.netStatus = rd_NetCom === 0 ? true : false;
-            this.sub = sub;
-            let slots = [];
-            sub.forEach(item => {
-              this.formatSub[item.ts_typeid] = item.ts_TypeMo;
-              let { ts_typeid: value, ts_TypeMo: label, ts_Icon: icon } = item;
-              slots.push({ label, value, icon });
-            });
-            this.slotsValue = slots;
-            console.log(slots, "after slots.....");
+            this.deviceOut = this.device.out;
+            this.time = this.device.time;
           }
           Indicator.close();
         })
@@ -155,7 +107,6 @@ export default {
           Indicator.close();
         });
     },
-    doStatus(data) {},
     changeWork(item, val) {
       console.log(item, val);
       const { value: pdi_index } = this.pdiIndex;
@@ -196,78 +147,7 @@ export default {
       //this.device = null;
       this.fetchData();
     },
-    handlerChange(index) {
-      console.log(index, "change.....", this);
-      this.index2 = "index-list2_1";
-      this.swipeIndex = index;
-    },
-    changeType(item) {
-      // this.currentItem = null;
-      console.log(item, "change item....");
-    },
-    chooseType(items, index) {
-      console.log(items, "choose type......");
-      this.open = true;
-      this.currentIndex = index;
-      this.currentItem = items;
-      let curItem;
-      if (Array.isArray(items)) {
-        curItem = items[0];
-      } else {
-        curItem = items;
-      }
-      if (curItem) {
-        this.currentType = {
-          value: curItem.tu_SubTypeId,
-          label: curItem.ts_TypeMo,
-          icon: curItem.ts_Icon
-        };
-      } else {
-        this.currentType = null;
-      }
 
-      this.slots = [
-        {
-          flex: 1,
-          defaultIndex: this.currentType
-            ? this.getSlotIndex(this.currentType, this.slotsValue)
-            : 0,
-          values: this.slotsValue,
-          className: "slot4"
-        }
-      ];
-      this.currentType = null;
-    },
-    chooseOutType(items) {},
-    getSlotIndex(first, data) {
-      for (let index in data) {
-        let { label, value } = data[index];
-        if (first.value == value) {
-          return Number(index);
-        }
-      }
-      return 0;
-    },
-
-    confirmOk() {
-      this.open = false;
-      // 输入
-      if (this.swipeIndex == 1) {
-        this.inputSelect();
-      }
-      // 输出
-      if (this.swipeIndex == 0) {
-        this.outSelect();
-      }
-    },
-    cancel() {},
-    titleChange(items, index) {
-      MessageBox.prompt(items.dp_paramdesc)
-        .then(({ value, action }) => {
-          this.inputSave(value, items, index);
-        })
-        .catch(() => {});
-    },
     changeControl(val, data, current, index) {
       console.log(val, data, current, index, "change control.......");
       MessageBox.confirm("确定更改状态?", "提示", {
@@ -314,6 +194,35 @@ export default {
           current.value = current.bStatus ? 1 : 0;
           Indicator.close();
         });
+    },
+    isNumber(val) {
+      return /^\d+$/.test(val);
+    },
+    saveTime() {
+      console.log(this.time, "......");
+      if (this.time.length === 0) return;
+      const params = [];
+      const errors = [];
+      this.time.forEach(item => {
+        let line = item.line;
+        if (!this.isNumber(line.value)) {
+          errors.push(item.label);
+        } else {
+          params.push({ dp_id: line.dp_id, status: line.value });
+        }
+      });
+      if (errors.length > 0) {
+        Toast(`${errors[0]}必须是数字`);
+        return;
+      }
+      const { value: pdi_index } = this.pdiIndex;
+      Indicator.open("正在处理中...");
+      saveCommand({ params, pdi_index: pdi_index }).then(res => {
+        setTimeout(() => {
+          Indicator.close();
+          Toast(res.data.msg);
+        }, 3000);
+      });
     }
   },
   watch: {
@@ -361,5 +270,11 @@ export default {
   justify-content: center;
   color: $theme-color;
   font-weight: bolder;
+}
+</style>
+<style lang="scss">
+.btn-save .mint-cell-value {
+  width: 100%;
+  justify-content: center;
 }
 </style>
