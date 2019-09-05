@@ -104,7 +104,14 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "ups" */ './views/sups/index.vue'),
         },
-
+        {
+          path: '/shidian/index/:pdi',
+          name: 'shidian',
+          meta: {
+            title: '精密配电',
+          },
+          component: () => import(/* webpackChunkName: "shidian" */ './views/shidian/index.vue'),
+        },
         {
           path: '/temphu/index/:pdi',
           name: 'temphu',
