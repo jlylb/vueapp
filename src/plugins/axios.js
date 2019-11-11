@@ -46,7 +46,8 @@ export function tryHideFullScreenLoading() {
 }
 
 const config = {
-  baseURL: process.env.NODE_ENV === 'production' ? apiUrl : '/api',
+// baseURL: process.env.NODE_ENV === 'production' ? apiUrl : '/api',
+  baseURL: apiUrl,
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
   showLoading: true,

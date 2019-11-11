@@ -78,7 +78,14 @@ const router = new Router({
           },
           component: () => import(/* webpackChunkName: "air" */ './views/air/index.vue'),
         },
-
+        {
+          path: '/ptair/index/:pdi',
+          name: 'ptair',
+          meta: {
+            title: '精密空调',
+          },
+          component: () => import(/* webpackChunkName: "ptair" */ './views/ptair/index.vue'),
+        },
         {
           path: '/alarm/index',
           name: 'alarm',
