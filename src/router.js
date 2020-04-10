@@ -241,6 +241,11 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "login" */ './views/login.vue'),
     },
     {
+      path: '/wxlogin',
+      name: 'wx_login',
+      component: () => import(/* webpackChunkName: "login" */ './views/wx_login.vue'),
+    },
+    {
       path: '/auth/forget',
       name: 'auth_forget',
       meta: {

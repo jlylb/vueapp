@@ -117,6 +117,7 @@ import Toast from "@/components/toast/toast.js";
 // 处理点击事件
 var openw = null;
 var w = window;
+import { getJssdk } from '@/api/we_auth';
 
 export default {
   components: {
@@ -258,7 +259,8 @@ export default {
       this.isAdd = true;
     },
     scanAdd() {
-      this.openBarcode();
+     // this.openBarcode();
+      this.scan()
     },
     openBarcode() {
       this.createWithoutTitle("barcode.html", {
@@ -308,7 +310,28 @@ export default {
     },
     clearBarcode() {
       window.result = null;
+      // this.isAdd = false;
+      // this.$router.push({ name: "addtest" });
     },
+    scan() {
+        wx.ready(function () {
+          wx.checkJsApi({
+            jsApiList: ["scanQRCode"],
+            success: function (res) {
+              wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], //可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                  console.log(res, 'scan code in wx.....')
+                },
+                error: function (err) {
+                  alert("扫描失败::扫描码=" + err);
+                }
+              });
+            }
+          });
+        });
+      },
     handAdd() {
       this.isAdd = false;
       this.popupVisible = true;
@@ -416,7 +439,7 @@ export default {
     },
     getData(more = false) {
       fetchAllDevice(this.search).then(res => {
-        let data = res.data.data.data;
+        let data = res.data.data;
         if (data.length === 0) {
           this.allLoaded = true;
         } else {
@@ -484,6 +507,11 @@ export default {
   },
   mounted() {
     console.log(this.fields, "created ....");
+    const url = window.location.href.split('#')[0];
+    getJssdk({url: url }).then(res=>{
+      console.log(res, url, 'get jssdk.........')
+      wx.config(res.data);
+    })
   },
   beforeDestroy() {
     this.clearBarcode();

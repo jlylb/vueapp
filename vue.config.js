@@ -76,7 +76,9 @@ module.exports = {
   baseUrl: process.env.NODE_ENV === 'production' ? './' : '/',
   configureWebpack: {
     plugins: [],
-    externals: {},
+    externals: {
+      wx: 'wx'
+    },
   },
   css: {
     loaderOptions: {
@@ -88,17 +90,23 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://phpsite.cc',
+        target: 'http://app_wx.test:8091/',
         changeOrigin: true,
       },
       '/image': {
-        target: 'http://phpsite.cc',
+        target: 'http://app_wx.test:8091/',
         secure: false,
         changeOrigin: true,
         pathRewrite: {
           '^/image': '/upload',
         },
       },
+      '/uapi': {
+        target: 'http://app_wx.test:8091/',
+        pathRewrite: {
+          '^/uapi': ''
+        }
+      }
     },
   },
 };

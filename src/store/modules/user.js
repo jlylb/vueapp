@@ -88,8 +88,8 @@ const user = {
               reject(response);
               return;
             }
-            commit('SET_TOKEN', data.token);
-            setToken(response.data.token);
+            commit('SET_TOKEN', data.access_token);
+            setToken(response.data.access_token);
             resolve();
           })
           .catch((error) => {

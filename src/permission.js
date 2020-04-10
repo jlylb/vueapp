@@ -4,9 +4,11 @@ import { getGuide } from '@/tools/guide';
 import router from './router';
 import store from './store';
 
-const whiteList = ['/login', '/guide', '/login3', '/login4', '/auth/forget'];
+import { isWechat, getWxUserInfo } from '@/api/we_auth';
 
-console.log(store.getters);
+const whiteList = ['/login','/wxlogin', '/guide', '/login3', '/login4', '/auth/forget'];
+
+
 
 router.beforeEach((to, from, next) => {
   if (getToken()) {
@@ -33,9 +35,25 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (whiteList.indexOf(to.path) !== -1) {
-    console.log(window.plus, 'window plus', to, from);
     next();
-  } else {
+  } else if(isWechat()){
+    console.log(isWechat(), 'permission...........');
+    getWxUserInfo()
+    .then((res)=>{
+      console.log(res, 'permission...........then');
+      // next({ path: '/' });
+      setTimeout(()=>{
+        next(); 
+      }, 1000)
+     
+    })
+    .catch(error =>{
+      console.log(error, 'permission........... catch');
+      next({ path: '/wxlogin', replace: true });
+    });
+   // next(); 
+
+  }  else {
     console.log('last login', getGuide());
     next({ path: '/login', replace: true });
     // if (!getGuide()) {
