@@ -39,7 +39,7 @@
     "babel-plugin-import": "^1.8.0",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.13.1",
     "postcss-plugin-px2rem": "^0.8.1",
     "pug-plain-loader": "^1.0.0",
     "sass-loader": "^7.0.1",
