@@ -38,7 +38,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "notice" */ './views/notice/index.vue'),
         },
         {
-          path: '/tab_discover',
+          path: '/tab_discover/:pdi_index?',
           name: 'tab_discover',
           meta: {
             title: '我的设备',
@@ -79,7 +79,7 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "air" */ './views/air/index.vue'),
         },
         {
-          path: '/ptair/index/:pdi',
+          path: '/ptair/index',
           name: 'ptair',
           meta: {
             title: '精密空调',
@@ -87,8 +87,9 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "ptair" */ './views/ptair/index.vue'),
         },
         {
-          path: '/alarm/index',
+          path: '/alarm/index/:device_id?',
           name: 'alarm',
+          props: true,
           meta: {
             title: '实时报警',
           },

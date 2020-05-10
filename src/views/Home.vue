@@ -279,7 +279,7 @@ export default {
     // this.setNoticeParams();
     // this.watchRate();
     // this.$store.dispatch("app/setAppRate", 30);
-    this.getUnread();
+    // this.getUnread();
     // this.setUnread();
     if (window.plus) {
       this.initApp();
@@ -294,9 +294,9 @@ export default {
     }
   },
   created() {
-    if (this.notification > 0) {
-      this.gotoRouter();
-    }
+    // if (this.notification > 0) {
+    //   this.gotoRouter();
+    // }
   }
 };
 </script>

@@ -123,6 +123,7 @@ export default {
   components: {
     // MyPicker
   },
+  props:['pdi_index'],
   data() {
     return {
       popupVisible: false,
@@ -132,7 +133,8 @@ export default {
       device: [],
       search: {
         page: 1,
-        pageSize: 15
+        pageSize: 15,
+        pdi_index: this.pdi_index
       },
       item: {},
       deviceModel: {
@@ -314,15 +316,20 @@ export default {
       // this.$router.push({ name: "addtest" });
     },
     scan() {
+        const vm = this
         wx.ready(function () {
           wx.checkJsApi({
             jsApiList: ["scanQRCode"],
-            success: function (res) {
+            success: function (res1) {
               wx.scanQRCode({
                 needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                 scanType: ["qrCode", "barCode"], //可以指定扫二维码还是一维码，默认二者都有
                 success: function (res) {
                   console.log(res, 'scan code in wx.....')
+                    const pdi = res.resultStr,
+                    name = `设备${pdi}`;
+                    vm.deviceModel = Object.assign(vm.deviceModel, { pdi, name });
+                    vm.popupVisible = true;
                 },
                 error: function (err) {
                   alert("扫描失败::扫描码=" + err);
@@ -427,7 +434,8 @@ export default {
     loadTop() {
       this.search = {
         page: 1,
-        pageSize: 15
+        pageSize: 15,
+         pdi_index: this.pdi_index
       };
       this.getData();
       this.$refs.loadmore.onTopLoaded();

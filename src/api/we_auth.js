@@ -2,21 +2,23 @@ import store from "@/store"
 import { getWxToken } from '@/tools/we_auth';
 import router from '@/router';
 
-const authUrl = 'http://c7e5dfd0.ngrok.io/'
+const authUrl = process.env.VUE_APP_APIHOST
 //const authUrl = 'http://localhost:8080/uapi/we_oauth'
 
 const getAuth = async(code)=>{
-    let res = await	axios
-        .get(authUrl+'we_oauth', {params: {code}})
+    let res1 = await	axios
+        .get(authUrl+'/we_oauth', {params: {code}})
         .then((res)=>{
                 const { user } = res.data
                 store.dispatch('wxuser/setOpenid', user.id)
                 return res.data
         })
 
-        console.log(res, 'await........')
-        if(res) {
-            await getAccessToken(res.id)
+        console.log(res1, 'await........')
+        if(res1) {
+           const { user } = res1
+           console.log(user, 'await res1........')
+           await getAccessToken(user.id)
         }
         
 }
@@ -27,9 +29,12 @@ export 	const getAccessToken = (openid)=>{
     .then((res)=>{
         console.log(res, 'app vue')
         store.dispatch('user/refreshToken', res.data.access_token)
-        store.dispatch('user/GetUserInfo')
+        store.dispatch('user/GetUserInfo', {openid})
+        return Promise.resolve('access successful......');
     }).catch(e=>{
        // router.push({path: '/login', replace: true })
+       console.log(e, 'app vue catche..........')
+       return Promise.reject(e);
     })
 }
 // 判断公众号截取code
@@ -51,7 +56,7 @@ export 	const isWechat = () => {
 // 获取用户信息
 export const getWxUserInfo = async()=> {
 
-    let appid = "wx1eaf570975a1bb11"; //为测试号id
+    let appid = process.env.VUE_APP_APPID; //为测试号id
     let code = getUrlParam("code"); //是否存在code
     const openid = getWxToken()
     // const openid = 'o7Ubxjm_-vD6GxOSkBa4bjMg3Agk'
@@ -68,6 +73,7 @@ export const getWxUserInfo = async()=> {
         //不存在就打开上面的地址进行授权
         window.location.href =
             `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${encodeURIComponent(local)}&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`;
+        return false
     }
     if(code){
       await  getAuth(code)
@@ -78,7 +84,7 @@ export const getWxUserInfo = async()=> {
 // 获取用户信息
 export const getJssdk = (data={})=> {
     return axios({
-        url: authUrl+'jssdk',
+        url: authUrl+'/jssdk',
         method: 'get',
         params: { ...data},
       });

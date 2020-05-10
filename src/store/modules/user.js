@@ -86,7 +86,7 @@ const user = {
             const { status } = data;
             if (status === 0) {
               reject(response);
-              return;
+              return response;
             }
             commit('SET_TOKEN', data.access_token);
             setToken(response.data.access_token);
@@ -100,10 +100,10 @@ const user = {
     },
 
     // 获取用户信息
-    GetUserInfo({ commit, state }) {
+    GetUserInfo({ commit, state }, udata) {
       return new Promise((resolve, reject) => {
         console.log(state.token, 666666);
-        getUserInfo()
+        getUserInfo(udata)
           .then((response) => {
             console.log(response);
             if (!response || !response.data) {
@@ -144,14 +144,15 @@ const user = {
     },
 
     // 登出
-    LogOut({ commit, state, dispatch }) {
+    LogOut({ commit, state, dispatch }, data) {
       return new Promise((resolve, reject) => {
-        logout(state.token)
+        logout(data)
           .then(() => {
             commit('SET_TOKEN', '');
             commit('SET_ROLES', []);
             dispatch('app/forgetGuide', null, { root: true });
             dispatch('app/clearAppNotificationId', null, { root: true });
+            // dispatch('wxuser/removeOpenid', null, { root: true });
             commit('SET_IS_GET', false);
             removeToken();
             resolve();
@@ -168,6 +169,7 @@ const user = {
         commit('SET_TOKEN', '');
         commit('SET_IS_GET', false);
         dispatch('app/clearAppNotificationId', null, { root: true });
+        dispatch('wxuser/removeOpenid', null, { root: true });
         removeToken();
         resolve();
       });

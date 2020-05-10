@@ -13,9 +13,9 @@
       您好, {{ name }}
     </mt-cell>
 
-    <mt-cell title="通知管理" is-link to="/notice">
+    <!-- <mt-cell title="通知管理" is-link to="/notice">
       <svg-icon icon-class="notice" class="item-icon" slot="icon"></svg-icon>
-    </mt-cell>
+    </mt-cell> -->
 
     <mt-cell title="修改密码" is-link to="/auth/password">
       <svg-icon icon-class="password-circle" class="item-icon" slot="icon"></svg-icon>
@@ -25,14 +25,21 @@
       <svg-icon icon-class="about" class="item-icon" slot="icon"></svg-icon>
     </mt-cell>
 
+    <mt-cell title="切换账号" is-link  @click.native="logout('wx_login')">
+      <svg-icon icon-class="user-change" class="item-icon" slot="icon"></svg-icon>
+    </mt-cell>
+
     <mt-cell></mt-cell>
-    <div class="sign-out" @click="logout('login')">退出登录</div>
+    <!-- <div class="sign-out" @click="logout('login')">退出登录</div> -->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import { getImageUrl } from "@/tools";
+import Toast from "@/components/toast/toast.js";
+import { getWxToken } from '@/tools/we_auth';
+import { MessageBox } from "mint-ui";
 
 export default {
   components: {},
@@ -52,9 +59,16 @@ export default {
       this.$router.push({ name });
     },
     logout(name) {
-      this.$store.dispatch("user/LogOut").then(() => {
-        this.$router.replace({ name });
-      });
+      MessageBox.confirm(`确定切换账号吗?`)
+        .then(action => {
+          this.$store.dispatch("user/LogOut", {openid: getWxToken()}).then(() => {
+            this.$router.replace({ name });
+          });
+        })
+        .catch(() => {
+          Toast("已取消切换账号");
+        });
+
     },
     openAvatar() {
       this.$router.push({ name: "uploadAvatar" });

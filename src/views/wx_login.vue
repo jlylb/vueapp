@@ -2,7 +2,7 @@
   <div class="login-container" id="login-container">
     <!-- <top-component></top-component> -->
     <div class="login-cover" id="login-cover">
-      <div class="home-content">
+      <div class="login-content">
         <div class="logo">
           <svg-icon icon-class="sys-power" class="logo-icon"></svg-icon>
         </div>
@@ -29,7 +29,7 @@
           <svg-icon icon-class="password" class="login-input-icon" slot="prepend"></svg-icon>
         </my-input>
         <div class="error" v-if="errors.has('password')">{{ errors.first("password") }}</div>
-        <mt-button size="large" type="primary" @click="handleLogin" class="login-btn">登 录</mt-button>
+        <mt-button size="large" type="primary" @click="handleLogin" class="login-btn">绑定用户</mt-button>
 
         <a class="forget-password">
           <span @click.stop="forgetPwd">忘记密码?</span>
@@ -70,7 +70,7 @@ export default {
             this.$axios.post('/auth/bind-login', {...this.validateForm, openid})
             .then(res => {
               console.log(res, 'bind login...........')
-              store.dispatch('user/refreshToken', res.data.access_token)
+              this.$store.dispatch('user/refreshToken', res.data.access_token)
               this.$router.push({ path: "/tab_home" });
               return res
             }).catch(err => {
@@ -96,7 +96,7 @@ export default {
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 $icon-color: #ccc;
 $placeholder-color: #ccc;
 
@@ -126,8 +126,37 @@ $placeholder-color: #ccc;
   display: block;
   text-decoration: underline;
 }
-.home-content {
+.login-content {
   width: 100%;
+  flex-direction: column;
+  .mint-field {
+    width: 100%;
+  }
+  .mint-cell-left,
+  .mint-cell-right {
+    display: flex;
+    align-items: center;
+  }
+  .login-input-icon {
+    width: 2em;
+    height: 2em;
+    color: $icon-color;
+  }
+  .error {
+    color: #ef4f4f;
+    text-align: left;
+  }
+  .my-input .mint-field-clear {
+    color: $icon-color;
+  }
+  .my-input .mint-field-core {
+    &::-webkit-input-placeholder {
+      color: $placeholder-color;
+    }
+    &::-moz-placeholder {
+      color: $placeholder-color;
+    }
+  }
 }
 .logo {
   width: 150px;
@@ -142,32 +171,12 @@ $placeholder-color: #ccc;
   align-items: center;
   justify-content: center;
 }
-.logo /deep/ .logo-icon {
+.logo .logo-icon {
   width: 120px;
   height: 120px;
   color: #fff;
 }
 
-.home-content /deep/ .login-input-icon {
-  width: 1.5em;
-  height: 1.5em;
-  color: $icon-color;
-}
-.error {
-  color: #ef4f4f;
-  text-align: left;
-}
-.my-input /deep/ .mint-field-clear {
-  color: $icon-color;
-}
-.my-input /deep/ .mint-field-core {
-  &::-webkit-input-placeholder {
-    color: $placeholder-color;
-  }
-  &::-moz-placeholder {
-    color: $placeholder-color;
-  }
-}
 .login-btn {
   background-color: darken($theme-color, 10%);
 }

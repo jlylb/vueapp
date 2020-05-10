@@ -68,6 +68,7 @@ import { mapGetters } from "vuex";
 import { MessageBox } from "mint-ui";
 import { getImageUrl } from "@/tools";
 
+import { unread } from "@/api/alarm";
 import Myimg from "@/tools/img.js";
 
 export default {
@@ -87,13 +88,22 @@ export default {
           image: Myimg.TestJpg3
         }
       ],
-      imgStyle: null
+      imgStyle: null,
+      warnNum: 0,
+      notificationId: null
     };
   },
   computed: {
     ...mapGetters("user", ["notification"]),
     ...mapGetters("app", ["isUpdateApp"])
+  },  
+  watch: {
+    warnNum(nval, oval) {
+      if (nval == oval) return;
+      this.$store.dispatch("user/setNotification", nval);
+    }
   },
+
   methods: {
     openRouter(name, type) {
       let params = type ? { type } : {};
@@ -122,14 +132,26 @@ export default {
     resizeImg() {
       this.slideImage();
       window.addEventListener("resize", this.resizeHandler, false);
-    }
+    },
+    getUnread() {
+      unread().then(res => {
+        this.warnNum = res.data.data;
+      });
+    },
+    setUnread() {
+      this.notificationId = setInterval(() => {
+        this.getUnread();
+      }, 2000);
+    },
   },
   beforeDestroy() {
+    clearInterval(this.notificationId)
     window.removeEventListener("resize", this.resizeHandler, false);
   },
   mounted() {
     console.log("mounted ing ...before", this.isUpdateApp);
     this.resizeImg();
+    this.getUnread()
     if (this.isUpdateApp) return;
     const AutoUpdateApp = this.$AutoUpdateApp();
     AutoUpdateApp.getVersion(version => {

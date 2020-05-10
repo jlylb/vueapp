@@ -48,7 +48,7 @@ export function tryHideFullScreenLoading() {
 const config = {
 // baseURL: process.env.NODE_ENV === 'production' ? apiUrl : '/api',
   baseURL: apiUrl,
-  timeout: 5000, // Timeout
+  timeout: 15000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
   showLoading: true,
 };
@@ -85,8 +85,8 @@ _axios.interceptors.response.use(
     }
     if (response.status === 200) {
       const { data } = response;
-      if (data && data.status !== 1 && data.msg) {
-        MessageBox.alert(data.msg, '提示');
+      if (data && data.status !== 1 && data.message) {
+        MessageBox.alert(data.message, '提示');
       }
     }
     if (response.config.showLoading) {
@@ -105,7 +105,7 @@ _axios.interceptors.response.use(
       });
     } else if (res.status === 422) {
       const firstKey = Object.keys(res.data)[0];
-      errorMsg = Array.isArray(res.data[firstKey]) ? res.data[firstKey][0] : res.data[firstKey];
+      errorMsg = 'message' in res.data? res.data.message:res.statusText;
     } else if (res.status === 404) {
       errorMsg = '页面不存在';
     } else if (res.status === 403) {
@@ -120,7 +120,8 @@ _axios.interceptors.response.use(
     if (errorMsg) {
       MessageBox.alert(errorMsg, '提示');
     }
-    Promise.reject(error);
+    return Promise.reject(res);
+    // return res;
   },
 );
 

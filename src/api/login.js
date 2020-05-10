@@ -10,10 +10,11 @@ export function loginByUsername(username, password) {
   });
 }
 
-export function logout() {
+export function logout(data) {
   return axios({
     url: '/auth/logout',
     method: 'post',
+    data
   });
 }
 
@@ -22,7 +23,7 @@ export function getUserInfo(data) {
   return axios({
     url: '/auth/userinfo',
     method: 'get',
-    params: { data },
+    params: { ...data },
   });
 }
 export function saveUserInfo(data) {

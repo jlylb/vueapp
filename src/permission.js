@@ -1,6 +1,7 @@
 import { MessageBox } from 'mint-ui';
 import { getToken } from '@/tools/auth';
 import { getGuide } from '@/tools/guide';
+import { getWxToken } from '@/tools/we_auth';
 import router from './router';
 import store from './store';
 
@@ -13,17 +14,26 @@ const whiteList = ['/login','/wxlogin', '/guide', '/login3', '/login4', '/auth/f
 router.beforeEach((to, from, next) => {
   if (getToken()) {
     // determine if there has token
-    if (to.path === '/login') {
+    if (to.path === '/login'||to.path === '/wxlogin') {
       next({ path: '/' });
     } else if (store.getters.isget === false) {
       store
-        .dispatch('user/GetUserInfo')
+        .dispatch('user/GetUserInfo', {openid: getWxToken()})
         .then((res) => {
           // next({ ...to, replace: true });
           next();
         })
-        .catch((err) => {
-          console.log(err, 'permission...........');
+        .catch((error) => {
+          console.log(error, 'permission...........');
+          const { err } = error.data||{}
+          store.dispatch('user/LogOut')
+          .then(()=>{
+            let pathlogin = isWechat()?'/wxlogin':'/login'
+            if(err==-1) {
+              pathlogin = '/login'
+            }
+            next({ path: pathlogin, replace: true });
+          })
           // next({ path: '/' });
           // store.dispatch('user/FedLogOut').then(() => {
           //   MessageBox.alert(err || '验证失败, 请重新登录!!');
@@ -38,19 +48,36 @@ router.beforeEach((to, from, next) => {
     next();
   } else if(isWechat()){
     console.log(isWechat(), 'permission...........');
-    getWxUserInfo()
-    .then((res)=>{
-      console.log(res, 'permission...........then');
-      // next({ path: '/' });
-      setTimeout(()=>{
-        next(); 
-      }, 1000)
-     
-    })
-    .catch(error =>{
-      console.log(error, 'permission........... catch');
-      next({ path: '/wxlogin', replace: true });
-    });
+    try {
+      getWxUserInfo()
+      .then((res)=>{
+        console.log(res, 'permission...........then');
+        // next({ path: '/' });
+     //   setTimeout(()=>{
+          if(res===false){
+            // MessageBox.alert('请先关注公众号!!');
+          }else{
+            next(); 
+          }
+         
+       // }, 1000)
+        // next(); 
+       
+      })
+      .catch(error =>{
+        console.log(error, 'permission........... catch');
+        const {err} = error.data||{}
+        if(err==-1){
+          next({ path: '/login', replace: true });
+        }else{
+          next({ path: '/wxlogin', replace: true });
+        }
+
+      });
+    } catch (error) {
+      console.log(error, 'permission........... catch getWxUserInfo');
+    }
+
    // next(); 
 
   }  else {

@@ -95,6 +95,7 @@ export default {
     // MyDatetimePicker,
     Toolbar
   },
+  props: ['device_id'],
   data() {
     return {
       device: [],
@@ -143,7 +144,7 @@ export default {
       let params = { ...this.search, searchDate: this.searchDate };
       fetchList(params)
         .then(res => {
-          const data = res.data.data.data;
+          const data = res.data.data;
           if (data.length < this.search.pageSize) {
             this.moreLoading = true;
             this.hasPage = false;
@@ -234,6 +235,7 @@ export default {
   },
   created() {
     this.search = {
+      pdi_devid: this.device_id,
       page: 0,
       pageSize: 15
     };
