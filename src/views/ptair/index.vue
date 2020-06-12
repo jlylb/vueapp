@@ -13,10 +13,10 @@
 
     <mt-tab-container v-model="active" v-if="detail">
       <mt-tab-container-item id="tab-real" name="参数" class="real-air">
-        <mt-cell title="当前温度" :label="'当前: '+ convertInt(detail.rd_temp_value)">
+        <mt-cell title="当前温度" :label="'当前: '+ convertInt(detail.rd_AirTemp)">
           <mt-range
             class="air-range"
-            v-model="detail.rd_temp_value"
+            v-model="detail.rd_AirTemp"
             :min="1"
             :max="100"
             :step="1"
@@ -25,10 +25,10 @@
           ></mt-range>
         </mt-cell>
 
-        <mt-cell title="当前湿度" :label="'当前: '+ convertInt(detail.rd_humi_value)">
+        <mt-cell title="当前湿度" :label="'当前: '+ convertInt(detail.rd_AirHumi)">
           <mt-range
             class="air-range"
-            v-model="detail.rd_humi_value"
+            v-model="detail.rd_AirHumi"
             :min="1"
             :max="100"
             :step="1"
@@ -90,45 +90,51 @@ export default {
       detail: null,
       running: [
         {
-          label: "开/关机",
-          field: "rd_GenAirRunStat",
+          label: "空调状态",
+          field: "rd_AirRunLSta",
           tLabel: "开",
           fLabel: "关"
         }
       ],
       alarm: [
         {
-          label: "温度上限状态",
-          field: "rd_temp_high",
+          label: "温度过高状态",
+          field: "rd_AirTempHSta",
           tLabel: "正常",
           fLabel: "过高"
         },
         {
-          label: "温度下限状态",
-          field: "rd_temp_low",
+          label: "温度过低状态",
+          field: "rd_AirTempLSta",
           tLabel: "正常",
           fLabel: "过低"
         },
         {
-          label: "湿度上限状态",
-          field: "rd_humi_high",
+          label: "湿度过高状态",
+          field: "rd_AirHumiHSta",
           tLabel: "正常",
           fLabel: "过高"
         },
         {
-          label: "湿度下限状态",
-          field: "rd_humi_low",
+          label: "湿度过低状态",
+          field: "rd_AirHumiLSta",
           tLabel: "正常",
           fLabel: "过低"
         },
+        {
+          label: "设备连线状态",
+          field: "rd_CommSta",
+          tLabel: "正常",
+          fLabel: "断线"
+        }, 
         {
           label: "通讯状态",
-          field: "rd_DevConnection",
+          field: "rd_NetCom",
           tLabel: "正常",
           fLabel: "断线"
         }
       ],
-      boolFields: ["rd_GenAirRunStat"],
+      boolFields: ["rd_AirRunLSta"],
       chartData: {},
       chartSettings: {},
       pdi: null
@@ -149,14 +155,14 @@ export default {
       if (!this.detail) {
         return;
       }
-      const { rd_temp_value, rd_humi_value } = this.detail;
+      const { rd_AirTemp, rd_AirHumi } = this.detail;
       const rows = [
-        { name: "温湿度", temp: rd_temp_value, wet: rd_humi_value }
+        { name: "温湿度", temp: rd_AirTemp, wet: rd_AirHumi }
         // { name: "送风", temp: rd_air_sendwindtemp, wet: rd_air_sendwindhum },
         // { name: "室内", temp: rd_air_innertemp, wet: rd_air_innerhum }
       ];
       const columns = ["name", "temp", "wet"];
-      let yAxisName = ["温度: °C", "湿度: %"],
+      let yAxisName = ["温度: °C", "湿度: %"], 
         yAxisType = ["normal", "normal"],
         axisSite = { right: ["wet"] };
       let min = [0, 0],

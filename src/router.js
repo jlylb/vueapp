@@ -82,7 +82,7 @@ const router = new Router({
           path: '/ptair/index',
           name: 'ptair',
           meta: {
-            title: '精密空调',
+            title: '普通空调',
           },
           component: () => import(/* webpackChunkName: "ptair" */ './views/ptair/index.vue'),
         },
